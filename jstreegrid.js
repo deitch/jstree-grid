@@ -56,6 +56,7 @@
 			},
 			_prepare_headers : function() {
 				var header, i, cols = this.data.grid.columns || [], width, defaultWidth = this.data.grid.columnWidth, cl, val, margin, last;
+				var cHeight, hHeight;
 				header = this.data.grid.header;
 				
 				// create the headers
@@ -69,7 +70,10 @@
 						.addClass("jstree-grid-header "+cl).text(val).appendTo(header);
 				}		
 				last.addClass("jstree-grid-header-last");
-				
+				// set the container height to that if the previous minus the height of the header
+				hHeight = header.height();
+				cHeight = obj.height();
+				obj.height(cHeight - hHeight);				
 			},
 			_prepare_grid : function(obj) {
 				var c = this.data.grid.treeClass, _this = this, t, cols = this.data.grid.columns || [], width, defaultWidth = this.data.grid.columnWidth;
