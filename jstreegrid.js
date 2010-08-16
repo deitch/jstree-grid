@@ -55,7 +55,7 @@
 				this.data.grid.header = header;
 			},
 			_prepare_headers : function() {
-				var header, i, cols = this.data.grid.columns || [], width, defaultWidth = this.data.grid.columnWidth, cl, val, margin;
+				var header, i, cols = this.data.grid.columns || [], width, defaultWidth = this.data.grid.columnWidth, cl, val, margin, last;
 				header = this.data.grid.header;
 				
 				// create the headers
@@ -77,7 +77,7 @@
 				obj = !obj || obj == -1 ? this.get_container() : this._get_node(obj);
 				// get our column definition
 				obj.each(function () {
-					var i, val, cl, a, last, valClass, valPrefix;
+					var i, val, cl, a, last, valClass;
 					t = $(this);
 					a = t.children("a:not(."+c+")");
 					if (a.length === 1) {
