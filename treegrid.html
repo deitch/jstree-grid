@@ -1,0 +1,40 @@
+<html>
+	<head>
+		<title>jstree treegrid plugin demo</title>
+		<script type="text/javascript" src="jquery-1.4.2.min.js"></script>
+		<script type="text/javascript" src="jquery.jstree.js"></script>
+		<script type="text/javascript" src="jstreegrid.js"></script>
+		<script type="text/javascript">
+			$(document).ready(function(){
+				var data = [{
+					data: "Root 1",
+					attr: {price: "$5.00", size: "4"},
+					children: [
+						{data: "Child 1", attr: {price: "$4.00", size: "3"}},
+						{data: "Child 2", attr: {price: "$3.00", size: "2"}}
+					]
+				}];
+				$("div#jstree").jstree({
+					plugins: ["themes","json_data","grid"],
+					json_data: {data: data},
+					grid: {
+						columns: [
+							{width: 120, header: "Nodes"},
+							{cellClass: "col1", value: "price", width: 50, header: "Price"},
+							{cellClass: "col2", value: "size", width: 40, header: "Qty"}
+						]
+					}
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<h2>Tree Grid Demo</h2>
+		This page gives a demo for using the excellent <a href="http://www.jstree.com">jstree</a>, built on the
+		amazing <a href="http://jquery.com">jQuery</a> library, with a tree grid. The treegrid is implemented
+		as a standard jstree plugin. Simply include jquery and jstree, and the plugin library jstreegrid.js,
+		and include it as a plugin. Look at the source to this page to see how it is done.
+		<div id="jstree"></div>
+		
+	</body>
+</html>
