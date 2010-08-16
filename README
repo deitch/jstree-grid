@@ -1,0 +1,46 @@
+Plugin for the jstree www.jstree.com tree component that provides a grid extension to the tree.
+
+Allows any number of columns, and can use any property of the node to display data in the grid
+
+Usage:
+1) Include jquery and jstree in your page, as usual
+2) Include jstreegrid.js
+<script src="/path/to/jstreegrid.js"></script>
+<link href="treegrid.css" rel="stylesheet" type="text/css"> 
+
+3) Include grid as a plugin
+$("div#id").jstree({
+..
+	plugins: ["core","ui",...,"grid"],
+..
+})
+
+4) Include relevant parameters. 
+$("div#id").jstree({
+..
+	plugins: ["core","ui",...,"grid"],
+	grid: {
+		columns: [{},{},...,{}],
+		width: 25
+	} 
+..
+});
+
+The options are as follows:
+- width: default width for a column for which no width is given. If no width is given, the default is 25px
+- columns: an array of columns to create, on order. Each entry is an object with the following parameters:
+	width: width of the column in pixels.
+	header: string to use as a header for the column.
+	cellClass: a CSS class to add to each cell in this column (except for the header)
+	headerClass: a CSS class to add to the header cell in this column
+	value: the attribute on the node to use as the value for this cell
+
+Value is the name of the attribute whose content will be used. Thus, if you have a node whose data is given by:
+{data: "My Node", attr: {price: "$10"}}
+and we want the price value ($10) to be in column 1, then we have a config of:
+grid: {
+	columns: [
+		{width: 50, header: "Nodes"},
+		{width: 30, header: "Price", value: "price"}
+	]
+}
