@@ -1,5 +1,5 @@
 /*
- * jsTreeGrid 0.5
+ * jsTreeGrid 0.6
  * http://jsorm.com/
  *
  * Dual licensed under the MIT and GPL licenses (same as jQuery):
@@ -9,14 +9,14 @@
  * Created for Tufin www.tufin.com
  * Contributed to public source through the good offices of Tufin
  *
- * $Date: 2010-08-05 $
+ * $Date: 2010-08-16 $
  * $Revision:  $
  */
 
 /*global window, jQuery*/
 
 /* 
- * jsTree grid plugin 1.0
+ * jsTree grid plugin 0.6
  * This plugin handles adding a grid to a tree to display additional data
  */
 (function ($) {
