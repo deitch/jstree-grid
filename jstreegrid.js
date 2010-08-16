@@ -77,7 +77,7 @@
 				obj = !obj || obj == -1 ? this.get_container() : this._get_node(obj);
 				// get our column definition
 				obj.each(function () {
-					var i, val, cl, a, last;
+					var i, val, cl, a, last, valClass, valPrefix;
 					t = $(this);
 					a = t.children("a:not(."+c+")");
 					if (a.length === 1) {
@@ -90,9 +90,13 @@
 						for (i=1;i<cols.length;i++) {
 							cl = cols[i].cellClass || "";
 							val = cols[i].value && t.attr(cols[i].value) ? t.attr(cols[i].value) : "";
+							valClass = cols[i].valueClass && t.attr(cols[i].valueClass) ? t.attr(cols[i].valueClass) : "";
+							if (valClass && cols[i].valueClassPrefix && cols[i].valueClassPrefix !== "") {
+								valClass = cols[i].valueClassPrefix + valClass;
+							}
 							width = cols[i].width || defaultWidth;
 							width -= 4;
-							last = $("<div></div>").css({display: "inline-block", width: width, overflow: "hidden", "padding-left": "4px"}).addClass("jstree-grid-cell "+cl).text(val).insertAfter(last);
+							last = $("<div></div>").css({display: "inline-block", width: width, overflow: "hidden", "padding-left": "4px"}).addClass("jstree-grid-cell "+cl + " "+valClass).text(val).insertAfter(last);
 						}		
 						last.addClass("jstree-grid-cell-last");
 					}
