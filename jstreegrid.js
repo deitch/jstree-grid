@@ -46,7 +46,7 @@
 		},
 		_fn : { 
 			_prepare_wrapper : function() {
-				var obj = this.get_container(), parent = obj.parent(), wrapper, header;
+				var obj = this.get_container(), parent = obj.parent(), header;
 				// wrap the container in a new div, which contains the headers
 				header = $("<div></div>").addClass("jstree-grid-header");
 				$("<div></div>").appendTo(parent).append(header).append(obj);
@@ -56,7 +56,7 @@
 			},
 			_prepare_headers : function() {
 				var header, i, cols = this.data.grid.columns || [], width, defaultWidth = this.data.grid.columnWidth, cl, val, margin, last;
-				var cHeight, hHeight;
+				var cHeight, hHeight, container = this.get_container();
 				header = this.data.grid.header;
 				
 				// create the headers
@@ -72,8 +72,8 @@
 				last.addClass("jstree-grid-header-last");
 				// set the container height to that if the previous minus the height of the header
 				hHeight = header.height();
-				cHeight = obj.height();
-				obj.height(cHeight - hHeight);				
+				cHeight = container.height();
+				container.height(cHeight - hHeight);				
 			},
 			_prepare_grid : function(obj) {
 				var c = this.data.grid.treeClass, _this = this, t, cols = this.data.grid.columns || [], width, defaultWidth = this.data.grid.columnWidth;
