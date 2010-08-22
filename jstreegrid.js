@@ -100,7 +100,7 @@
 							}
 							width = cols[i].width || defaultWidth;
 							width -= 4;
-							last = $("<div></div>").css({display: "inline-block", width: width, overflow: "hidden", "padding-left": "4px"}).addClass("jstree-grid-cell "+cl + " "+valClass).text(val).insertAfter(last);
+							last = $("<div></div>").css({display: "inline-block", width: width, overflow: "hidden"}).addClass("jstree-grid-cell "+cl + " "+valClass).text(val).insertAfter(last);
 						}		
 						last.addClass("jstree-grid-cell-last");
 					}
