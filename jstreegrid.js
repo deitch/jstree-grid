@@ -26,7 +26,7 @@
 			this.data.grid.columns = s.columns || []; 
 			this.data.grid.treeClass = "jstree-grid";
 			this.data.grid.columnWidth = s.width;
-			this.data.grid.defaultConf = {display: "inline-block", overflow: "hidden"};
+			this.data.grid.defaultConf = {display: "inline-block"};
 			
 			if ($.browser.msie && parseInt($.browser.version.substr(0,1),10) < 8) {
 				this.data.grid.defaultConf.display = "inline";
@@ -96,7 +96,7 @@
 						depth = a.parentsUntil(_this.get_container()).filter("li").length;
 						//width = cols[0].width - a.closest("li").offset().left - divOffset + parseInt(a.css("padding-left").replace("px",""),10);
 						width = cols[0].width - depth*18;
-						a.css({width: width, overflow: "hidden"});
+						a.css({width: width});
 						last = a;
 						for (i=1;i<cols.length;i++) {
 							cl = cols[i].cellClass || "";
