@@ -1,5 +1,5 @@
 /*
- * jsTreeGrid 0.6
+ * jsTreeGrid 0.7
  * http://jsorm.com/
  *
  * Dual licensed under the MIT and GPL licenses (same as jQuery):
@@ -9,14 +9,14 @@
  * Created for Tufin www.tufin.com
  * Contributed to public source through the good offices of Tufin
  *
- * $Date: 2010-08-16 $
+ * $Date: 2010-09-28 $
  * $Revision:  $
  */
 
-/*global window, jQuery*/
+/*global window, document, jQuery*/
 
 /* 
- * jsTree grid plugin 0.6
+ * jsTree grid plugin 0.7
  * This plugin handles adding a grid to a tree to display additional data
  */
 (function ($) {
@@ -26,6 +26,12 @@
 			this.data.grid.columns = s.columns || []; 
 			this.data.grid.treeClass = "jstree-grid";
 			this.data.grid.columnWidth = s.width;
+			this.data.grid.defaultConf = {display: "inline-block", overflow: "hidden"};
+			
+			if ($.browser.msie && parseInt($.browser.version.substr(0,1),10) < 8) {
+				this.data.grid.defaultConf.display = "inline";
+				this.data.grid.defaultConf.zoom = "1";
+			}
 			
 			// set up the classes we need
 			$("<link/>").attr({rel: "stylesheet",type: "text/css", href: "treegrid.css"}).appendTo($("head",$(document)));
@@ -45,7 +51,8 @@
 			_prepare_headers : function() {
 				var header, i, cols = this.data.grid.columns || [], width, defaultWidth = this.data.grid.columnWidth, cl, val, margin, last;
 				var cHeight, hHeight, container = this.get_container(), parent = container.parent(), hasHeaders = 0;
-
+				var conf = this.data.grid.defaultConf;
+				
 				// set up the wrapper, if not already done
 				header = this.data.grid.header || $("<div></div>").addClass("jstree-grid-header");
 				
@@ -57,8 +64,7 @@
 					width = cols[i].width || defaultWidth;
 					width -= 2+8; // account for the borders and padding
 					margin = i === 0 ? 3 : 0;
-					last = $("<div></div>").css({display: "inline-block", width: width, overflow: "hidden", "margin-left": margin,"padding": "1 3 2 5"})
-						.addClass("jstree-grid-header "+cl).text(val).appendTo(header);
+					last = $("<div></div>").css(conf).css({"margin-left": margin,"width":width, "padding": "1 3 2 5"}).addClass("jstree-grid-header "+cl).text(val).appendTo(header);
 				}		
 				last.addClass("jstree-grid-header-last");
 				// did we have any real columns?
@@ -78,6 +84,7 @@
 			_prepare_grid : function(obj) {
 				var c = this.data.grid.treeClass, _this = this, t, cols = this.data.grid.columns || [], width, defaultWidth = this.data.grid.columnWidth;
 				var divOffset = this.data.grid.divOffset, depth;
+				var conf = this.data.grid.defaultConf;
 				obj = !obj || obj == -1 ? this.get_container() : this._get_node(obj);
 				// get our column definition
 				obj.each(function () {
@@ -99,8 +106,9 @@
 								valClass = cols[i].valueClassPrefix + valClass;
 							}
 							width = cols[i].width || defaultWidth;
-							width -= 4;
-							last = $("<div></div>").css({display: "inline-block", width: width, overflow: "hidden"}).addClass("jstree-grid-cell "+cl + " "+valClass).text(val).insertAfter(last);
+							width -= 4; // allow for borders
+							last = $("<div></div>").css(conf).css({width: width}).addClass("jstree-grid-cell "+cl + " "+valClass).text(val).insertAfter(last);
+							//last = $("<div></div>").css({display: "inline-block", width: width, overflow: "hidden"}).addClass("jstree-grid-cell "+cl + " "+valClass).text(val).insertAfter(last);
 						}		
 						last.addClass("jstree-grid-cell-last");
 					}
