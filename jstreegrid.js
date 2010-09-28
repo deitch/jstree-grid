@@ -1,5 +1,5 @@
 /*
- * jsTreeGrid 0.7
+ * jsTreeGrid 0.8
  * http://jsorm.com/
  *
  * Dual licensed under the MIT and GPL licenses (same as jQuery):
@@ -16,7 +16,7 @@
 /*global window, document, jQuery*/
 
 /* 
- * jsTree grid plugin 0.7
+ * jsTree grid plugin 0.8
  * This plugin handles adding a grid to a tree to display additional data
  */
 (function ($) {
