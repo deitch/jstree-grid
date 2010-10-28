@@ -1,5 +1,5 @@
 /*
- * jsTreeGrid 0.8
+ * jsTreeGrid 0.9
  * http://jsorm.com/
  *
  * Dual licensed under the MIT and GPL licenses (same as jQuery):
@@ -9,14 +9,14 @@
  * Created for Tufin www.tufin.com
  * Contributed to public source through the good offices of Tufin
  *
- * $Date: 2010-09-28 $
+ * $Date: 2010-10-28 $
  * $Revision:  $
  */
 
 /*global window, document, jQuery*/
 
 /* 
- * jsTree grid plugin 0.8
+ * jsTree grid plugin 0.9
  * This plugin handles adding a grid to a tree to display additional data
  */
 (function ($) {
@@ -88,7 +88,7 @@
 				obj = !obj || obj == -1 ? this.get_container() : this._get_node(obj);
 				// get our column definition
 				obj.each(function () {
-					var i, val, cl, a, last, valClass;
+					var i, val, cl, wcl, a, last, valClass, wideValClass, span;
 					t = $(this);
 					a = t.children("a:not(."+c+")");
 					if (a.length === 1) {
@@ -99,15 +99,28 @@
 						a.css({width: width});
 						last = a;
 						for (i=1;i<cols.length;i++) {
+							// get the cellClass and the wideCellClass
 							cl = cols[i].cellClass || "";
+							wcl = cols[i].wideCellClass || "";
+							// get the contents of the cell
 							val = cols[i].value && t.attr(cols[i].value) ? t.attr(cols[i].value) : "";
+							// get the valueClass
 							valClass = cols[i].valueClass && t.attr(cols[i].valueClass) ? t.attr(cols[i].valueClass) : "";
 							if (valClass && cols[i].valueClassPrefix && cols[i].valueClassPrefix !== "") {
 								valClass = cols[i].valueClassPrefix + valClass;
 							}
+							// get the wideValueClass
+							wideValClass = cols[i].wideValueClass && t.attr(cols[i].wideValueClass) ? t.attr(cols[i].wideValueClass) : "";
+							if (wideValClass && cols[i].wideValueClassPrefix && cols[i].wideValueClassPrefix !== "") {
+								wideValClass = cols[i].wideValueClassPrefix + wideValClass;
+							}
+							
+							// get the width
 							width = cols[i].width || defaultWidth;
 							width -= 4; // allow for borders
-							last = $("<div></div>").css(conf).css({width: width}).addClass("jstree-grid-cell "+cl + " "+valClass).text(val).insertAfter(last);
+							// create a span inside the div, so we can control what happens in the whole div versus inside just the text/background
+							span = $("<span></span>").addClass(cl+" "+valClass).text(val);
+							last = $("<div></div>").css(conf).css({width: width}).addClass("jstree-grid-cell "+wcl+ " " + wideValClass).append(span).insertAfter(last);
 							//last = $("<div></div>").css({display: "inline-block", width: width, overflow: "hidden"}).addClass("jstree-grid-cell "+cl + " "+valClass).text(val).insertAfter(last);
 						}		
 						last.addClass("jstree-grid-cell-last");
