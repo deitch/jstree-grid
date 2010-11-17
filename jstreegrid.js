@@ -83,7 +83,7 @@
 				obj = !obj || obj == -1 ? this.get_container() : this._get_node(obj);
 				// get our column definition
 				obj.each(function () {
-					var i, val, cl, wcl, a, last, valClass, wideValClass, span;
+					var i, val, cl, wcl, a, last, valClass, wideValClass, span, paddingleft;
 					t = $(this);
 					a = t.children("a:not(."+c+")");
 					if (a.length === 1) {
@@ -111,11 +111,12 @@
 							}
 							
 							// get the width
+							paddingleft = 7;
 							width = cols[i].width || defaultWidth;
-							width -= 4; // allow for borders
+							width = width - paddingleft;
 							// create a span inside the div, so we can control what happens in the whole div versus inside just the text/background
-							span = $("<span></span>").addClass(cl+" "+valClass).text(val);
-							last = $("<div></div>").css(conf).css({width: width}).addClass("jstree-grid-cell "+wcl+ " " + wideValClass).append(span).insertAfter(last);
+							span = $("<span></span>").addClass(cl+" "+valClass).css("display","inline-block").text(val);
+							last = $("<div></div>").css(conf).css({width: width,"padding-left":paddingleft+"px"}).addClass("jstree-grid-cell "+wcl+ " " + wideValClass).append(span).insertAfter(last);
 							//last = $("<div></div>").css({display: "inline-block", width: width, overflow: "hidden"}).addClass("jstree-grid-cell "+cl + " "+valClass).text(val).insertAfter(last);
 						}		
 						last.addClass("jstree-grid-cell-last");
