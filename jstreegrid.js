@@ -73,11 +73,6 @@
 					// save the offset of the div from the body
 					this.data.grid.divOffset = header.parent().offset().left;
 					this.data.grid.header = header;
-					
-					// set the container height to that if the previous minus the height of the header
-					hHeight = header.height();
-					cHeight = container.height();
-					container.height(cHeight - hHeight);				
 				}
 				
 			},
