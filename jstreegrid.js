@@ -34,7 +34,7 @@
 			}
 			
 			// set up the classes we need
-			$("<link/>").attr({rel: "stylesheet",type: "text/css", href: "treegrid.css"}).appendTo($("head",$(document)));
+			$('<style type="text/css">.jstree-grid-header {border-left: 1px solid #eeeeee;border-right: 1px solid #d0d0d0;background-color: #EBF3FD;}\n.jstree-grid-cell {padding-left: 4px;}</style>').appendTo($("head"));
 
 			this.get_container().bind("open_node.jstree create_node.jstree clean_node.jstree", $.proxy(function (e, data) { 
 					this._prepare_grid(data.rslt.obj);
