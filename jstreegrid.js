@@ -1,6 +1,8 @@
 /*
- * jsTreeGrid 0.9
+ * jsTreeGrid 0.95
  * http://jsorm.com/
+ *
+ * This plugin handles adding a grid to a tree to display additional data
  *
  * Dual licensed under the MIT and GPL licenses (same as jQuery):
  *   http://www.opensource.org/licenses/mit-license.php
@@ -15,11 +17,14 @@
 
 /*global window, document, jQuery*/
 
-/* 
- * jsTree grid plugin 0.9
- * This plugin handles adding a grid to a tree to display additional data
- */
 (function ($) {
+	var renderAWidth = function(node,tree) {
+		var depth, a = node.get(0).tagName.toLowerCase() === "a" ? node : node.children("a");
+		var width = tree.data.grid.columns[0].width;
+		depth = a.parentsUntil(tree.get_container()).filter("li").length;
+		width = width - depth*18;
+		a.css({width: width});
+	};
 	$.jstree.plugin("grid", {
 		__init : function () { 
 			var s = this._get_settings().grid || {};
@@ -42,7 +47,17 @@
 			.bind("loaded.jstree", $.proxy(function (e) {
 				this._prepare_headers();
 				this._prepare_grid();
-				}, this));
+				}, this))
+			.bind("move_node.jstree",$.proxy(function(e,data){
+				var node = data.rslt.o;
+				renderAWidth(node,this);
+				// check all the children, because we could drag a tree over
+				node.find("li > a").each($.proxy(function(i,elm){
+					renderAWidth($(elm),this);
+				},this));
+				
+			},this));
+			
 		},
 		defaults : {
 			width: 25
@@ -78,7 +93,7 @@
 			},
 			_prepare_grid : function(obj) {
 				var c = this.data.grid.treeClass, _this = this, t, cols = this.data.grid.columns || [], width, defaultWidth = this.data.grid.columnWidth;
-				var divOffset = this.data.grid.divOffset, depth;
+				var divOffset = this.data.grid.divOffset;
 				var conf = this.data.grid.defaultConf;
 				obj = !obj || obj == -1 ? this.get_container() : this._get_node(obj);
 				// get our column definition
@@ -88,10 +103,7 @@
 					a = t.children("a:not(."+c+")");
 					if (a.length === 1) {
 						a.addClass(c);
-						depth = a.parentsUntil(_this.get_container()).filter("li").length;
-						//width = cols[0].width - a.closest("li").offset().left - divOffset + parseInt(a.css("padding-left").replace("px",""),10);
-						width = cols[0].width - depth*18;
-						a.css({width: width});
+						renderAWidth(a,_this);
 						last = a;
 						for (i=1;i<cols.length;i++) {
 							// get the cellClass and the wideCellClass
