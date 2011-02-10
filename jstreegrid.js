@@ -21,7 +21,8 @@
 	var renderAWidth = function(node,tree) {
 		var depth, a = node.get(0).tagName.toLowerCase() === "a" ? node : node.children("a");
 		var width = tree.data.grid.columns[0].width;
-		depth = a.parentsUntil(tree.get_container()).filter("li").length;
+		// need to use a selector in jquery 1.4.4+
+		depth = a.parentsUntil(tree.get_container().get(0).tagName+".jstree").filter("li").length;
 		width = width - depth*18;
 		a.css({width: width});
 	};
@@ -59,6 +60,13 @@
 			},this));
 			
 		},
+		__destroy : function() {
+			var parent = this.data.grid.parent;
+			var container = this.get_container();
+			container.detach();
+			$("div.jstree-grid-wrapper",parent).remove();
+			parent.append(container);
+		},
 		defaults : {
 			width: 25
 		},
@@ -67,6 +75,9 @@
 				var header, i, cols = this.data.grid.columns || [], width, defaultWidth = this.data.grid.columnWidth, cl, val, margin, last;
 				var cHeight, hHeight, container = this.get_container(), parent = container.parent(), hasHeaders = 0;
 				var conf = this.data.grid.defaultConf;
+				// save the original parent so we can reparent on destroy
+				this.data.grid.parent = parent;
+				
 				
 				// set up the wrapper, if not already done
 				header = this.data.grid.header || $("<div></div>").addClass("jstree-grid-header");
