@@ -15,12 +15,13 @@
  * $Revision:  $
  */
 
+/*jslint nomen:false */
 /*global window, document, jQuery*/
 
 (function ($) {
 	var renderAWidth = function(node,tree) {
-		var depth, a = node.get(0).tagName.toLowerCase() === "a" ? node : node.children("a");
-		var width = tree.data.grid.columns[0].width;
+		var depth, a = node.get(0).tagName.toLowerCase() === "a" ? node : node.children("a"),
+		width = tree.data.grid.columns[0].width;
 		// need to use a selector in jquery 1.4.4+
 		depth = a.parentsUntil(tree.get_container().get(0).tagName+".jstree").filter("li").length;
 		width = width - depth*18;
@@ -48,6 +49,7 @@
 			.bind("loaded.jstree", $.proxy(function (e) {
 				this._prepare_headers();
 				this._prepare_grid();
+				this.get_container().trigger("loaded_grid.jstree");
 				}, this))
 			.bind("move_node.jstree",$.proxy(function(e,data){
 				var node = data.rslt.o;
@@ -61,8 +63,7 @@
 			
 		},
 		__destroy : function() {
-			var parent = this.data.grid.parent;
-			var container = this.get_container();
+			var parent = this.data.grid.parent, container = this.get_container();
 			container.detach();
 			$("div.jstree-grid-wrapper",parent).remove();
 			parent.append(container);
@@ -72,9 +73,9 @@
 		},
 		_fn : { 
 			_prepare_headers : function() {
-				var header, i, cols = this.data.grid.columns || [], width, defaultWidth = this.data.grid.columnWidth, cl, val, margin, last;
-				var cHeight, hHeight, container = this.get_container(), parent = container.parent(), hasHeaders = 0;
-				var conf = this.data.grid.defaultConf;
+				var header, i, cols = this.data.grid.columns || [], width, defaultWidth = this.data.grid.columnWidth, cl, val, margin, last,
+				cHeight, hHeight, container = this.get_container(), parent = container.parent(), hasHeaders = 0,
+				conf = this.data.grid.defaultConf;
 				// save the original parent so we can reparent on destroy
 				this.data.grid.parent = parent;
 				
@@ -103,10 +104,9 @@
 				
 			},
 			_prepare_grid : function(obj) {
-				var c = this.data.grid.treeClass, _this = this, t, cols = this.data.grid.columns || [], width, defaultWidth = this.data.grid.columnWidth;
-				var divOffset = this.data.grid.divOffset;
-				var conf = this.data.grid.defaultConf;
-				obj = !obj || obj == -1 ? this.get_container() : this._get_node(obj);
+				var c = this.data.grid.treeClass, _this = this, t, cols = this.data.grid.columns || [], width, 
+				defaultWidth = this.data.grid.columnWidth, divOffset = this.data.grid.divOffset, conf = this.data.grid.defaultConf;
+				obj = !obj || obj === -1 ? this.get_container() : this._get_node(obj);
 				// get our column definition
 				obj.each(function () {
 					var i, val, cl, wcl, a, last, valClass, wideValClass, span, paddingleft;
@@ -151,4 +151,4 @@
 		}
 		// need to do alternating background colors or borders
 	});
-})(jQuery);
+}(jQuery));

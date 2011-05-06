@@ -14,6 +14,9 @@
 						{data: "Child 2", attr: {price: "$3.00", size: "2"}}
 					]
 				}];
+				$("div#jstree").bind("loaded_grid.jstree",function(){
+					$("span#status").text("loaded");
+				});
 				$("div#jstree").jstree({
 					plugins: ["themes","json_data","grid","dnd"],
 					json_data: {data: data},
@@ -48,6 +51,7 @@
 		as a standard jstree plugin. Simply include jquery and jstree, and the plugin library jstreegrid.js,
 		and include it as a plugin. Look at the source to this page to see how it is done.
 		<div id="jstree"></div>
+		<div>Tree grid is <span id="status">loading</span>.</div>
 		
 	</body>
 </html>
