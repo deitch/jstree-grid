@@ -26,6 +26,12 @@ $("div#id").jstree({
 ..
 });
 
+Events
+------
+When the tree is done loading, as usual, it fires a "loaded.jstree" event on the div to which you added jstree. jsTreeGrid uses this event
+to start its own load process. When jsTreeGrid is done, it fires a "loaded_grid.jstree" event on the same div. If you need to run some 
+code after the jsTreeGrid is done loading, just listen for that event. An example is in the treegrid.html sample page.
+
 The grid is built by adding divs <div></div> to each <li> entry for a row in the tree. Inside the <div> is a <span></span> with the data.
 Thus, an entry is likely to look like:
 <div><span>$5.00</span></div>
