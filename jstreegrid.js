@@ -138,7 +138,7 @@
 							width = cols[i].width || defaultWidth;
 							width = width - paddingleft;
 							// create a span inside the div, so we can control what happens in the whole div versus inside just the text/background
-							span = $("<span></span>").addClass(cl+" "+valClass).css("display","inline-block").text(val);
+							span = $("<span></span>").addClass(cl+" "+valClass).css("display","inline-block").html(val);
 							last = $("<div></div>").css(conf).css({width: width,"padding-left":paddingleft+"px"}).addClass("jstree-grid-cell "+wcl+ " " + wideValClass).append(span).insertAfter(last);
 							//last = $("<div></div>").css({display: "inline-block", width: width, overflow: "hidden"}).addClass("jstree-grid-cell "+cl + " "+valClass).text(val).insertAfter(last);
 						}		

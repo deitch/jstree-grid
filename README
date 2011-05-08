@@ -92,6 +92,9 @@ grid: {
 The result would be:
 <div><span class="price-expensive">$10</span></div>
 
-
+HTML
+----
+Note that the data in each cell is treated as html content for the span, rather than raw text. You can use HTML in any cell, except for the 
+base tree node cell, which follows jstree rules.
 
 
