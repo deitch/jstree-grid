@@ -1,5 +1,5 @@
 /*
- * jsTreeGrid 0.95
+ * jsTreeGrid 0.96
  * http://jsorm.com/
  *
  * This plugin handles adding a grid to a tree to display additional data
@@ -25,7 +25,7 @@
 		// need to use a selector in jquery 1.4.4+
 		depth = a.parentsUntil(tree.get_container().get(0).tagName+".jstree").filter("li").length;
 		width = width - depth*18;
-		a.css({width: width});
+		a.css({width: width, "vertical-align": "top", "overflow":"hidden"});
 	};
 	$.jstree.plugin("grid", {
 		__init : function () { 
