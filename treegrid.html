@@ -10,7 +10,7 @@
 					data: "Root 1",
 					attr: {price: "$5.00", size: "4"},
 					children: [
-						{data: "Child 1", attr: {price: "<b>$4.00</b>", size: "3"}},
+						{data: "Really long named child whose name gets cut off", attr: {price: "<b>$4.00</b>", size: "3"}},
 						{data: "Child 2", attr: {price: "<i>$3.00</i>", size: "2"}}
 					]
 				}];
@@ -22,9 +22,9 @@
 					json_data: {data: data},
 					grid: {
 						columns: [
-							{width: 120, header: "Nodes"},
-							{cellClass: "col1", value: "price", width: 50, header: "Price"},
-							{cellClass: "col2", value: "size", width: 40, header: "Qty"}
+							{width: 120, header: "Nodes",title:"_DATA_"},
+							{cellClass: "col1", value: "price", width: 50, header: "Price", title:"price"},
+							{cellClass: "col2", value: "size", width: 40, header: "Qty", title:"size"}
 						]
 					},
 					dnd: {

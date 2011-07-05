@@ -92,6 +92,35 @@ grid: {
 The result would be:
 <div><span class="price-expensive">$10</span></div>
 
+You can add a tooltip to each element in the grid by adding the name of it to the title, with the HTML stripped out. For example:
+grid: {
+	columns: [
+		{width: 50, header: "Nodes"},
+		{width: 30, header: "Price", value: "price", title: "price"}
+	]
+}
+
+The result would be:
+<div><span title="$10">$10</span></div>
+
+This includes the actual tree node, not just the added grid cells:
+grid: {
+	columns: [
+		{width: 50, header: "Nodes", title:"price"},
+		{width: 30, header: "Price", value: "price", title: "price"}
+	]
+}
+
+Finally, you can have the contents of the tree node (value of tree.get_text()) itself made into the tooltip by using the special title keyword
+"_DATA_".
+grid: {
+	columns: [
+		{width: 50, header: "Nodes", title:"_DATA_"},
+		{width: 30, header: "Price", value: "price", title: "price"}
+	]
+}
+
+
 HTML
 ----
 Note that the data in each cell is treated as html content for the span, rather than raw text. You can use HTML in any cell, except for the 

@@ -1,5 +1,5 @@
 /*
- * jsTreeGrid 0.96
+ * jsTreeGrid 0.97
  * http://jsorm.com/
  *
  * This plugin handles adding a grid to a tree to display additional data
@@ -19,7 +19,12 @@
 /*global window, document, jQuery*/
 
 (function ($) {
-	var renderAWidth = function(node,tree) {
+	var renderAWidth, renderATitle, htmlstripre, SPECIAL_TITLE = "_DATA_";
+	/*jslint regexp:false */
+	htmlstripre = /<\/?[^>]+>/gi;
+	/*jslint regexp:true */
+
+	renderAWidth = function(node,tree) {
 		var depth, a = node.get(0).tagName.toLowerCase() === "a" ? node : node.children("a"),
 		width = tree.data.grid.columns[0].width;
 		// need to use a selector in jquery 1.4.4+
@@ -27,6 +32,24 @@
 		width = width - depth*18;
 		a.css({width: width, "vertical-align": "top", "overflow":"hidden"});
 	};
+	renderATitle = function(node,t,tree) {
+		var a = node.get(0).tagName.toLowerCase() === "a" ? node : node.children("a"), title, col = tree.data.grid.columns[0];
+		// get the title
+		title = "";
+		if (col.title) {
+			if (col.title === SPECIAL_TITLE) {
+				title = tree.get_text(t);
+			} else if (t.attr(col.title)) {
+				title = t.attr(col.title);
+			}
+		}
+		// strip out HTML
+		title = title.replace(htmlstripre, '');
+		if (title) {
+			a.attr("title",title);
+		}
+	};
+
 	$.jstree.plugin("grid", {
 		__init : function () { 
 			var s = this._get_settings().grid || {};
@@ -109,17 +132,19 @@
 				obj = !obj || obj === -1 ? this.get_container() : this._get_node(obj);
 				// get our column definition
 				obj.each(function () {
-					var i, val, cl, wcl, a, last, valClass, wideValClass, span, paddingleft;
+					var i, val, cl, wcl, a, last, valClass, wideValClass, span, paddingleft, title;
 					t = $(this);
 					a = t.children("a:not(."+c+")");
 					if (a.length === 1) {
 						a.addClass(c);
 						renderAWidth(a,_this);
+						renderATitle(a,t,_this);
 						last = a;
 						for (i=1;i<cols.length;i++) {
 							// get the cellClass and the wideCellClass
 							cl = cols[i].cellClass || "";
 							wcl = cols[i].wideCellClass || "";
+
 							// get the contents of the cell
 							val = cols[i].value && t.attr(cols[i].value) ? t.attr(cols[i].value) : "";
 							// get the valueClass
@@ -132,6 +157,10 @@
 							if (wideValClass && cols[i].wideValueClassPrefix && cols[i].wideValueClassPrefix !== "") {
 								wideValClass = cols[i].wideValueClassPrefix + wideValClass;
 							}
+							// get the title
+							title = cols[i].title && t.attr(cols[i].title) ? t.attr(cols[i].title) : "";
+							// strip out HTML
+							title = title.replace(htmlstripre, '');
 							
 							// get the width
 							paddingleft = 7;
@@ -140,7 +169,11 @@
 							// create a span inside the div, so we can control what happens in the whole div versus inside just the text/background
 							span = $("<span></span>").addClass(cl+" "+valClass).css("display","inline-block").html(val);
 							last = $("<div></div>").css(conf).css({width: width,"padding-left":paddingleft+"px"}).addClass("jstree-grid-cell "+wcl+ " " + wideValClass).append(span).insertAfter(last);
-							//last = $("<div></div>").css({display: "inline-block", width: width, overflow: "hidden"}).addClass("jstree-grid-cell "+cl + " "+valClass).text(val).insertAfter(last);
+							
+							if (title) {
+								span.attr("title",title);
+							}
+
 						}		
 						last.addClass("jstree-grid-cell-last");
 					}
