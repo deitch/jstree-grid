@@ -66,8 +66,10 @@
 			// set up the classes we need
 			$('<style type="text/css">.jstree-grid-header {border-left: 1px solid #eeeeee;border-right: 1px solid #d0d0d0;background-color: #EBF3FD;}\n.jstree-grid-cell {padding-left: 4px;}</style>').appendTo($("head"));
 
-			this.get_container().bind("open_node.jstree create_node.jstree clean_node.jstree", $.proxy(function (e, data) { 
-					this._prepare_grid(data.rslt.obj);
+			this.get_container().bind("open_node.jstree create_node.jstree clean_node.jstree change_node.jstree", $.proxy(function (e, data) { 
+					var target = data && data.rslt && data.rslt.obj ? data.rslt.obj : e.target;
+					target = $(target);
+					this._prepare_grid(target);
 				}, this))
 			.bind("loaded.jstree", $.proxy(function (e) {
 				this._prepare_headers();
@@ -132,9 +134,14 @@
 				obj = !obj || obj === -1 ? this.get_container() : this._get_node(obj);
 				// get our column definition
 				obj.each(function () {
-					var i, val, cl, wcl, a, last, valClass, wideValClass, span, paddingleft, title;
+					var i, val, cl, wcl, a, last, valClass, wideValClass, span, paddingleft, title, isAlreadyGrid;
 					t = $(this);
-					a = t.children("a:not(."+c+")");
+					
+					// find the a children
+					a = t.children("a");
+					isAlreadyGrid = a.hasClass(c);
+					
+
 					if (a.length === 1) {
 						a.addClass(c);
 						renderAWidth(a,_this);
@@ -166,9 +173,13 @@
 							paddingleft = 7;
 							width = cols[i].width || defaultWidth;
 							width = width - paddingleft;
+							
+							last = isAlreadyGrid ? a.nextAll("div:eq("+(i-1)+")") : $("<div></div>").insertAfter(last);
+							span = isAlreadyGrid ? last.children("span") : $("<span></span>").appendTo(last);
+
 							// create a span inside the div, so we can control what happens in the whole div versus inside just the text/background
-							span = $("<span></span>").addClass(cl+" "+valClass).css("display","inline-block").html(val);
-							last = $("<div></div>").css(conf).css({width: width,"padding-left":paddingleft+"px"}).addClass("jstree-grid-cell "+wcl+ " " + wideValClass).append(span).insertAfter(last);
+							span.addClass(cl+" "+valClass).css("display","inline-block").html(val);
+							last = last.css(conf).css({width: width,"padding-left":paddingleft+"px"}).addClass("jstree-grid-cell "+wcl+ " " + wideValClass);
 							
 							if (title) {
 								span.attr("title",title);

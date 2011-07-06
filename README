@@ -111,7 +111,7 @@ grid: {
 	]
 }
 
-Finally, you can have the contents of the tree node (value of tree.get_text()) itself made into the tooltip by using the special title keyword
+You also can have the contents of the tree node (value of tree.get_text()) itself made into the tooltip by using the special title keyword
 "_DATA_".
 grid: {
 	columns: [
@@ -120,6 +120,10 @@ grid: {
 	]
 }
 
+Finally, you can change a node contents on the fly using "change_node.jstree". You change the attribute of the node, then trigger the event,
+for example:
+
+$("li.mynode").attr("value","25").trigger("change_node.jstree");
 
 HTML
 ----

@@ -41,6 +41,10 @@
 		                } 
 					}
 				});
+				$("a#change").click(function(){
+					var li = $("li:eq(0)","div#jstree"), val = li.attr("size"), newval = parseInt(val,10)*2;
+					li.attr("size",newval).trigger("change_node.jstree");
+				});
 			});
 		</script>
 	</head>
@@ -52,6 +56,7 @@
 		and include it as a plugin. Look at the source to this page to see how it is done.
 		<div id="jstree"></div>
 		<div>Tree grid is <span id="status">loading</span>.</div>
+		<div><a href="#" id="change">Click here to double the root Qty</a></div>
 		
 	</body>
 </html>
