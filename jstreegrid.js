@@ -57,6 +57,7 @@
 			this.data.grid.treeClass = "jstree-grid";
 			this.data.grid.columnWidth = s.width;
 			this.data.grid.defaultConf = {display: "inline-block"};
+			this.data.grid.source = s.source || "attr";
 			
 			if ($.browser.msie && parseInt($.browser.version.substr(0,1),10) < 8) {
 				this.data.grid.defaultConf.display = "inline";
@@ -129,7 +130,7 @@
 				
 			},
 			_prepare_grid : function(obj) {
-				var c = this.data.grid.treeClass, _this = this, t, cols = this.data.grid.columns || [], width, 
+				var c = this.data.grid.treeClass, _this = this, t, cols = this.data.grid.columns || [], width, s = this.data.grid.source,
 				defaultWidth = this.data.grid.columnWidth, divOffset = this.data.grid.divOffset, conf = this.data.grid.defaultConf;
 				obj = !obj || obj === -1 ? this.get_container() : this._get_node(obj);
 				// get our column definition
@@ -141,7 +142,6 @@
 					a = t.children("a");
 					isAlreadyGrid = a.hasClass(c);
 					
-
 					if (a.length === 1) {
 						a.addClass(c);
 						renderAWidth(a,_this);
@@ -153,7 +153,9 @@
 							wcl = cols[i].wideCellClass || "";
 
 							// get the contents of the cell
-							val = cols[i].value && t.attr(cols[i].value) ? t.attr(cols[i].value) : "";
+							if (s === "attr") { val = cols[i].value && t.attr(cols[i].value) ? t.attr(cols[i].value) : "";
+							} else if (s === "metadata") { val = cols[i].value && t.data(cols[i].value) ? t.data(cols[i].value) : ""; }
+
 							// get the valueClass
 							valClass = cols[i].valueClass && t.attr(cols[i].valueClass) ? t.attr(cols[i].valueClass) : "";
 							if (valClass && cols[i].valueClassPrefix && cols[i].valueClassPrefix !== "") {
