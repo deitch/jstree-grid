@@ -59,7 +59,7 @@ You want the entire width of the cell to be red, but just the word "OK" to be cl
 You would ensure that "clickable" is applied to the span, but important to the div.
 
 
-Value is the name of the attribute whose content will be used. Thus, if you have a node whose data is given by:
+Value is the name of the attribute or metadata whose content will be used; you can choose which once for the entire grid. Thus, if you have a node whose data is given by:
 {data: "My Node", attr: {price: "$10"}}
 and we want the price value ($10) to be in column 1, then we have a config of:
 grid: {
@@ -68,6 +68,20 @@ grid: {
 		{width: 30, header: "Price", value: "price"}
 	]
 }
+
+If you prefer to use metadata, per jstree (see http://www.jstree.com/documentation/json_data) then you need to set the source to metadata 
+and use that data:
+
+{data: "My Node", metadata: {price: "$10"}}
+grid: {
+	source: "metadata",
+	columns: [
+		{width: 50, header: "Nodes"},
+		{width: 30, header: "Price", value: "price"}
+	]
+}
+
+Thanks to ChrisRaven for the metadata support.
 
 ValueClass is the name of the attribute that will be added as a class to this cell. Thus, if you have a node whose data is given by:
 {data: "My Node", attr: {price: "$10", scale: "expensive"}}
@@ -131,3 +145,6 @@ Note that the data in each cell is treated as html content for the span, rather 
 base tree node cell, which follows jstree rules.
 
 
+Themeroller
+-----------
+The themeroller plugin for jstree is supported as of tag 0.9.1 (29 November 2011). Thanks to ChrisRaven for the support.
