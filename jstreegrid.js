@@ -57,6 +57,8 @@
 			this.data.grid.treeClass = "jstree-grid";
 			this.data.grid.columnWidth = s.width;
 			this.data.grid.defaultConf = {display: "inline-block"};
+			this.data.grid.source = s.source || "attr";
+			this.data.grid.isThemeroller = !!this.data.themeroller;
 			
 			if ($.browser.msie && parseInt($.browser.version.substr(0,1),10) < 8) {
 				this.data.grid.defaultConf.display = "inline";
@@ -64,7 +66,11 @@
 			}
 			
 			// set up the classes we need
-			$('<style type="text/css">.jstree-grid-header {border-left: 1px solid #eeeeee;border-right: 1px solid #d0d0d0;background-color: #EBF3FD;}\n.jstree-grid-cell {padding-left: 4px;}</style>').appendTo($("head"));
+			if (this.data.grid.isThemeroller) {
+				$('<style type="text/css">.jstree-grid-header {border-width: 0 1px 0 0; padding: 1px 3px;}\n.jstree-grid-cell {padding-left: 4px; border: none !important; background: transparent !important;}</style>').appendTo($("head"));
+			} else {
+				$('<style type="text/css">.jstree-grid-header {border-left: 1px solid #eeeeee;border-right: 1px solid #d0d0d0;background-color: #EBF3FD;}\n.jstree-grid-cell {padding-left: 4px;}</style>').appendTo($("head"));
+			}
 
 			this.get_container().bind("open_node.jstree create_node.jstree clean_node.jstree change_node.jstree", $.proxy(function (e, data) { 
 					var target = data && data.rslt && data.rslt.obj ? data.rslt.obj : e.target;
@@ -85,6 +91,21 @@
 				},this));
 				
 			},this));
+			if (this.data.grid.isThemeroller) {
+				this.get_container()
+					.bind("select_node.jstree",$.proxy(function(e,data){
+						data.rslt.obj.children("a").nextAll("div").addClass("ui-state-active");
+					},this))
+					.bind("deselect_node.jstree deselect_all.jstree",$.proxy(function(e,data){
+						data.rslt.obj.children("a").nextAll("div").removeClass("ui-state-active");
+					},this))
+					.bind("hover_node.jstree",$.proxy(function(e,data){
+						data.rslt.obj.children("a").nextAll("div").addClass("ui-state-hover");
+					},this))
+					.bind("dehover_node.jstree",$.proxy(function(e,data){
+						data.rslt.obj.children("a").nextAll("div").removeClass("ui-state-hover");
+					},this));
+			}
 			
 		},
 		__destroy : function() {
@@ -98,7 +119,7 @@
 		},
 		_fn : { 
 			_prepare_headers : function() {
-				var header, i, cols = this.data.grid.columns || [], width, defaultWidth = this.data.grid.columnWidth, cl, val, margin, last,
+				var header, i, cols = this.data.grid.columns || [], width, defaultWidth = this.data.grid.columnWidth, cl, val, margin, last, tr = this.data.grid.isThemeroller,
 				cHeight, hHeight, container = this.get_container(), parent = container.parent(), hasHeaders = 0,
 				conf = this.data.grid.defaultConf;
 				// save the original parent so we can reparent on destroy
@@ -106,7 +127,7 @@
 				
 				
 				// set up the wrapper, if not already done
-				header = this.data.grid.header || $("<div></div>").addClass("jstree-grid-header");
+				header = this.data.grid.header || $("<div></div>").addClass((tr?"ui-widget-header ":"")+"jstree-grid-header");
 				
 				// create the headers
 				for (i=0;i<cols.length;i++) {
@@ -116,9 +137,9 @@
 					width = cols[i].width || defaultWidth;
 					width -= 2+8; // account for the borders and padding
 					margin = i === 0 ? 3 : 0;
-					last = $("<div></div>").css(conf).css({"margin-left": margin,"width":width, "padding": "1 3 2 5"}).addClass("jstree-grid-header "+cl).text(val).appendTo(header);
+					last = $("<div></div>").css(conf).css({"margin-left": margin,"width":width, "padding": "1 3 2 5"}).addClass((tr?"ui-widget-header ":"")+"jstree-grid-header "+cl).text(val).appendTo(header);
 				}		
-				last.addClass("jstree-grid-header-last");
+				last.addClass((tr?"ui-widget-header ":"")+"jstree-grid-header");
 				// did we have any real columns?
 				if (hasHeaders) {
 					$("<div></div>").addClass("jstree-grid-wrapper").appendTo(parent).append(header).append(container);
@@ -129,7 +150,7 @@
 				
 			},
 			_prepare_grid : function(obj) {
-				var c = this.data.grid.treeClass, _this = this, t, cols = this.data.grid.columns || [], width, 
+				var c = this.data.grid.treeClass, _this = this, t, cols = this.data.grid.columns || [], width, s = this.data.grid.source, tr = this.data.grid.isThemeroller,
 				defaultWidth = this.data.grid.columnWidth, divOffset = this.data.grid.divOffset, conf = this.data.grid.defaultConf;
 				obj = !obj || obj === -1 ? this.get_container() : this._get_node(obj);
 				// get our column definition
@@ -141,7 +162,6 @@
 					a = t.children("a");
 					isAlreadyGrid = a.hasClass(c);
 					
-
 					if (a.length === 1) {
 						a.addClass(c);
 						renderAWidth(a,_this);
@@ -153,7 +173,9 @@
 							wcl = cols[i].wideCellClass || "";
 
 							// get the contents of the cell
-							val = cols[i].value && t.attr(cols[i].value) ? t.attr(cols[i].value) : "";
+							if (s === "attr") { val = cols[i].value && t.attr(cols[i].value) ? t.attr(cols[i].value) : "";
+							} else if (s === "metadata") { val = cols[i].value && t.data(cols[i].value) ? t.data(cols[i].value) : ""; }
+
 							// get the valueClass
 							valClass = cols[i].valueClass && t.attr(cols[i].valueClass) ? t.attr(cols[i].valueClass) : "";
 							if (valClass && cols[i].valueClassPrefix && cols[i].valueClassPrefix !== "") {
@@ -179,14 +201,14 @@
 
 							// create a span inside the div, so we can control what happens in the whole div versus inside just the text/background
 							span.addClass(cl+" "+valClass).css("display","inline-block").html(val);
-							last = last.css(conf).css({width: width,"padding-left":paddingleft+"px"}).addClass("jstree-grid-cell "+wcl+ " " + wideValClass);
+							last = last.css(conf).css({width: width,"padding-left":paddingleft+"px"}).addClass("jstree-grid-cell "+wcl+ " " + wideValClass + (tr?" ui-state-default":""));
 							
 							if (title) {
 								span.attr("title",title);
 							}
 
 						}		
-						last.addClass("jstree-grid-cell-last");
+						last.addClass("jstree-grid-cell-last"+(tr?" ui-state-default":""));
 					}
 				});
 				if(obj.is("li")) { this._repair_state(obj); }
