@@ -150,7 +150,7 @@
 				
 			},
 			_prepare_grid : function(obj) {
-				var c = this.data.grid.treeClass, _this = this, t, cols = this.data.grid.columns || [], width, s = this.data.grid.source, tr = this.data.grid.isThemeroller,
+				var c = this.data.grid.treeClass, _this = this, t, cols = this.data.grid.columns || [], width, s = this.data.grid.source, tr = this.data.grid.isThemeroller, img
 				defaultWidth = this.data.grid.columnWidth, divOffset = this.data.grid.divOffset, conf = this.data.grid.defaultConf;
 				obj = !obj || obj === -1 ? this.get_container() : this._get_node(obj);
 				// get our column definition
@@ -172,9 +172,16 @@
 							cl = cols[i].cellClass || "";
 							wcl = cols[i].wideCellClass || "";
 
+
 							// get the contents of the cell
 							if (s === "attr") { val = cols[i].value && t.attr(cols[i].value) ? t.attr(cols[i].value) : "";
 							} else if (s === "metadata") { val = cols[i].value && t.data(cols[i].value) ? t.data(cols[i].value) : ""; }
+
+							// put images instead of text if needed
+							if (cols[i].images) {
+								img = cols[i].images[val] || cols[i].images["default"];
+								val = img[0] === "*" ? '<span class="'+img.substr(1)+'"></span>' : '<img src="'+img+'">';
+							}
 
 							// get the valueClass
 							valClass = cols[i].valueClass && t.attr(cols[i].valueClass) ? t.attr(cols[i].valueClass) : "";
