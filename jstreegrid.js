@@ -180,7 +180,7 @@
 							// put images instead of text if needed
 							if (cols[i].images) {
 								img = cols[i].images[val] || cols[i].images["default"];
-								val = img[0] === "*" ? '<span class="'+img.substr(1)+'"></span>' : '<img src="'+img+'">';
+								if (img) { val = img[0] === "*" ? '<span class="'+img.substr(1)+'"></span>' : '<img src="'+img+'">'; }
 							}
 
 							// get the valueClass
