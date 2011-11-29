@@ -94,16 +94,16 @@
 			if (this.data.grid.isThemeroller) {
 				this.get_container()
 					.bind("select_node.jstree",$.proxy(function(e,data){
-						data.rslt.obj.children("a").next().addClass("ui-state-active");
+						data.rslt.obj.children("a").nextAll("div").addClass("ui-state-active");
 					},this))
 					.bind("deselect_node.jstree deselect_all.jstree",$.proxy(function(e,data){
-						data.rslt.obj.children("a").next().removeClass("ui-state-active");
+						data.rslt.obj.children("a").nextAll("div").removeClass("ui-state-active");
 					},this))
 					.bind("hover_node.jstree",$.proxy(function(e,data){
-						data.rslt.obj.children("a").next().addClass("ui-state-hover");
+						data.rslt.obj.children("a").nextAll("div").addClass("ui-state-hover");
 					},this))
 					.bind("dehover_node.jstree",$.proxy(function(e,data){
-						data.rslt.obj.children("a").next().removeClass("ui-state-hover");
+						data.rslt.obj.children("a").nextAll("div").removeClass("ui-state-hover");
 					},this));
 			}
 			
