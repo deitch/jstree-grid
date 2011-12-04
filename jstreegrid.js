@@ -57,7 +57,6 @@
 			this.data.grid.treeClass = "jstree-grid";
 			this.data.grid.columnWidth = s.width;
 			this.data.grid.defaultConf = {display: "inline-block"};
-			this.data.grid.source = s.source || "attr";
 			this.data.grid.isThemeroller = !!this.data.themeroller;
 			
 			if ($.browser.msie && parseInt($.browser.version.substr(0,1),10) < 8) {
@@ -135,7 +134,7 @@
 					val = cols[i].header || "";
 					if (val) {hasHeaders = true;}
 					width = cols[i].width || defaultWidth;
-					width -= 2+8; // account for the borders and padding
+					// width -= 2+8; // account for the borders and padding
 					margin = i === 0 ? 3 : 0;
 					last = $("<div></div>").css(conf).css({"margin-left": margin,"width":width, "padding": "1 3 2 5"}).addClass((tr?"ui-widget-header ":"")+"jstree-grid-header "+cl).text(val).appendTo(header);
 				}		
@@ -150,12 +149,12 @@
 				
 			},
 			_prepare_grid : function(obj) {
-				var c = this.data.grid.treeClass, _this = this, t, cols = this.data.grid.columns || [], width, s = this.data.grid.source, tr = this.data.grid.isThemeroller,
+				var c = this.data.grid.treeClass, _this = this, t, cols = this.data.grid.columns || [], width, tr = this.data.grid.isThemeroller, img
 				defaultWidth = this.data.grid.columnWidth, divOffset = this.data.grid.divOffset, conf = this.data.grid.defaultConf;
 				obj = !obj || obj === -1 ? this.get_container() : this._get_node(obj);
 				// get our column definition
 				obj.each(function () {
-					var i, val, cl, wcl, a, last, valClass, wideValClass, span, paddingleft, title, isAlreadyGrid;
+					var i, val, cl, wcl, a, last, valClass, wideValClass, span, paddingleft, title, isAlreadyGrid, col, content, s;
 					t = $(this);
 					
 					// find the a children
@@ -168,39 +167,50 @@
 						renderATitle(a,t,_this);
 						last = a;
 						for (i=1;i<cols.length;i++) {
+							col = cols[i];
+							s = col.source || "attr";
 							// get the cellClass and the wideCellClass
-							cl = cols[i].cellClass || "";
-							wcl = cols[i].wideCellClass || "";
+							cl = col.cellClass || "";
+							wcl = col.wideCellClass || "";
+
 
 							// get the contents of the cell
-							if (s === "attr") { val = cols[i].value && t.attr(cols[i].value) ? t.attr(cols[i].value) : "";
-							} else if (s === "metadata") { val = cols[i].value && t.data(cols[i].value) ? t.data(cols[i].value) : ""; }
+							if (s === "attr") { val = col.value && t.attr(col.value) ? t.attr(col.value) : "";
+							} else if (s === "metadata") { val = col.value && t.data(col.value) ? t.data(col.value) : ""; }
+
+							// put images instead of text if needed
+							if (col.images) {
+							img = col.images[val] || col.images["default"];
+								if (img) content = img[0] === "*" ? '<span class="'+img.substr(1)+'"></span>' : '<img src="'+img+'">';
+							} else { content = val; }
 
 							// get the valueClass
-							valClass = cols[i].valueClass && t.attr(cols[i].valueClass) ? t.attr(cols[i].valueClass) : "";
-							if (valClass && cols[i].valueClassPrefix && cols[i].valueClassPrefix !== "") {
-								valClass = cols[i].valueClassPrefix + valClass;
+							valClass = col.valueClass && t.attr(col.valueClass) ? t.attr(col.valueClass) : "";
+							if (valClass && col.valueClassPrefix && col.valueClassPrefix !== "") {
+								valClass = col.valueClassPrefix + valClass;
 							}
 							// get the wideValueClass
-							wideValClass = cols[i].wideValueClass && t.attr(cols[i].wideValueClass) ? t.attr(cols[i].wideValueClass) : "";
-							if (wideValClass && cols[i].wideValueClassPrefix && cols[i].wideValueClassPrefix !== "") {
-								wideValClass = cols[i].wideValueClassPrefix + wideValClass;
+							wideValClass = col.wideValueClass && t.attr(col.wideValueClass) ? t.attr(col.wideValueClass) : "";
+							if (wideValClass && col.wideValueClassPrefix && col.wideValueClassPrefix !== "") {
+								wideValClass = col.wideValueClassPrefix + wideValClass;
 							}
 							// get the title
-							title = cols[i].title && t.attr(cols[i].title) ? t.attr(cols[i].title) : "";
+							title = col.title && t.attr(col.title) ? t.attr(col.title) : "";
 							// strip out HTML
 							title = title.replace(htmlstripre, '');
 							
 							// get the width
 							paddingleft = 7;
-							width = cols[i].width || defaultWidth;
+							width = col.width || defaultWidth;
 							width = width - paddingleft;
 							
 							last = isAlreadyGrid ? a.nextAll("div:eq("+(i-1)+")") : $("<div></div>").insertAfter(last);
 							span = isAlreadyGrid ? last.children("span") : $("<span></span>").appendTo(last);
 
 							// create a span inside the div, so we can control what happens in the whole div versus inside just the text/background
-							span.addClass(cl+" "+valClass).css("display","inline-block").html(val);
+							span.addClass(cl+" "+valClass).css("display","inline-block").html(content).click(function () {
+								$(this).trigger("select_cell.jstree-grid", [{value: val,column: col.header,node: $(this).closest("li"),sourceName: col.value,sourceType: s}]);
+							});
 							last = last.css(conf).css({width: width,"padding-left":paddingleft+"px"}).addClass("jstree-grid-cell "+wcl+ " " + wideValClass + (tr?" ui-state-default":""));
 							
 							if (title) {
