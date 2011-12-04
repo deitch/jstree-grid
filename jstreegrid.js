@@ -168,7 +168,7 @@
 						last = a;
 						for (i=1;i<cols.length;i++) {
 							col = cols[i];
-							s = col.source;
+							s = col.source || "attr";
 							// get the cellClass and the wideCellClass
 							cl = col.cellClass || "";
 							wcl = col.wideCellClass || "";
