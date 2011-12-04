@@ -209,7 +209,7 @@
 
 							// create a span inside the div, so we can control what happens in the whole div versus inside just the text/background
 							span.addClass(cl+" "+valClass).css("display","inline-block").html(content).click(function () {
-								_this.get_container().trigger("select_cell.jstree-grid", [{value: val,column: col.header,node: $(this).closest("li"),sourceName: col.value,sourceType: s}]);
+								$(this).trigger("select_cell.jstree-grid", [{value: val,column: col.header,node: $(this).closest("li"),sourceName: col.value,sourceType: s}]);
 							});
 							last = last.css(conf).css({width: width,"padding-left":paddingleft+"px"}).addClass("jstree-grid-cell "+wcl+ " " + wideValClass + (tr?" ui-state-default":""));
 							
