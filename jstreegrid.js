@@ -134,7 +134,7 @@
 					val = cols[i].header || "";
 					if (val) {hasHeaders = true;}
 					width = cols[i].width || defaultWidth;
-					// width -= 2+8; // account for the borders and padding
+					width -= 2+8; // account for the borders and padding
 					margin = i === 0 ? 3 : 0;
 					last = $("<div></div>").css(conf).css({"margin-left": margin,"width":width, "padding": "1 3 2 5"}).addClass((tr?"ui-widget-header ":"")+"jstree-grid-header "+cl).text(val).appendTo(header);
 				}		
@@ -149,7 +149,7 @@
 				
 			},
 			_prepare_grid : function(obj) {
-				var c = this.data.grid.treeClass, _this = this, t, cols = this.data.grid.columns || [], width, tr = this.data.grid.isThemeroller, img
+				var c = this.data.grid.treeClass, _this = this, t, cols = this.data.grid.columns || [], width, tr = this.data.grid.isThemeroller, img,
 				defaultWidth = this.data.grid.columnWidth, divOffset = this.data.grid.divOffset, conf = this.data.grid.defaultConf;
 				obj = !obj || obj === -1 ? this.get_container() : this._get_node(obj);
 				// get our column definition
@@ -181,7 +181,7 @@
 							// put images instead of text if needed
 							if (col.images) {
 							img = col.images[val] || col.images["default"];
-								if (img) content = img[0] === "*" ? '<span class="'+img.substr(1)+'"></span>' : '<img src="'+img+'">';
+							if (img) {content = img[0] === "*" ? '<span class="'+img.substr(1)+'"></span>' : '<img src="'+img+'">';}
 							} else { content = val; }
 
 							// get the valueClass
