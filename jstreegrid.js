@@ -134,7 +134,7 @@
 					val = cols[i].header || "";
 					if (val) {hasHeaders = true;}
 					width = cols[i].width || defaultWidth;
-					width -= 2+8; // account for the borders and padding
+					width -= tr ? 1+6 : 2+8; // account for the borders and padding
 					margin = i === 0 ? 3 : 0;
 					last = $("<div></div>").css(conf).css({"margin-left": margin,"width":width, "padding": "1 3 2 5"}).addClass((tr?"ui-widget-header ":"")+"jstree-grid-header "+cl).text(val).appendTo(header);
 				}		
