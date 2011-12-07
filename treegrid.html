@@ -6,7 +6,12 @@
 		<script type="text/javascript" src="jstreegrid.js"></script>
 		<script type="text/javascript">
 			$(document).ready(function(){
-				var data = [{
+				var data, xmldata;
+				
+				/*
+				 * Do the JSON tree
+				 */
+				data = [{
 					data: "Root 1",
 					attr: {price: "$5.00", size: "4"},
 					children: [
@@ -14,6 +19,7 @@
 						{data: "Child 2", attr: {price: "<i>$3.00</i>", size: "2"}}
 					]
 				}];
+				
 				$("div#jstree").bind("loaded_grid.jstree",function(){
 					$("span#status").text("loaded");
 				});
@@ -45,6 +51,51 @@
 					var li = $("li:eq(0)","div#jstree"), val = li.attr("size"), newval = parseInt(val,10)*2;
 					li.attr("size",newval).trigger("change_node.jstree");
 				});
+				
+				
+				/*
+				 * Do the XML tree
+				 */
+				xmldata = 
+						'<root>'+
+							'<item id="xml_root_1" price="$5.00" size="4">'+
+								'<content><name>Root 1</name></content>'+
+								'<item id="xml_child_1" price="$4.00" size="3">'+
+									'<content><name>Really long named child whose name gets cut off</name></content>'+
+								'</item>'+
+								'<item id="xml_child_2" price="$3.00" size="2">'+
+									'<content><name>Child 2</name></content>'+
+								'</item>'+
+							'</item>'+
+						'</root>';
+				$("div#jstreex").bind("loaded_grid.jstree",function(){
+					$("span#xstatus").text("loaded");
+				});
+				$("div#jstreex").jstree({
+					plugins: ["themes","xml_data","grid","dnd"],
+					xml_data: {data: xmldata, xsl: "nest",clean_node:true},
+					grid: {
+						columns: [
+							{width: 110, header: "Nodes",title:"_DATA_"},
+							{cellClass: "col1", value: "price", width: 60, header: "Price", title:"price"},
+							{cellClass: "col2", value: "size", width: 60, header: "Qty", title:"size"}
+						]
+					},
+					dnd: {
+		                drop_finish : function () { 
+		                }, 
+		                drag_finish : function () { 
+		                }, 
+		                drag_check : function (data) { 
+		                    return { 
+		                        after : true, 
+		                        before : true, 
+		                        inside : true 
+		                    }; 
+		                } 
+					}
+				});
+				
 			});
 		</script>
 	</head>
@@ -54,9 +105,17 @@
 		amazing <a href="http://jquery.com">jQuery</a> library, with a tree grid. The treegrid is implemented
 		as a standard jstree plugin. Simply include jquery and jstree, and the plugin library jstreegrid.js,
 		and include it as a plugin. Look at the source to this page to see how it is done.
-		<div id="jstree"></div>
-		<div>Tree grid is <span id="status">loading</span>.</div>
-		<div><a href="#" id="change">Click here to double the root Qty</a></div>
+		<div id="json_jstree">
+			<h4>JSON Tree</h4>
+			<div id="jstree"></div>
+			<div>Tree grid is <span id="status">loading</span>.</div>
+			<div><a href="#" id="change">Click here to double the root Qty</a></div>
+		</div>
+		<div id="xml_jstree">
+			<h4>XML Tree</h4>
+			<div id="jstreex"></div>
+			<div>Tree grid is <span id="xstatus">loading</span>.</div>
+		</div>
 		
 	</body>
 </html>
