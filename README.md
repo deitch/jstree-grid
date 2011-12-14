@@ -9,12 +9,15 @@ Allows any number of columns, and can use any property of the node to display da
 
 Usage
 -----
-# Include jquery (>= 1.4.2) and jstree in your page, as usual
-# Include jstreegrid.js
+1. Include jquery (>= 1.4.2) and jstree in your page, as usual
+2. Include jstreegrid.js
+
+````HTML
 <script src="/path/to/jstreegrid.js"></script>
 <link href="treegrid.css" rel="stylesheet" type="text/css"> 
+````
 
-# Include grid as a plugin
+3. Include grid as a plugin
 
 ````JavaScript
 $("div#id").jstree({
@@ -24,7 +27,7 @@ $("div#id").jstree({
 })
 ````
 
-# Include relevant parameters. 
+4. Include relevant parameters. 
 
 ````JavaScript
 $("div#id").jstree({
@@ -43,7 +46,7 @@ Structure
 The grid is built by adding divs <div></div> to each <li> entry for a row in the tree. Inside the <div> is a <span></span> with the data.
 Thus, an entry is likely to look like
 
-````html
+````HTML
 <div><span>$5.00</span></div>
 ````
 
@@ -113,7 +116,7 @@ grid: {
 ````
 
 The result would be:
-````html
+````HTML
 <div><span class="expensive">$10</span></div>
 ````
 
@@ -127,7 +130,7 @@ grid: {
 }
 ````
 The result would be:
-````html
+````HTML
 <div><span class="price-expensive">$10</span></div>
 ````
 
@@ -142,7 +145,7 @@ grid: {
 ````
 
 The result would be:
-````html
+````HTML
 <div><span title="$10">$10</span></div>
 ````
 
@@ -177,7 +180,7 @@ $("li.mynode").attr("value","25").trigger("change_node.jstree");
 
 HTML
 ----
-Note that the data in each cell is treated as html content for the span, rather than raw text. You can use HTML in any cell, except for the 
+Note that the data in each cell is treated as HTML content for the span, rather than raw text. You can use HTML in any cell, except for the 
 base tree node cell, which follows jstree rules.
 
 
@@ -189,7 +192,7 @@ Events
 ------
 * loaded.jstree: When the tree is done loading, as usual, it fires a "loaded.jstree" event on the div to which you added jstree. jsTreeGrid uses this event to start its own load process. 
 * loaded_grid.jstree: When jsTreeGrid is done, it fires a "loaded_grid.jstree" event on the same div. If you need to run some 
-code after the jsTreeGrid is done loading, just listen for that event. An example is in the treegrid.html sample page.
+code after the jsTreeGrid is done loading, just listen for that event. An example is in the treegrid.HTML sample page.
 * select_cell.jstree-grid: If you click in any individual cell, the jstreegrid will fire a "select_cell.jstree_grid" event on the jstree. 
 
 The signature for the select_cell.jstree-grid handler is:
