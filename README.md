@@ -11,33 +11,25 @@ Usage
 -----
 1. Include jquery (>= 1.4.2) and jstree in your page, as usual
 2. Include jstreegrid.js
+3. Include grid as a plugin
+4. Include relevant parameters. 
 
 ````HTML
-<script src="/path/to/jstreegrid.js"></script>
+<!-- include jstreegrid and css -->
+<script src="/path/to/jstreegrid.js"></script> 
 <link href="treegrid.css" rel="stylesheet" type="text/css"> 
 ````
 
-3. Include grid as a plugin
 
 ````JavaScript
 $("div#id").jstree({
-..
+	// include grid as a plugin
 	plugins: ["core","ui",...,"grid"],
-..
-})
-````
-
-4. Include relevant parameters. 
-
-````JavaScript
-$("div#id").jstree({
-..
-	plugins: ["core","ui",...,"grid"],
+	// include relevant parameters
 	grid: {
 		columns: [{},{},...,{}],
 		width: 25
 	} 
-..
 });
 ````
 
@@ -78,18 +70,26 @@ You would ensure that "clickable" is applied to the span, but important to the d
 
 
 Value is the name of the attribute or metadata whose content will be used; you can choose which once for the entire grid. Thus, if you have a node whose data is given by:
+
+````JavaScript
 {data: "My Node", attr: {price: "$10"}}
+````
+
 and we want the price value ($10) to be in column 1, then we have a config of:
+
+````JavaScript
 grid: {
 	columns: [
 		{width: 50, header: "Nodes"},
 		{width: 30, header: "Price", value: "price"}
 	]
 }
+````
 
 If you prefer to use metadata, per jstree (see http://www.jstree.com/documentation/json_data) then you need to set the source to metadata 
 and use that data:
 
+````JavaScript
 {data: "My Node", metadata: {price: "$10"}}
 grid: {
 	source: "metadata",
@@ -98,14 +98,18 @@ grid: {
 		{width: 30, header: "Price", value: "price"}
 	]
 }
+````
 
 Thanks to ChrisRaven for the metadata support, resizable columns, and cell click events..
 
 ValueClass is the name of the attribute that will be added as a class to this cell. Thus, if you have a node whose data is given by:
+
 ````JavaScript
 {data: "My Node", attr: {price: "$10", scale: "expensive"}}
 ````
+
 and we want the cell to have the class "expensive", then we have a config of:
+
 ````JavaScript
 grid: {
 	columns: [
@@ -116,11 +120,13 @@ grid: {
 ````
 
 The result would be:
+
 ````HTML
 <div><span class="expensive">$10</span></div>
 ````
 
 Conversely, if we want it to be "price-expensive", we would have a config of:
+
 ````JavaScript
 grid: {
 	columns: [
@@ -129,12 +135,15 @@ grid: {
 	]
 }
 ````
+
 The result would be:
+
 ````HTML
 <div><span class="price-expensive">$10</span></div>
 ````
 
 You can add a tooltip to each element in the grid by adding the name of it to the title, with the HTML stripped out. For example:
+
 ````JavaScript
 grid: {
 	columns: [
@@ -145,11 +154,13 @@ grid: {
 ````
 
 The result would be:
+
 ````HTML
 <div><span title="$10">$10</span></div>
 ````
 
 This includes the actual tree node, not just the added grid cells:
+
 ````JavaScript
 grid: {
 	columns: [
@@ -196,11 +207,12 @@ code after the jsTreeGrid is done loading, just listen for that event. An exampl
 * select_cell.jstree-grid: If you click in any individual cell, the jstreegrid will fire a "select_cell.jstree_grid" event on the jstree. 
 
 The signature for the select_cell.jstree-grid handler is:
+
 ````JavaScript
 function(value,header,node,sourceName,sourceType)
 ````
+
 where:
-[{value: val,column: col.header,node: $(this).closest("li"),sourceName: col.value,sourceType: s}]
 
 * value: value of the data element that rendered this cell
 * column: header for the column
