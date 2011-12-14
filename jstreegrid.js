@@ -1,5 +1,5 @@
 /*
- * jsTreeGrid 0.97
+ * jsTreeGrid 0.98
  * http://jsorm.com/
  *
  * This plugin handles adding a grid to a tree to display additional data
@@ -19,14 +19,14 @@
 /*global window, document, jQuery*/
 
 (function ($) {
-	var renderAWidth, renderATitle, htmlstripre, SPECIAL_TITLE = "_DATA_";
+	var renderAWidth, renderATitle, htmlstripre, SPECIAL_TITLE = "_DATA_", bound = false;
 	/*jslint regexp:false */
 	htmlstripre = /<\/?[^>]+>/gi;
 	/*jslint regexp:true */
 
 	renderAWidth = function(node,tree) {
 		var depth, a = node.get(0).tagName.toLowerCase() === "a" ? node : node.children("a"),
-		width = tree.data.grid.columns[0].width;
+		width = tree.data.grid.columns[0].width + tree.data.grid.treeWidthDiff;
 		// need to use a selector in jquery 1.4.4+
 		depth = a.parentsUntil(tree.get_container().get(0).tagName+".jstree").filter("li").length;
 		width = width - depth*18;
@@ -54,10 +54,12 @@
 		__init : function () { 
 			var s = this._get_settings().grid || {};
 			this.data.grid.columns = s.columns || []; 
-			this.data.grid.treeClass = "jstree-grid";
+			this.data.grid.treeClass = "jstree-grid-col-0";
 			this.data.grid.columnWidth = s.width;
 			this.data.grid.defaultConf = {display: "inline-block"};
 			this.data.grid.isThemeroller = !!this.data.themeroller;
+			this.data.grid.treeWidthDiff = 0;
+			this.data.grid.resizable = s.resizable;
 			
 			if ($.browser.msie && parseInt($.browser.version.substr(0,1),10) < 8) {
 				this.data.grid.defaultConf.display = "inline";
@@ -66,9 +68,17 @@
 			
 			// set up the classes we need
 			if (this.data.grid.isThemeroller) {
-				$('<style type="text/css">.jstree-grid-header {border-width: 0 1px 0 0; padding: 1px 3px;}\n.jstree-grid-cell {padding-left: 4px; border: none !important; background: transparent !important;}</style>').appendTo($("head"));
+				$('<style type="text/css">.jstree-grid-header {border: 0; padding: 1px 3px;}\n'+
+					'.jstree-grid-cell {padding-left: 4px; border: none !important; background: transparent !important;}\n'+
+					'.jstree-grid-separator {display: inline-block; border-width: 0 2px 0 0; }\n'+
+					'.jstree-grid-resizable-separator {cursor: col-resize;}'+
+					'</style>').appendTo("head");
 			} else {
-				$('<style type="text/css">.jstree-grid-header {border-left: 1px solid #eeeeee;border-right: 1px solid #d0d0d0;background-color: #EBF3FD;}\n.jstree-grid-cell {padding-left: 4px;}</style>').appendTo($("head"));
+				$('<style type="text/css">.jstree-grid-header {background-color: #EBF3FD;}\n'+
+					'.jstree-grid-cell {padding-left: 4px;}\n'+
+					'.jstree-grid-separator {display: inline-block; border-right: 2px solid #d0d0d0;}'+
+					'.jstree-grid-resizable-separator {cursor: col-resize;}'+
+					'</style>').appendTo("head");
 			}
 
 			this.get_container().bind("open_node.jstree create_node.jstree clean_node.jstree change_node.jstree", $.proxy(function (e, data) { 
@@ -118,9 +128,10 @@
 		},
 		_fn : { 
 			_prepare_headers : function() {
-				var header, i, cols = this.data.grid.columns || [], width, defaultWidth = this.data.grid.columnWidth, cl, val, margin, last, tr = this.data.grid.isThemeroller,
+				var header, i, cols = this.data.grid.columns || [], width, defaultWidth = this.data.grid.columnWidth, resizable = this.data.grid.resizable || false,
+				cl, val, margin, last, tr = this.data.grid.isThemeroller,
 				cHeight, hHeight, container = this.get_container(), parent = container.parent(), hasHeaders = 0,
-				conf = this.data.grid.defaultConf;
+				conf = this.data.grid.defaultConf, isClickedSep = false, oldMouseX = 0, newMouseX = 0, currentTree = null, colNum = 0, toResize = null, clickedSep = null, borPadWidth = 0;
 				// save the original parent so we can reparent on destroy
 				this.data.grid.parent = parent;
 				
@@ -134,10 +145,12 @@
 					val = cols[i].header || "";
 					if (val) {hasHeaders = true;}
 					width = cols[i].width || defaultWidth;
-					width -= tr ? 1+6 : 2+8; // account for the borders and padding
+					borPadWidth = tr ? 1+6 : 2+8; // account for the borders and padding
+					width -= borPadWidth;
 					margin = i === 0 ? 3 : 0;
-					last = $("<div></div>").css(conf).css({"margin-left": margin,"width":width, "padding": "1 3 2 5"}).addClass((tr?"ui-widget-header ":"")+"jstree-grid-header "+cl).text(val).appendTo(header);
-				}		
+					last = $("<div></div>").css(conf).css({"margin-left": margin,"width":width, "padding": "1 3 2 5"}).addClass((tr?"ui-widget-header ":"")+"jstree-grid-header "+cl).text(val).appendTo(header)
+						.after("<div class='jstree-grid-separator"+(tr ? " ui-widget-header" : "")+(resizable? " jstree-grid-resizable-separator":"")+"'>&nbsp;</div>");
+				}
 				last.addClass((tr?"ui-widget-header ":"")+"jstree-grid-header");
 				// did we have any real columns?
 				if (hasHeaders) {
@@ -146,7 +159,44 @@
 					this.data.grid.divOffset = header.parent().offset().left;
 					this.data.grid.header = header;
 				}
-				
+
+				if (!bound && resizable) {
+					bound = true;
+					$(".jstree-grid-separator")
+						.live("selectstart", function () { return false; })
+						.live("mousedown", function (e) {
+							clickedSep = $(this);
+							isClickedSep = true;
+							currentTree = clickedSep.parents(".jstree-grid-wrapper").children(".jstree");
+							oldMouseX = e.clientX;
+							colNum = clickedSep.prevAll(".jstree-grid-header").length-1;
+							toResize = clickedSep.prev().add(currentTree.find(".jstree-grid-col-"+colNum));
+							return false;
+						});
+
+					$(document)
+						.mouseup(function () {
+							var  i, ref, cols, widths, headers;
+							if (isClickedSep) {
+								ref = $.jstree._reference(currentTree);
+								cols = ref.data.grid.columns;
+								headers = clickedSep.parent().children(".jstree-grid-header");
+								widths = {};
+								if (!colNum) { ref.data.grid.treeWidthDiff = currentTree.find("ins:eq(0)").width() + currentTree.find("a:eq(0)").width() - ref.data.grid.columns[0].width; }
+								isClickedSep = false;
+								for (i=0;i<cols.length;i++) { widths[cols[i].header] = {w: parseFloat(headers[i].style.width)+borPadWidth, r: i===colNum }; }
+								currentTree.trigger("resize_column.jstree-grid", [widths]);
+							}
+						})
+						.mousemove(function (e) {
+							if (isClickedSep) {
+								newMouseX = e.clientX;
+								var diff = newMouseX - oldMouseX;
+								toResize.each(function () { this.style.width = parseFloat(this.style.width) + diff + "px"; });
+								oldMouseX = newMouseX;
+							}
+						});
+				}
 			},
 			_prepare_grid : function(obj) {
 				var c = this.data.grid.treeClass, _this = this, t, cols = this.data.grid.columns || [], width, tr = this.data.grid.isThemeroller, img,
@@ -202,7 +252,7 @@
 							// get the width
 							paddingleft = 7;
 							width = col.width || defaultWidth;
-							width = width - paddingleft;
+							width = $(".jstree-grid-col-"+i).width() || (width - paddingleft);
 							
 							last = isAlreadyGrid ? a.nextAll("div:eq("+(i-1)+")") : $("<div></div>").insertAfter(last);
 							span = isAlreadyGrid ? last.children("span") : $("<span></span>").appendTo(last);
@@ -213,7 +263,7 @@
 									$(this).trigger("select_cell.jstree-grid", [{value: val,column: col.header,node: $(this).closest("li"),sourceName: col.value,sourceType: s}]);
 								};
 							}(val,col,s)));
-							last = last.css(conf).css({width: width,"padding-left":paddingleft+"px"}).addClass("jstree-grid-cell "+wcl+ " " + wideValClass + (tr?" ui-state-default":""));
+							last = last.css(conf).css({width: width,"padding-left":paddingleft+"px"}).addClass("jstree-grid-cell "+wcl+ " " + wideValClass + (tr?" ui-state-default":"")).addClass("jstree-grid-col-"+i);
 							
 							if (title) {
 								span.attr("title",title);
@@ -229,4 +279,5 @@
 		}
 		// need to do alternating background colors or borders
 	});
+	$(".jstree-grid-separator").css('height', $('.jstree-grid-header').height());
 }(jQuery));
