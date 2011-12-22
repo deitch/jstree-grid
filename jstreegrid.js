@@ -279,5 +279,4 @@
 		}
 		// need to do alternating background colors or borders
 	});
-	$(".jstree-grid-separator").css('height', $('.jstree-grid-header').height());
 }(jQuery));
