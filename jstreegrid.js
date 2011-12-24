@@ -69,13 +69,13 @@
 			// set up the classes we need
 			if (this.data.grid.isThemeroller) {
 				$('<style type="text/css">.jstree-grid-header {border: 0; padding: 1px 3px;}\n'+
-					'.jstree-grid-cell {padding-left: 4px; border: none !important; background: transparent !important; overflow: hidden;}\n'+
+					'.jstree-grid-cell {padding-left: 4px; border: none !important; background: transparent !important; vertical-align: top; overflow:hidden;}\n'+
 					'.jstree-grid-separator {display: inline-block; border-width: 0 2px 0 0; }\n'+
 					'.jstree-grid-resizable-separator {cursor: col-resize;}'+
 					'</style>').appendTo("head");
 			} else {
 				$('<style type="text/css">.jstree-grid-header {background-color: #EBF3FD;}\n'+
-					'.jstree-grid-cell {padding-left: 4px; overflow: hidden;}\n'+
+					'.jstree-grid-cell {padding-left: 4px; vertical-align: top; overflow:hidden;}\n'+
 					'.jstree-grid-separator {display: inline-block; border-right: 2px solid #d0d0d0;}'+
 					'.jstree-grid-resizable-separator {cursor: col-resize;}'+
 					'</style>').appendTo("head");
@@ -258,7 +258,7 @@
 							span = isAlreadyGrid ? last.children("span") : $("<span></span>").appendTo(last);
 
 							// create a span inside the div, so we can control what happens in the whole div versus inside just the text/background
-							span.addClass(cl+" "+valClass).css("display","inline-block").html(content).click((function (val,col,s) {
+							span.addClass(cl+" "+valClass).css({"display":"inline-block"}).html(content).click((function (val,col,s) {
 								return function() {
 									$(this).trigger("select_cell.jstree-grid", [{value: val,column: col.header,node: $(this).closest("li"),sourceName: col.value,sourceType: s}]);
 								};
