@@ -106,6 +106,12 @@
 		amazing <a href="http://jquery.com">jQuery</a> library, with a tree grid. The treegrid is implemented
 		as a standard jstree plugin. Simply include jquery and jstree, and the plugin library jstreegrid.js,
 		and include it as a plugin. Look at the source to this page to see how it is done.
+		<p/>
+		Some interesting feature usage. Check out the HTML and JS config to see the details:
+		<ul>
+			<li>The XML tree has a max-height set to 30px, causing the tree itself - but not the headers - to scroll.</li>
+			<li>The JSON tree has resizable columns, set to true.</li>
+		</ul>
 		<div id="json_jstree">
 			<h4>JSON Tree</h4>
 			<div id="jstree"></div>
@@ -114,7 +120,7 @@
 		</div>
 		<div id="xml_jstree">
 			<h4>XML Tree</h4>
-			<div id="jstreex"></div>
+			<div id="jstreex" style="max-height: 30px;"></div>
 			<div>Tree grid is <span id="xstatus">loading</span>.</div>
 		</div>
 		

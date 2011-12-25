@@ -194,6 +194,21 @@ HTML
 Note that the data in each cell is treated as HTML content for the span, rather than raw text. You can use HTML in any cell, except for the 
 base tree node cell, which follows jstree rules.
 
+Heights
+-------
+The height of the entire div in which the tree is rendered is given by you. If you wish the tree to have a max-height of 40px, you need to set it as part of the standard HTML/CSS. 
+
+````HTML
+<style>
+div#mytree {
+	max-height: 40px;
+}
+</style>
+<div id="mytree"></div>
+````
+
+In the above example, the tree itself, but *not* the headers, will be limited to 40px, not by jstree or jstreegrid, but by straight CSS. However, jstreegrid will structure the tree and header in such a way that if the total tree is greater than 40px in height, then the tree will have a vertical scrollbar, but the header will remain fixed.
+
 
 Themeroller
 -----------

@@ -275,6 +275,8 @@
 				});
 				if(obj.is("li")) { this._repair_state(obj); }
 				else { obj.find("> ul > li").each(function () { _this._repair_state(this); }); }
+			    $('.jstree').css({'overflow-y':'scroll'});
+				
 			}
 		}
 		// need to do alternating background colors or borders
