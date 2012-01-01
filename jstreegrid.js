@@ -52,7 +52,7 @@
 
 	$.jstree.plugin("grid", {
 		__init : function () { 
-			var s = this._get_settings().grid || {};
+			var s = this._get_settings().grid || {}, styles;
 			this.data.grid.columns = s.columns || []; 
 			this.data.grid.treeClass = "jstree-grid-col-0";
 			this.data.grid.columnWidth = s.width;
@@ -67,19 +67,17 @@
 			}
 			
 			// set up the classes we need
-			if (this.data.grid.isThemeroller) {
-				$('<style type="text/css">.jstree-grid-header {border: 0; padding: 1px 3px;}\n'+
-					'.jstree-grid-cell {padding-left: 4px; border: none !important; background: transparent !important; vertical-align: top; overflow:hidden;}\n'+
-					'.jstree-grid-separator {display: inline-block; border-width: 0 2px 0 0; }\n'+
-					'.jstree-grid-resizable-separator {cursor: col-resize;}'+
-					'</style>').appendTo("head");
-			} else {
-				$('<style type="text/css">.jstree-grid-header {background-color: #EBF3FD;}\n'+
-					'.jstree-grid-cell {padding-left: 4px; vertical-align: top; overflow:hidden;}\n'+
-					'.jstree-grid-separator {display: inline-block; border-right: 2px solid #d0d0d0;}'+
-					'.jstree-grid-resizable-separator {cursor: col-resize;}'+
-					'</style>').appendTo("head");
-			}
+
+			styles = [
+				'.jstree-grid-cell {padding-left: 4px; vertical-align: top; overflow:hidden;}',
+				'.jstree-grid-separator {display: inline-block; border-width: 0 2px 0 0;}',
+				'.jstree-grid-header-themeroller {border: 0; padding: 1px 3px;}',
+				'.jstree-grid-header-regular {background-color: #EBF3FD;}',
+				'.jstree-grid-separator-regular {border-color: 2px solid #d0d0d0;}',
+				'.jstree-grid-cell-themeroller {border: none !important; background: transparent !important;}'
+			];
+			
+			$('<style type="text/css">'+styles.join("\n")+'</style>').appendTo("head");
 
 			this.get_container().bind("open_node.jstree create_node.jstree clean_node.jstree change_node.jstree", $.proxy(function (e, data) { 
 					var target = data && data.rslt && data.rslt.obj ? data.rslt.obj : e.target;
@@ -129,7 +127,7 @@
 		_fn : { 
 			_prepare_headers : function() {
 				var header, i, cols = this.data.grid.columns || [], width, defaultWidth = this.data.grid.columnWidth, resizable = this.data.grid.resizable || false,
-				cl, val, margin, last, tr = this.data.grid.isThemeroller,
+				cl, val, margin, last, tr = this.data.grid.isThemeroller, classAdd = (tr?"themeroller":"regular"),
 				cHeight, hHeight, container = this.get_container(), parent = container.parent(), hasHeaders = 0,
 				conf = this.data.grid.defaultConf, isClickedSep = false, oldMouseX = 0, newMouseX = 0, currentTree = null, colNum = 0, toResize = null, clickedSep = null, borPadWidth = 0;
 				// save the original parent so we can reparent on destroy
@@ -137,7 +135,7 @@
 				
 				
 				// set up the wrapper, if not already done
-				header = this.data.grid.header || $("<div></div>").addClass((tr?"ui-widget-header ":"")+"jstree-grid-header");
+				header = this.data.grid.header || $("<div></div>").addClass((tr?"ui-widget-header ":"")+"jstree-grid-header jstree-grid-header-"+classAdd);
 				
 				// create the headers
 				for (i=0;i<cols.length;i++) {
@@ -148,10 +146,10 @@
 					borPadWidth = tr ? 1+6 : 2+8; // account for the borders and padding
 					width -= borPadWidth;
 					margin = i === 0 ? 3 : 0;
-					last = $("<div></div>").css(conf).css({"margin-left": margin,"width":width, "padding": "1 3 2 5"}).addClass((tr?"ui-widget-header ":"")+"jstree-grid-header "+cl).text(val).appendTo(header)
-						.after("<div class='jstree-grid-separator"+(tr ? " ui-widget-header" : "")+(resizable? " jstree-grid-resizable-separator":"")+"'>&nbsp;</div>");
+					last = $("<div></div>").css(conf).css({"margin-left": margin,"width":width, "padding": "1 3 2 5"}).addClass((tr?"ui-widget-header ":"")+"jstree-grid-header jstree-grid-header-"+classAdd+" "+cl).text(val).appendTo(header)
+						.after("<div class='jstree-grid-separator jstree-grid-separator-"+classAdd+(tr ? " ui-widget-header" : "")+(resizable? " jstree-grid-resizable-separator":"")+"'>&nbsp;</div>");
 				}
-				last.addClass((tr?"ui-widget-header ":"")+"jstree-grid-header");
+				last.addClass((tr?"ui-widget-header ":"")+"jstree-grid-header jstree-grid-header-"+classAdd);
 				// did we have any real columns?
 				if (hasHeaders) {
 					$("<div></div>").addClass("jstree-grid-wrapper").appendTo(parent).append(header).append(container);
@@ -199,7 +197,8 @@
 				}
 			},
 			_prepare_grid : function(obj) {
-				var c = this.data.grid.treeClass, _this = this, t, cols = this.data.grid.columns || [], width, tr = this.data.grid.isThemeroller, img,
+				var c = this.data.grid.treeClass, _this = this, t, cols = this.data.grid.columns || [], width, tr = this.data.grid.isThemeroller, 
+				classAdd = (tr?"themeroller":"regular"), img,
 				defaultWidth = this.data.grid.columnWidth, divOffset = this.data.grid.divOffset, conf = this.data.grid.defaultConf;
 				obj = !obj || obj === -1 ? this.get_container() : this._get_node(obj);
 				// get our column definition
@@ -263,7 +262,7 @@
 									$(this).trigger("select_cell.jstree-grid", [{value: val,column: col.header,node: $(this).closest("li"),sourceName: col.value,sourceType: s}]);
 								};
 							}(val,col,s)));
-							last = last.css(conf).css({width: width,"padding-left":paddingleft+"px"}).addClass("jstree-grid-cell "+wcl+ " " + wideValClass + (tr?" ui-state-default":"")).addClass("jstree-grid-col-"+i);
+							last = last.css(conf).css({width: width,"padding-left":paddingleft+"px"}).addClass("jstree-grid-cell jstree-grid-cell-"+classAdd+" "+wcl+ " " + wideValClass + (tr?" ui-state-default":"")).addClass("jstree-grid-col-"+i);
 							
 							if (title) {
 								span.attr("title",title);
