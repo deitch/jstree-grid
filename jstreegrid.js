@@ -19,7 +19,7 @@
 /*global window, document, jQuery*/
 
 (function ($) {
-	var renderAWidth, renderATitle, htmlstripre, SPECIAL_TITLE = "_DATA_", bound = false;
+	var renderAWidth, renderATitle, htmlstripre, SPECIAL_TITLE = "_DATA_", bound = false, styled = false;
 	/*jslint regexp:false */
 	htmlstripre = /<\/?[^>]+>/gi;
 	/*jslint regexp:true */
@@ -67,17 +67,20 @@
 			}
 			
 			// set up the classes we need
+			if (!styled) {
+				styled = true;
+				styles = [
+					'.jstree-grid-cell {padding-left: 4px; vertical-align: top; overflow:hidden;}',
+					'.jstree-grid-separator {display: inline-block; border-width: 0 2px 0 0;}',
+					'.jstree-grid-header-themeroller {border: 0; padding: 1px 3px;}',
+					'.jstree-grid-header-regular {background-color: #EBF3FD;}',
+					'.jstree-grid-resizable-separator {cursor: col-resize;}',
+					'.jstree-grid-separator-regular {border-color: #d0d0d0; border-style: solid;}',
+					'.jstree-grid-cell-themeroller {border: none !important; background: transparent !important;}'
+				];
 
-			styles = [
-				'.jstree-grid-cell {padding-left: 4px; vertical-align: top; overflow:hidden;}',
-				'.jstree-grid-separator {display: inline-block; border-width: 0 2px 0 0;}',
-				'.jstree-grid-header-themeroller {border: 0; padding: 1px 3px;}',
-				'.jstree-grid-header-regular {background-color: #EBF3FD;}',
-				'.jstree-grid-separator-regular {border-color: 2px solid #d0d0d0;}',
-				'.jstree-grid-cell-themeroller {border: none !important; background: transparent !important;}'
-			];
-			
-			$('<style type="text/css">'+styles.join("\n")+'</style>').appendTo("head");
+				$('<style type="text/css">'+styles.join("\n")+'</style>').appendTo("head");
+			}
 
 			this.get_container().bind("open_node.jstree create_node.jstree clean_node.jstree change_node.jstree", $.proxy(function (e, data) { 
 					var target = data && data.rslt && data.rslt.obj ? data.rslt.obj : e.target;
