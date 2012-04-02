@@ -209,7 +209,7 @@
 				obj = !obj || obj === -1 ? this.get_container() : this._get_node(obj);
 				// get our column definition
 				obj.each(function () {
-					var i, val, cl, wcl, a, last, valClass, wideValClass, span, paddingleft, title, isAlreadyGrid, col, content, s;
+					var i, val, cl, wcl, a, last, valClass, wideValClass, span, paddingleft, title, isAlreadyGrid, col, content, s, tmpWidth;
 					t = $(this);
 					
 					// find the a children
@@ -258,7 +258,8 @@
 							// get the width
 							paddingleft = 7;
 							width = col.width || defaultWidth;
-							width = $(".jstree-grid-col-"+i).width() || (width - paddingleft);
+							tmpWidth = $.browser.msie ? $(".jstree-grid-col-"+i+":first",t).outerWidth() : $(".jstree-grid-col-"+i+":first",t).width();
+							width = tmpWidth || (width - paddingleft);
 							
 							last = isAlreadyGrid ? a.nextAll("div:eq("+(i-1)+")") : $("<div></div>").insertAfter(last);
 							span = isAlreadyGrid ? last.children("span") : $("<span></span>").appendTo(last);
