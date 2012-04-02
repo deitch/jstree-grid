@@ -30,7 +30,7 @@
 		// need to use a selector in jquery 1.4.4+
 		depth = a.parentsUntil(tree.get_container().get(0).tagName+".jstree").filter("li").length;
 		width = width - depth*18;
-		a.css({width: width, "vertical-align": "top", "overflow":"hidden"});
+		a.css({width: width, "vertical-align": "top", "overflow":"hidden","float":"left"});
 	};
 	renderATitle = function(node,t,tree) {
 		var a = node.get(0).tagName.toLowerCase() === "a" ? node : node.children("a"), title, col = tree.data.grid.columns[0];
@@ -56,7 +56,7 @@
 			this.data.grid.columns = s.columns || []; 
 			this.data.grid.treeClass = "jstree-grid-col-0";
 			this.data.grid.columnWidth = s.width;
-			this.data.grid.defaultConf = {display: "inline-block"};
+			this.data.grid.defaultConf = {display: "inline-block","*display":"inline","*+display":"inline","float":"left"};
 			this.data.grid.isThemeroller = !!this.data.themeroller;
 			this.data.grid.treeWidthDiff = 0;
 			this.data.grid.resizable = s.resizable;
@@ -71,7 +71,8 @@
 				styled = true;
 				styles = [
 					'.jstree-grid-cell {padding-left: 4px; vertical-align: top; overflow:hidden;}',
-					'.jstree-grid-separator {display: inline-block; border-width: 0 2px 0 0;}',
+					'.jstree-grid-separator {display: inline-block; border-width: 0 2px 0 0; *display:inline; *+display:inline; margin-right:0px;float:left;}',
+          '.jstree-grid-header-cell {float: left;}',
 					'.jstree-grid-header-themeroller {border: 0; padding: 1px 3px;}',
 					'.jstree-grid-header-regular {background-color: #EBF3FD;}',
 					'.jstree-grid-resizable-separator {cursor: col-resize;}',
@@ -149,10 +150,12 @@
 					borPadWidth = tr ? 1+6 : 2+8; // account for the borders and padding
 					width -= borPadWidth;
 					margin = i === 0 ? 3 : 0;
-					last = $("<div></div>").css(conf).css({"margin-left": margin,"width":width, "padding": "1 3 2 5"}).addClass((tr?"ui-widget-header ":"")+"jstree-grid-header jstree-grid-header-"+classAdd+" "+cl).text(val).appendTo(header)
+					last = $("<div></div>").css(conf).css({"margin-left": margin,"width":width, "padding": "1 3 2 5"}).addClass((tr?"ui-widget-header ":"")+"jstree-grid-header jstree-grid-header-cell jstree-grid-header-"+classAdd+" "+cl).text(val).appendTo(header)
 						.after("<div class='jstree-grid-separator jstree-grid-separator-"+classAdd+(tr ? " ui-widget-header" : "")+(resizable? " jstree-grid-resizable-separator":"")+"'>&nbsp;</div>");
 				}
 				last.addClass((tr?"ui-widget-header ":"")+"jstree-grid-header jstree-grid-header-"+classAdd);
+				// add a clearer
+				$("<div></div>").css("clear","both").appendTo(header);
 				// did we have any real columns?
 				if (hasHeaders) {
 					$("<div></div>").addClass("jstree-grid-wrapper").appendTo(parent).append(header).append(container);
@@ -214,6 +217,7 @@
 					isAlreadyGrid = a.hasClass(c);
 					
 					if (a.length === 1) {
+					  a.prev().css("float","left");
 						a.addClass(c);
 						renderAWidth(a,_this);
 						renderATitle(a,t,_this);
@@ -260,7 +264,7 @@
 							span = isAlreadyGrid ? last.children("span") : $("<span></span>").appendTo(last);
 
 							// create a span inside the div, so we can control what happens in the whole div versus inside just the text/background
-							span.addClass(cl+" "+valClass).css({"display":"inline-block"}).html(content).click((function (val,col,s) {
+							span.addClass(cl+" "+valClass).css({"margin-right":"0px","display":"inline-block","*display":"inline","*+display":"inline"}).html(content).click((function (val,col,s) {
 								return function() {
 									$(this).trigger("select_cell.jstree-grid", [{value: val,column: col.header,node: $(this).closest("li"),sourceName: col.value,sourceType: s}]);
 								};
@@ -273,6 +277,7 @@
 
 						}		
 						last.addClass("jstree-grid-cell-last"+(tr?" ui-state-default":""));
+						$("<div></div>").css("clear","both").insertAfter(last);
 					}
 				});
 				if(obj.is("li")) { this._repair_state(obj); }
