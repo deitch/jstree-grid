@@ -258,7 +258,7 @@
 							// get the width
 							paddingleft = 7;
 							width = col.width || defaultWidth;
-							tmpWidth = $.browser.msie ? $(".jstree-grid-col-"+i+":first",t).outerWidth() : $(".jstree-grid-col-"+i+":first",t).width();
+							tmpWidth = $.support.boxModel ? $(".jstree-grid-col-"+i+":first",t).width() : $(".jstree-grid-col-"+i+":first",t).outerWidth();
 							width = tmpWidth || (width - paddingleft);
 							
 							last = isAlreadyGrid ? a.nextAll("div:eq("+(i-1)+")") : $("<div></div>").insertAfter(last);
