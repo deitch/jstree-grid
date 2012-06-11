@@ -15,9 +15,8 @@ Usage
 4. Include relevant parameters. 
 
 ````HTML
-<!-- include jstreegrid and css -->
+<!-- include jstreegrid -->
 <script src="/path/to/jstreegrid.js"></script> 
-<link href="treegrid.css" rel="stylesheet" type="text/css"> 
 ````
 
 
