@@ -26,7 +26,7 @@
 
 	renderAWidth = function(node,tree) {
 		var depth, a = node.get(0).tagName.toLowerCase() === "a" ? node : node.children("a"),
-		width = parseFloat(tree.data.grid.columns[0].width) + parseFloat(tree.data.grid.treeWidthDiff);
+		width = parseInt(tree.data.grid.columns[0].width) + parseInt(tree.data.grid.treeWidthDiff);
 		// need to use a selector in jquery 1.4.4+
 		depth = a.parentsUntil(tree.get_container().get(0).tagName+".jstree").filter("li").length;
 		width = width - depth*18;
