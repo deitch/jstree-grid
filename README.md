@@ -223,7 +223,7 @@ code after the jsTreeGrid is done loading, just listen for that event. An exampl
 The signature for the select_cell.jstree-grid handler is:
 
 ````JavaScript
-function(value,header,node,sourceName,sourceType)
+function(event,{value:value,header:header,node:node,sourceName:sourceName,sourceType:sourceType})
 ````
 
 where:
