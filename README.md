@@ -91,10 +91,9 @@ and use that data:
 ````JavaScript
 {data: "My Node", metadata: {price: "$10"}}
 grid: {
-	source: "metadata",
 	columns: [
 		{width: 50, header: "Nodes"},
-		{width: 30, header: "Price", value: "price"}
+		{width: 30, header: "Price", value: "price",source:"metadata"}
 	]
 }
 ````
