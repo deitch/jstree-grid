@@ -34,7 +34,7 @@ $("div#id").jstree({
 
 Structure
 ---------
-The grid is built by adding divs <div></div> to each <li> entry for a row in the tree. Inside the <div> is a <span></span> with the data.
+The grid is built by adding divs `<div></div>` to each `<li>` entry for a row in the tree. Inside the `<div>` is a `<span></span>` with the data.
 Thus, an entry is likely to look like
 
 ````HTML
@@ -61,8 +61,7 @@ The options are as follows:
 	wideValueClassPrefix: a prefix to add to the wideValueClass to use as a class on this cell
 * resizable: true/false if the columns should be resizable. Defaults to false.	
 	
-The reason for both valueClass and wideValueClass is to give you the ability to control both the narrow part of the text,
-and the entire width of the cell. For example, if the cell is 56px wide, but the text in it is "OK" and thus only 20px wide.
+The reason for both valueClass and wideValueClass is to give you the ability to control both the narrow part of the text, and the entire width of the cell. For example, if the cell is 56px wide, but the text in it is "OK" and thus only 20px wide.
 Suppose you have a class "important" which backgrounds in red, and a class "clickable" which changes the cursor to a pointer.
 You want the entire width of the cell to be red, but just the word "OK" to be clickable. 
 You would ensure that "clickable" is applied to the span, but important to the div.
