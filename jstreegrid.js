@@ -10,8 +10,9 @@
  * 
  * Created for Tufin www.tufin.com
  * Contributed to public source through the good offices of Tufin
+ * Edited by: SOVA
  *
- * $Date: 2010-10-28 $
+ * $Date: 2013-05-15 $
  * $Revision:  $
  */
 
@@ -61,9 +62,13 @@
 			this.data.grid.treeWidthDiff = 0;
 			this.data.grid.resizable = s.resizable;
 			
-			if ($.browser.msie && parseInt($.browser.version.substr(0,1),10) < 8) {
-				this.data.grid.defaultConf.display = "inline";
-				this.data.grid.defaultConf.zoom = "1";
+			var msie = /msie/.test(navigator.userAgent.toLowerCase());
+			if (msie) {
+				var version = parseFloat(navigator.appVersion.split("MSIE")[1]);
+				if (version < 8) {
+					this.data.grid.defaultConf.display = "inline";
+					this.data.grid.defaultConf.zoom = "1";
+				}
 			}
 			
 			// set up the classes we need
@@ -166,9 +171,8 @@
 
 				if (!bound && resizable) {
 					bound = true;
-					$(".jstree-grid-separator")
-						.live("selectstart", function () { return false; })
-						.live("mousedown", function (e) {
+					$(document).on("selectstart", ".jstree-grid-separator", function () { return false; });
+					$(document).on("mousedown", ".jstree-grid-separator", function (e) {
 							clickedSep = $(this);
 							isClickedSep = true;
 							currentTree = clickedSep.parents(".jstree-grid-wrapper").children(".jstree");
@@ -177,7 +181,15 @@
 							toResize = clickedSep.prev().add(currentTree.find(".jstree-grid-col-"+colNum));
 							return false;
 						});
-
+					function (e) {
+							clickedSep = $(this);
+							isClickedSep = true;
+							currentTree = clickedSep.parents(".jstree-grid-wrapper").children(".jstree");
+							oldMouseX = e.clientX;
+							colNum = clickedSep.prevAll(".jstree-grid-header").length-1;
+							toResize = clickedSep.prev().add(currentTree.find(".jstree-grid-col-"+colNum));
+							return false;
+						}
 					$(document)
 						.mouseup(function () {
 							var  i, ref, cols, widths, headers;
