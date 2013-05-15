@@ -181,15 +181,6 @@
 							toResize = clickedSep.prev().add(currentTree.find(".jstree-grid-col-"+colNum));
 							return false;
 						});
-					function (e) {
-							clickedSep = $(this);
-							isClickedSep = true;
-							currentTree = clickedSep.parents(".jstree-grid-wrapper").children(".jstree");
-							oldMouseX = e.clientX;
-							colNum = clickedSep.prevAll(".jstree-grid-header").length-1;
-							toResize = clickedSep.prev().add(currentTree.find(".jstree-grid-col-"+colNum));
-							return false;
-						}
 					$(document)
 						.mouseup(function () {
 							var  i, ref, cols, widths, headers;
