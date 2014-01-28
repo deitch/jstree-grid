@@ -196,7 +196,7 @@
 					.mouseup(function () {
 						var  i, ref, cols, widths, headers;
 						if (isClickedSep) {
-							ref = $.jstree._reference(currentTree);
+							ref = $.jstree.reference(currentTree);
 							cols = ref.settings.grid.columns;
 							headers = clickedSep.parent().children(".jstree-grid-header");
 							widths = {};
