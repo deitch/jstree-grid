@@ -306,7 +306,7 @@
 				last.addClass("jstree-grid-cell-last"+(tr?" ui-state-default":""));
 				$("<div></div>").css("clear","both").insertAfter(last);
 			}
-      $('.jstree').css({'overflow-y':'auto !important'});			
+      			this.element.css({'overflow-y':'auto !important'});			
 		};
 
 		// need to do alternating background colors or borders
