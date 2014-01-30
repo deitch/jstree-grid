@@ -112,7 +112,7 @@
 				this.element.trigger("loaded_grid.jstree");
 				}, this))
 			.on("move_node.jstree",$.proxy(function(e,data){
-				var node = data.rslt.o;
+				var node = data.new_instance.element;
 				renderAWidth(node,this);
 				// check all the children, because we could drag a tree over
 				node.find("li > a").each($.proxy(function(i,elm){
