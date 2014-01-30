@@ -200,7 +200,7 @@
 							cols = ref.settings.grid.columns;
 							headers = clickedSep.parent().children(".jstree-grid-header");
 							widths = {};
-							if (!colNum) { ref._gridSettings.treeWidthDiff = currentTree.find("ins:eq(0)").width() + currentTree.find("a:eq(0)").width() - ref.data.grid.columns[0].width; }
+							if (isNaN(colNum) || colNum < 0) { ref._gridSettings.treeWidthDiff = currentTree.find("ins:eq(0)").width() + currentTree.find("a:eq(0)").width() - ref._gridSettings.columns[0].width; }
 							isClickedSep = false;
 							for (i=0;i<cols.length;i++) { widths[cols[i].header] = {w: parseFloat(headers[i].style.width)+borPadWidth, r: i===colNum }; }
 							currentTree.trigger("resize_column.jstree-grid", [widths]);
@@ -306,7 +306,7 @@
 				last.addClass("jstree-grid-cell-last"+(tr?" ui-state-default":""));
 				$("<div></div>").css("clear","both").insertAfter(last);
 			}
-      			this.element.css({'overflow-y':'auto !important'});			
+			this.element.css({'overflow-y':'auto !important'});			
 		};
 
 		// need to do alternating background colors or borders
