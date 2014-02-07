@@ -75,7 +75,7 @@ You would ensure that "clickable" is applied to the span, but important to the d
 Value is the name of the attribute or metadata whose content will be used; you can choose which once for the entire grid. Thus, if you have a node whose data is given by:
 
 ````JavaScript
-{text: "My Node", attr: {price: "$10"}}
+{text: "My Node", data {price: "$10"}}
 // in pre-v3: {data: "My Node", attr: {price: "$10"}}
 ````
 
@@ -96,7 +96,7 @@ Thanks to ChrisRaven for the metadata support (no longer being used), resizable 
 ValueClass is the name of the attribute that will be added as a class to this cell. Thus, if you have a node whose data is given by:
 
 ````JavaScript
-{text: "My Node", attr: {price: "$10", scale: "expensive"}}
+{text: "My Node", data {price: "$10", scale: "expensive"}}
 ````
 
 and we want the cell to have the class "expensive", then we have a config of:
