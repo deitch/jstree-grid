@@ -17,10 +17,46 @@
 /*global window,navigator, document, jQuery*/
 
 (function ($) {
-	var renderAWidth, renderATitle, htmlstripre, SPECIAL_TITLE = "_DATA_", LEVELINDENT = 24, bound = false, styled = false;
+	var renderAWidth, renderATitle, getIndent, htmlstripre,
+	SPECIAL_TITLE = "_DATA_", LEVELINDENT = 24, bound = false, styled = false;
+	
 	/*jslint regexp:true */
 	htmlstripre = /<\/?[^>]+>/gi;
 	/*jslint regexp:false */
+	
+	getIndent = function(node,tree) {
+		var div, i, li, width;
+		
+		// did we already save it for this tree?
+		tree._gridSettings = tree._gridSettings || {};
+		if (tree._gridSettings.indent > 0) {
+			width = tree._gridSettings.indent;
+		} else {
+			// create a new div on the DOM but not visible on the page
+			div = $("<div></div>");
+			i = node.prev("i");
+			li = i.parent();
+			// add to that div all of the classes on the tree root
+			div.addClass(tree.get_node("#",true).attr("class"));
+		
+			// move the li to the temporary div root
+			li.appendTo(div);
+		
+			// get the width
+			width = i.width() || LEVELINDENT;
+		
+			// detach the li from the new div and destroy the new div
+			li.detach();
+			div.remove();
+			
+			// save it for the future
+			tree._gridSettings.indent = width;
+		}
+		
+		
+		return(width);
+		
+	};
 
 	renderAWidth = function(node,tree) {
 		var depth, a = node.get(0).tagName.toLowerCase() === "a" ? node : node.children("a"),
@@ -28,7 +64,7 @@
 		// need to use a selector in jquery 1.4.4+
 		depth = tree.get_node(node).parents.length;
 		// THIS SHOULD REALLY CALCULATE THE LEVELINDENT
-		width = width - depth*LEVELINDENT;
+		width = width - depth*getIndent(node,tree);
 		a.css({width: width, "vertical-align": "top", "overflow":"hidden","float":"left"});
 	};
 	renderATitle = function(node,t,tree) {
@@ -64,7 +100,8 @@
 					defaultConf : {display: "inline-block","*display":"inline","*+display":"inline","float":"left"},
 					isThemeroller : !!this._data.themeroller,
 					treeWidthDiff : 0,
-					resizable : s.resizable
+					resizable : s.resizable,
+					indent: 0
 				};
 			
 				var msie = /msie/.test(navigator.userAgent.toLowerCase());
