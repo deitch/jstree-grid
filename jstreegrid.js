@@ -258,7 +258,7 @@
 
 
 					// get the contents of the cell
-					val = col.value && objData.data[col.value] ? objData.data[col.value] : "";
+					val = col.value && objData.data && objData.data[col.value] !== null && objData.data[col.value] !== undefined ? objData.data[col.value] : "";
 
 					// put images instead of text if needed
 					if (col.images) {
