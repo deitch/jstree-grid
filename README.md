@@ -7,10 +7,12 @@ Plugin for the jstree www.jstree.com tree component that provides a grid extensi
 
 Allows any number of columns, and can use any property of the node to display data in the grid
 
+For significant changes to v3 compared to v1, see the end of this document.
+
 Usage
 -----
-1. Include jquery (>= 1.4.2) and jstree in your page, as usual
-2. Include jstreegrid.js
+1. Include jquery (>= 1.4.2) and jstree in your page, as usual; use jstree v3 or later.
+2. Include jstreegrid.js v3 or later
 3. Include grid as a plugin
 4. Include relevant parameters. 
 
@@ -28,7 +30,10 @@ $("div#id").jstree({
 	grid: {
 		columns: [{},{},...,{}],
 		width: 25
-	} 
+	},
+	core: {
+		data: [...]
+	}
 });
 ````
 
@@ -70,8 +75,10 @@ You would ensure that "clickable" is applied to the span, but important to the d
 Value is the name of the attribute or metadata whose content will be used; you can choose which once for the entire grid. Thus, if you have a node whose data is given by:
 
 ````JavaScript
-{data: "My Node", attr: {price: "$10"}}
+{text: "My Node", attr: {price: "$10"}}
+// in pre-v3: {data: "My Node", attr: {price: "$10"}}
 ````
+
 
 and we want the price value ($10) to be in column 1, then we have a config of:
 
@@ -84,25 +91,12 @@ grid: {
 }
 ````
 
-If you prefer to use metadata, per jstree (see http://www.jstree.com/documentation/json_data) then you need to set the source to metadata 
-and use that data:
-
-````JavaScript
-{data: "My Node", metadata: {price: "$10"}}
-grid: {
-	columns: [
-		{width: 50, header: "Nodes"},
-		{width: 30, header: "Price", value: "price",source:"metadata"}
-	]
-}
-````
-
-Thanks to ChrisRaven for the metadata support, resizable columns, and cell click events..
+Thanks to ChrisRaven for the metadata support (no longer being used), resizable columns, and cell click events..
 
 ValueClass is the name of the attribute that will be added as a class to this cell. Thus, if you have a node whose data is given by:
 
 ````JavaScript
-{data: "My Node", attr: {price: "$10", scale: "expensive"}}
+{text: "My Node", attr: {price: "$10", scale: "expensive"}}
 ````
 
 and we want the cell to have the class "expensive", then we have a config of:
@@ -183,7 +177,9 @@ Finally, you can change a node contents on the fly using "change_node.jstree". Y
 for example:
 
 ````JavaScript
-$("li.mynode").attr("value","25").trigger("change_node.jstree");
+var node = $("#jstree").jstree(true).get_node("my_node");
+node.data.value = 25;
+node.trigger("change_node.jstree");
 ````
 
 HTML
@@ -231,3 +227,17 @@ where:
 * node: reference to the &lt;li&gt; element that contains the clicked cell
 * sourceName: name of the element in the original data that contained this value, as provided by the config in the columns "value" for this column
 * sourceType: if the source was from "attr" or "metadata"
+
+
+
+V3 Changes
+----------
+jsTree v3 has created significant non-backwards-compatible changes to jsTree. To make jsTreeGrid compatible with jsTree3, jsTreeGrid v3 has changed as well, and is no longer backwards compatible. However, the changes required to support v3 are minimal.
+
+This section lists significant changes between pre-v3 and v3.
+
+* jstree v3 no longer stores its data in the DOM, rather inside JS. As such, jsTreeGrid no longer stores any data in the DOM. For example, in pre-v3 jstree, `attr` on a node's source data would store the actual data on the DOM as attributes using `jQuery.attr()`. This is no longer true in v3. jsTreeGrid similarly no longer looks for its source data on the DOM. All data to be passed to the grid should be stored in the `data` property of the node's JSON source.
+* `metadata` is no longer an option, since it is no longer necessary to use it to avoid storing data on the DOM.
+
+
+

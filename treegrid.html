@@ -14,10 +14,10 @@
 				 */
 				data = [{
 					text: "Root 1",
-					attr: {price: "$5.00", size: "4"},
+					data: {price: "$5.00", size: "4"},
 					children: [
-						{text: "Really long named child whose name gets cut off", attr: {price: "<b>$4.00</b>", size: "3"}},
-						{text: "Child 2", attr: {price: "<i>$3.00</i>", size: "2"}}
+						{text: "Really long named child whose name gets cut off", data: {price: "<b>$4.00</b>", size: "3"}},
+						{text: "Child 2", data: {price: "<i>$3.00</i>", size: "2"}}
 					]
 				}];
 				
@@ -52,8 +52,14 @@
 					}
 				});
 				$("a#change").click(function(){
-					var li = $("li:eq(0)","div#jstree"), val = li.attr("size"), newval = parseInt(val,10)*2;
-					li.attr("size",newval).trigger("change_node.jstree");
+					var tree = $("div#jstree").jstree(), 
+					nodename = "j1_1", node = tree.get_node(nodename), 
+					val = parseInt(node.data.size);
+					
+					node.data.size = node.data.size*2;
+					tree.trigger("change_node.jstree",nodename);
+					
+					return(false);
 				});
 				
 				

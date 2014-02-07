@@ -1,5 +1,5 @@
 /*
- * jsTreeGrid 3.0.0
+ * jsTreeGrid 3.0.0-beta2
  * http://github.com/deitch/jstree-grid
  *
  * This plugin handles adding a grid to a tree to display additional data
@@ -7,10 +7,10 @@
  * Licensed under the MIT license:
  *   http://www.opensource.org/licenses/mit-license.php
  * 
- * Works only with jstree "v3.0.0-alpha" and higher
+ * Works only with jstree "v3.0.0-beta5" and higher
  *
- * $Date: 2014-01-28 $
- * $Revision:  1.00 $
+ * $Date: 2014-02-07 $
+ * $Revision:  3.0.0-beta2 $
  */
 
 /*jslint nomen:true */
@@ -27,6 +27,7 @@
 		width = parseInt(tree.settings.grid.columns[0].width,10) + parseInt(tree._gridSettings.treeWidthDiff,10);
 		// need to use a selector in jquery 1.4.4+
 		depth = tree.get_node(node).parents.length;
+		// THIS SHOULD REALLY CALCULATE THE LEVELINDENT
 		width = width - depth*LEVELINDENT;
 		a.css({width: width, "vertical-align": "top", "overflow":"hidden","float":"left"});
 	};
@@ -103,8 +104,7 @@
 			parent.bind.call(this);
 			this._initialize();
 			this.element.on("open_node.jstree create_node.jstree redraw.jstree clean_node.jstree change_node.jstree", $.proxy(function (e, data) { 
-					var target = data && data.rslt && data.rslt.obj ? data.rslt.obj : e.target;
-					target = $(target);
+					var target = this.get_node(data || "#",true);
 					this._prepare_grid(target);
 				}, this))
 			.on("loaded.jstree", $.proxy(function (e) {
@@ -252,15 +252,13 @@
 				last = a;
 				for (i=1;i<cols.length;i++) {
 					col = cols[i];
-					s = col.source || "attr";
 					// get the cellClass and the wideCellClass
 					cl = col.cellClass || "";
 					wcl = col.wideCellClass || "";
 
 
 					// get the contents of the cell
-					if (s === "attr") { val = col.value && objData.original.attr[col.value] ? objData.original.attr[col.value] : "";
-					} else if (s === "metadata") { val = col.value && t.data(col.value) ? t.data(col.value) : ""; }
+					val = col.value && objData.data[col.value] ? objData.data[col.value] : "";
 
 					// put images instead of text if needed
 					if (col.images) {
