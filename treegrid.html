@@ -5,6 +5,9 @@
 		<script type='text/javascript' src='http://code.jquery.com/jquery-1.9.1.js'></script>
 		<script type="text/javascript" src="lib/jstree-3.0.0.js"></script>
 		<script type="text/javascript" src="jstreegrid.js"></script>
+		<style type="text/css">
+			@import url('http://getbootstrap.com/dist/css/bootstrap.css');
+		</style>
 		<script type="text/javascript">
 			$(document).ready(function(){
 				var data;
@@ -38,17 +41,17 @@
 						resizable:true
 					},
 					dnd: {
-		                drop_finish : function () { 
-		                }, 
-		                drag_finish : function () { 
-		                }, 
-		                drag_check : function (data) { 
-		                    return { 
-		                        after : true, 
-		                        before : true, 
-		                        inside : true 
-		                    }; 
-		                } 
+            drop_finish : function () { 
+            }, 
+            drag_finish : function () { 
+            }, 
+            drag_check : function (data) { 
+                return { 
+                    after : true, 
+                    before : true, 
+                    inside : true 
+                }; 
+            } 
 					}
 				});
 				$("a#change").click(function(){
@@ -63,9 +66,7 @@
 				});
 				
 				
-				/*
-				 * Do the second tree
-				 */
+				// Do the second tree
 				$("div#jstreex").bind("loaded_grid.jstree",function(){
 					$("span#xstatus").text("loaded");
 				});
@@ -96,6 +97,40 @@
 					}
 				});
 				
+				$("div#jstreec").bind("loaded_grid.jstree",function () {
+					$("span#cstatus").text("loaded")
+				});
+			  $('div#jstreec').jstree({
+			    plugins: ['grid', 'types'],
+			    core: {
+			      themes: {variant: 'small'},
+			      data: [{
+			        text: "Root",
+			        type: "default",
+			        state: {opened: true},
+			        data: {column1: 'foo'},
+			        children: [
+			          {
+									text: 'Level1',
+			          	type: "default",
+			          	data: {column1: 'bar'}
+								}
+							]
+						}]
+			    },
+			    grid: {
+			      columns: [
+		          {header: 'Name' , width: 200},
+		          {header: 'Column1' , width: 200, value: 'column1'}]
+			    },
+			    types : {
+			      default: {
+			        icon : "glyphicon glyphicon-folder-open"
+			      }
+			    }
+			  });
+        
+				
 			});
 		</script>
 	</head>
@@ -110,6 +145,7 @@
 		<ul>
 			<li>The first tree has resizable columns, set to true.</li>
 			<li>The second tree has a max-height set to 30px, causing the tree itself - but not the headers - to scroll.</li>
+			<li>The third tree uses an alternate them and styling.</li>
 		</ul>
 		<div id="jstree1">
 			<h4>First Tree</h4>
@@ -121,6 +157,11 @@
 			<h4>Second Tree</h4>
 			<div id="jstreex" style="max-height: 30px;"></div>
 			<div>Tree grid is <span id="xstatus">loading</span>.</div>
+		</div>
+		<div id="jstree3">
+			<h4>Third Tree</h4>
+			<div id="jstreec" style="max-height: 30px;"></div>
+			<div>Tree grid is <span id="cstatus">loading</span>.</div>
 		</div>
 		
 	</body>

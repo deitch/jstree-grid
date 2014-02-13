@@ -41,6 +41,9 @@
 		
 			// move the li to the temporary div root
 			li.appendTo(div);
+			
+			// attach to the body quickly
+			div.appendTo($("body"));
 		
 			// get the width
 			width = i.width() || LEVELINDENT;
