@@ -129,7 +129,40 @@
 			      }
 			    }
 			  });
-        
+				$("div#jstreef").bind("loaded_grid.jstree",function(){
+					$("span#fstatus").text("loaded");
+				});
+				$("div#jstreef").jstree({
+					plugins: ["themes","json","grid","dnd"],
+					core: {
+						data: data
+					},
+					grid: {
+						columns: [
+							{width: 110, header: "Nodes",title:"_DATA_"},
+							{cellClass: "col1", value: function (node) {
+								return(node.price);
+							}, width: 60, header: "Price", title:"price"},
+							{cellClass: "col2", value: function (node) {
+								return(node.size)
+							}, width: 60, header: "Qty", title:"size"}
+						],
+						resizable:true
+					},
+					dnd: {
+            drop_finish : function () { 
+            }, 
+            drag_finish : function () { 
+            }, 
+            drag_check : function (data) { 
+                return { 
+                    after : true, 
+                    before : true, 
+                    inside : true 
+                }; 
+            } 
+					}
+				});        
 				
 			});
 		</script>
@@ -146,6 +179,7 @@
 			<li>The first tree has resizable columns, set to true.</li>
 			<li>The second tree has a max-height set to 30px, causing the tree itself - but not the headers - to scroll.</li>
 			<li>The third tree uses an alternate them and styling.</li>
+			<li>The fourth tree uses a function for the <i>value</i>.</li>
 		</ul>
 		<div id="jstree1">
 			<h4>First Tree</h4>
@@ -162,6 +196,11 @@
 			<h4>Third Tree</h4>
 			<div id="jstreec" style="max-height: 30px;"></div>
 			<div>Tree grid is <span id="cstatus">loading</span>.</div>
+		</div>
+		<div id="jstree4">
+			<h4>Fourth Tree</h4>
+			<div id="jstreef" style="max-height: 30px;"></div>
+			<div>Tree grid is <span id="fstatus">loading</span>.</div>
 		</div>
 		
 	</body>

@@ -297,8 +297,18 @@
 					wcl = col.wideCellClass || "";
 
 
-					// get the contents of the cell
-					val = col.value && objData.data && objData.data[col.value] !== null && objData.data[col.value] !== undefined ? objData.data[col.value] : "";
+					// get the contents of the cell - value could be a string or a function
+					if (col.value !== undefined && col.value !== null && objData.data !== null && objData.data !== undefined) {
+						if (typeof(col.value) === "function") {
+							val = col.value(objData.data);
+						} else if (objData.data[col.value] !== undefined) {
+							val = objData.data[col.value];
+						} else {
+							val = "";
+						}
+					} else {
+						val = "";
+					}
 
 					// put images instead of text if needed
 					if (col.images) {
