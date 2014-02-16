@@ -1,5 +1,5 @@
 /*
- * jsTreeGrid 3.0.0-beta2
+ * jsTreeGrid 3.0.0-beta4
  * http://github.com/deitch/jstree-grid
  *
  * This plugin handles adding a grid to a tree to display additional data
@@ -66,7 +66,6 @@
 		width = parseInt(tree.settings.grid.columns[0].width,10) + parseInt(tree._gridSettings.treeWidthDiff,10);
 		// need to use a selector in jquery 1.4.4+
 		depth = tree.get_node(node).parents.length;
-		// THIS SHOULD REALLY CALCULATE THE LEVELINDENT
 		width = width - depth*getIndent(node,tree);
 		a.css({width: width, "vertical-align": "top", "overflow":"hidden","float":"left"});
 	};
