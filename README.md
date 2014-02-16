@@ -59,7 +59,7 @@ The options are as follows:
 	cellClass: a CSS class to add to each cell in this column (except for the header) - added to the <span>
 	wideCellClass: a CSS class to add to each cell in this column (except for the header) - added to the <div>
 	headerClass: a CSS class to add to the header cell in this column - added to the <div>
-	value: the attribute on the node to use as the value for this cell - entered as the <span> text
+	value: the attribute on the node to use as the value for this cell - entered as the <span> text. Can be a string or a function.
 	valueClass: the attribute on the node to use as a class on this cell - added to the <span>
 	valueClassPrefix: a prefix to add to the valueClass to use as a class on this cell
 	wideValueClass: the attribute on the node to use as a class on this cell - added to the <div>
@@ -72,11 +72,15 @@ You want the entire width of the cell to be red, but just the word "OK" to be cl
 You would ensure that "clickable" is applied to the span, but important to the div.
 
 
-Value is the name of the attribute or metadata whose content will be used; you can choose which once for the entire grid. Thus, if you have a node whose data is given by:
+Value is one of:
+
+* the name of the property of the node data whose content will be used; you can choose which once for the entire grid. 
+* a function, which will be passed the node's data, and is expected to return the value to use.
+
+Thus, if you have a node whose data is given by:
 
 ````JavaScript
 {text: "My Node", data: {price: "$10"}}
-// in pre-v3: {data: "My Node", attr: {price: "$10"}}
 ````
 
 
@@ -91,7 +95,31 @@ grid: {
 }
 ````
 
-Thanks to ChrisRaven for the metadata support (no longer being used), resizable columns, and cell click events..
+Or, in a function:
+
+````JavaScript
+grid: {
+	columns: [
+		{width: 50, header: "Nodes"},
+		{width: 30, header: "Price", value: function(node){return(node.price);}}
+	]
+}
+````
+
+Using a function allows you to calculate things, or make conditions:
+
+````JavaScript
+grid: {
+	columns: [
+		{width: 50, header: "Nodes"},
+		{width: 30, header: "Price", value: function(node){return("$"+node.price*2);}}
+	]
+}
+````
+
+
+
+Thanks to ChrisRaven for the metadata support (deprecated as of v3), resizable columns, and cell click events.
 
 ValueClass is the name of the attribute that will be added as a class to this cell. Thus, if you have a node whose data is given by:
 
@@ -105,7 +133,7 @@ and we want the cell to have the class "expensive", then we have a config of:
 grid: {
 	columns: [
 		{width: 50, header: "Nodes"},
-		{width: 30, header: "Price", value: "price", valueClass: "scale"}
+		{width: 30, header: "Price", value:"price", valueClass: "scale"}
 	]
 }
 ````
