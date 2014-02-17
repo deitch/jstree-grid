@@ -9,6 +9,16 @@ Allows any number of columns, and can use any property of the node to display da
 
 For significant changes to v3 compared to v1, see the end of this document.
 
+**Note:** treegrid may have issues when using theme autooading as in:
+
+````JavaScript
+core: {
+	themes: {url: 'http://some.url/theme'}
+}
+````
+
+In any case, theme autoloading is strongly discouraged in jstree v3.
+
 Usage
 -----
 1. Include jquery (>= 1.4.2) and jstree in your page, as usual; use jstree v3 or later.
