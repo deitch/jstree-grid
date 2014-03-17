@@ -233,16 +233,21 @@
 					});
 				$(document)
 					.mouseup(function () {
-						var  i, ref, cols, widths, headers;
+						var  i, ref, cols, widths, headers, w;
 						if (isClickedSep) {
 							ref = $.jstree.reference(currentTree);
 							cols = ref.settings.grid.columns;
 							headers = clickedSep.parent().children(".jstree-grid-header");
-							widths = {};
+							widths = [];
 							if (isNaN(colNum) || colNum < 0) { ref._gridSettings.treeWidthDiff = currentTree.find("ins:eq(0)").width() + currentTree.find("a:eq(0)").width() - ref._gridSettings.columns[0].width; }
 							isClickedSep = false;
-							for (i=0;i<cols.length;i++) { widths[cols[i].header] = {w: parseFloat(headers[i].style.width)+borPadWidth, r: i===colNum }; }
-							currentTree.trigger("resize_column.jstree-grid", [widths]);
+							for (i=0;i<cols.length;i++) {
+								w = parseFloat(headers[i].style.width)+borPadWidth;
+								widths[i] = {w: w, r: i===colNum };
+								ref._gridSettings.columns[i].width = w;
+							}
+							
+							currentTree.trigger("resize_column.jstree-grid", widths);
 						}
 					})
 					.mousemove(function (e) {
