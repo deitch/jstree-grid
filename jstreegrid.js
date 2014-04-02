@@ -158,6 +158,12 @@
 					renderAWidth($(elm),this);
 				},this));
 				
+			},this))
+			.on("select_node.jstree",$.proxy(function(node,selected,event){
+				this.get_node(selected.node.id,true).children("div.jstree-grid-cell").addClass("jstree-clicked");
+			},this))
+			.on("deselect_node.jstree",$.proxy(function(node,selected,event){
+				this.get_node(selected.node.id,true).children("div.jstree-grid-cell").removeClass("jstree-clicked");
 			},this));
 			if (this._gridSettings.isThemeroller) {
 				this.element
