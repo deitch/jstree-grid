@@ -209,7 +209,7 @@
 				borPadWidth = tr ? 1+6 : 2+8; // account for the borders and padding
 				width -= borPadWidth;
 				margin = i === 0 ? 3 : 0;
-				last = $("<div></div>").css(conf).css({"margin-left": margin,"width":width, "padding": "1 3 2 5"}).addClass((tr?"ui-widget-header ":"")+"jstree-grid-header jstree-grid-header-cell jstree-grid-header-"+classAdd+" "+cl).text(val).appendTo(header)
+				last = $("<div></div>").css(conf).css({"margin-left": margin,"width":width, "padding": "1px 3px 2px 5px"}).addClass((tr?"ui-widget-header ":"")+"jstree-grid-header jstree-grid-header-cell jstree-grid-header-"+classAdd+" "+cl).text(val).appendTo(header)
 					.after("<div class='jstree-grid-separator jstree-grid-separator-"+classAdd+(tr ? " ui-widget-header" : "")+(resizable? " jstree-grid-resizable-separator":"")+"'>&nbsp;</div>");
 			}
 			if (last) {
