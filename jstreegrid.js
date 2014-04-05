@@ -14,7 +14,7 @@
  */
 
 /*jslint nomen:true */
-/*global window,navigator, document, jQuery*/
+/*global window,navigator, document, jQuery, console*/
 
 (function ($) {
 	var renderAWidth, renderATitle, getIndent, htmlstripre,
@@ -192,7 +192,8 @@
 			var header, i, gs = this._gridSettings,cols = gs.columns || [], width, defaultWidth = gs.columnWidth, resizable = gs.resizable || false,
 			cl, val, margin, last, tr = gs.isThemeroller, classAdd = (tr?"themeroller":"regular"),
 			container = this.element, gridparent = container.parent(), hasHeaders = 0,
-			conf = gs.defaultConf, isClickedSep = false, oldMouseX = 0, newMouseX = 0, currentTree = null, colNum = 0, toResize = null, clickedSep = null, borPadWidth = 0;
+			conf = gs.defaultConf, isClickedSep = false, oldMouseX = 0, newMouseX = 0, maxMouseX, maxRightElement,
+			currentTree = null, colNum = 0, toResize = null, clickedSep = null, borPadWidth = 0;
 			// save the original parent so we can reparent on destroy
 			this.parent = gridparent;
 			
@@ -228,13 +229,19 @@
 			if (!bound && resizable) {
 				bound = true;
 				$(document).on("selectstart", ".jstree-grid-separator", function () { return false; });
-				$(document).on("mousedown", ".jstree-grid-separator", function (e) {
+				$(document)
+					.on("mousedown", ".jstree-grid-separator", function (e) {
+						var headerWrapper;
 						clickedSep = $(this);
 						isClickedSep = true;
 						currentTree = clickedSep.parents(".jstree-grid-wrapper").children(".jstree");
 						oldMouseX = e.clientX;
 						colNum = clickedSep.prevAll(".jstree-grid-header").length-1;
 						toResize = clickedSep.prev().add(currentTree.find(".jstree-grid-col-"+colNum));
+						// the max rightmost position we will allow is the right-most of the wrapper minus a buffer (10)
+						headerWrapper = clickedSep.parent();
+						maxMouseX = headerWrapper.offset().left+headerWrapper.width() - 15;
+						maxRightElement = headerWrapper.children(".jstree-grid-separator:last");
 						return false;
 					});
 				$(document)
@@ -259,8 +266,12 @@
 					.mousemove(function (e) {
 						if (isClickedSep) {
 							newMouseX = e.clientX;
-							var diff = newMouseX - oldMouseX;
-							toResize.each(function () { this.style.width = parseFloat(this.style.width) + diff + "px"; });
+							var diff = newMouseX - oldMouseX, rightMostLocation = maxRightElement.offset().left+maxRightElement.width();
+							// how far to the right will this shove the right-most element
+							if (rightMostLocation + diff > maxMouseX) {
+								diff = 0;
+							}
+							toResize.each(function () { this.style.width = (parseFloat(this.style.width) + diff) + "px"; });
 							oldMouseX = newMouseX;
 						}
 					});
