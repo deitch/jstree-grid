@@ -159,6 +159,12 @@
 				},this));
 				
 			},this))
+			.on("hover_node.jstree",$.proxy(function(node,selected,event){
+				this.get_node(selected.node.id,true).children("div.jstree-grid-cell").addClass("jstree-hovered");
+			},this))
+			.on("dehover_node.jstree",$.proxy(function(node,selected,event){
+				this.get_node(selected.node.id,true).children("div.jstree-grid-cell").removeClass("jstree-hovered");
+			},this))
 			.on("select_node.jstree",$.proxy(function(node,selected,event){
 				this.get_node(selected.node.id,true).children("div.jstree-grid-cell").addClass("jstree-clicked");
 			},this))
