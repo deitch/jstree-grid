@@ -16,7 +16,15 @@
 /*jslint nomen:true */
 /*global window,navigator, document, jQuery, console*/
 
-(function ($) {
+(function (factory) {
+    if (typeof define === 'function' && define.amd) {
+        // AMD. Register as an anonymous module.
+        define(['jquery', 'jstree'], factory);
+    } else {
+        // Browser globals
+        factory(jQuery);
+    }
+}(function ($) {
 	var renderAWidth, renderATitle, getIndent, htmlstripre,
 	SPECIAL_TITLE = "_DATA_", LEVELINDENT = 24, bound = false, styled = false;
 	
@@ -386,4 +394,4 @@
 
 		// need to do alternating background colors or borders
 	};
-}(jQuery));
+}));
