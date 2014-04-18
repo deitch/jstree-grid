@@ -287,8 +287,10 @@
 							if (rightMostLocation + diff > maxMouseX) {
 								diff = 0;
 							}
-							toResize.each(function () { this.style.width = (parseFloat(this.style.width) + diff) + "px"; });
-							oldMouseX = newMouseX;
+							if(diff !== 0){
+								toResize.each(function () { this.style.width = (parseFloat(this.style.width) + diff) + "px"; });
+								oldMouseX = newMouseX;
+							}
 						}
 					});
 			}
