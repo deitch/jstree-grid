@@ -47,6 +47,8 @@ $("div#id").jstree({
 });
 ````
 
+As of 3.0.0-beta5, jstree-grid supports AMD, thanks https://github.com/jochenberger
+
 Structure
 ---------
 The grid is built by adding divs `<div></div>` to each `<li>` entry for a row in the tree. Inside the `<div>` is a `<span></span>` with the data.

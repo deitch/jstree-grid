@@ -1,5 +1,4 @@
 /*
- * jsTreeGrid 3.0.0-beta4
  * http://github.com/deitch/jstree-grid
  *
  * This plugin handles adding a grid to a tree to display additional data
@@ -9,13 +8,16 @@
  * 
  * Works only with jstree "v3.0.0-beta5" and higher
  *
- * $Date: 2014-02-07 $
- * $Revision:  3.0.0-beta2 $
+ * $Date: 2014-04-18 $
+ * $Revision:  3.0.0-beta5 $
  */
 
 /*jslint nomen:true */
-/*global window,navigator, document, jQuery, console*/
+/*global window,navigator, document, jQuery, console, define */
 
+/* AMD support added by jochenberger per https://github.com/deitch/jstree-grid/pull/49
+ *
+ */
 (function (factory) {
     if (typeof define === 'function' && define.amd) {
         // AMD. Register as an anonymous module.
