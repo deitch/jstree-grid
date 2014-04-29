@@ -9,7 +9,7 @@
  * Works only with jstree "v3.0.0-beta5" and higher
  *
  * $Date: 2014-04-18 $
- * $Revision:  3.0.0-beta5 $
+ * $Revision:  3.0.0-beta6 $
  */
 
 /*jslint nomen:true */
@@ -383,7 +383,7 @@
 					span.addClass(cl+" "+valClass).css({"margin-right":"0px","display":"inline-block","*display":"inline","*+display":"inline"}).html(content)
 					// add click handler for clicking inside a grid cell
 					.click(cellClickHandler(val,col,s));
-					last = last.css(conf).css({width: width,"padding-left":paddingleft+"px"}).addClass("jstree-grid-cell jstree-grid-cell-"+classAdd+" "+wcl+ " " + wideValClass + (tr?" ui-state-default":"")).addClass("jstree-grid-col-"+i);
+					last = last.css(conf).css({position:"relative",width: width,"padding-left":paddingleft+"px"}).addClass("jstree-grid-cell jstree-grid-cell-"+classAdd+" "+wcl+ " " + wideValClass + (tr?" ui-state-default":"")).addClass("jstree-grid-col-"+i);
 					
 					if (title) {
 						span.attr("title",title);
