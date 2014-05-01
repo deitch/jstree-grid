@@ -244,8 +244,7 @@
 
 			if (!bound && resizable) {
 				bound = true;
-				$(document).on("selectstart", ".jstree-grid-separator", function () { return false; });
-				$(document)
+				header.on("selectstart", ".jstree-grid-separator", function () { return false; })
 					.on("mousedown", ".jstree-grid-separator", function (e) {
 						var headerWrapper;
 						clickedSep = $(this);
@@ -259,8 +258,7 @@
 						maxMouseX = headerWrapper.offset().left+headerWrapper.width() - 15;
 						maxRightElement = headerWrapper.children(".jstree-grid-separator:last");
 						return false;
-					});
-				$(document)
+					})
 					.mouseup(function () {
 						var  i, ref, cols, widths, headers, w;
 						if (isClickedSep) {
