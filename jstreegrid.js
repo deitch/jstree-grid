@@ -232,10 +232,13 @@
 					.after("<div class='jstree-grid-separator jstree-grid-separator-"+classAdd+(tr ? " ui-widget-header" : "")+(resizable? " jstree-grid-resizable-separator":"")+"'>&nbsp;</div>");
 			}
 			if (last) {
-				last.addClass((tr?"ui-widget-header ":"")+"jstree-grid-header jstree-grid-header-"+classAdd);
-				totalWidth -= width;
-				gs.lastColumnMarginLeft = gs.lastColumnMarginLeft || totalWidth;
-				last.css({width:"auto",float:"none","margin-left":gs.lastColumnMarginLeft,display:"block"}).addClass("jstree-grid-header-last").next(".jstree-grid-separator").remove();
+				last.addClass((tr?"ui-widget-header ":"")+"jstree-grid-header jstree-grid-header-last jstree-grid-header-"+classAdd);
+				// if there is no width given for the last column, do it via automatic
+				if (cols[cols.length-1].width === undefined) {
+					totalWidth -= width;
+					gs.lastColumnMarginLeft = gs.lastColumnMarginLeft || totalWidth;
+					last.css({width:"auto",float:"none","margin-left":gs.lastColumnMarginLeft,display:"block"}).addClass("jstree-grid-width-auto").next(".jstree-grid-separator").remove();
+				}
 			}
 			// add a clearer
 			$("<div></div>").css("clear","both").appendTo(header);
@@ -310,7 +313,7 @@
 									});
 									toResize.next.each(function () {
 										var j = $(this);
-										if (j.hasClass("jstree-grid-header-last") || j.hasClass("jstree-grid-cell-last")) {
+										if (j.hasClass("jstree-grid-width-auto")) {
 											j.css("margin-left",parseFloat(j.css("margin-left"))+diff);
 										} else {
 											this.style.width = newRight; 
@@ -421,9 +424,12 @@
 
 				}		
 				last.addClass("jstree-grid-cell-last"+(tr?" ui-state-default":""));
-				totalWidth -= width;
-				gs.lastColumnMarginLeft = gs.lastColumnMarginLeft || totalWidth;
-				last.css({width:"auto",float:"none","margin-left":gs.lastColumnMarginLeft,display:"block"}).addClass("jstree-grid-header-last").next(".jstree-grid-separator").remove();
+				// if there is no width given for the last column, do it via automatic
+				if (cols[cols.length-1].width === undefined) {
+					totalWidth -= width;
+					gs.lastColumnMarginLeft = gs.lastColumnMarginLeft || totalWidth;
+					last.css({width:"auto",float:"none","margin-left":gs.lastColumnMarginLeft,display:"block"}).addClass("jstree-grid-width-auto").next(".jstree-grid-separator").remove();
+				}
 				$("<div></div>").css("clear","both").insertAfter(last);
 			}
 			this.element.css({'overflow-y':'auto !important'});			
