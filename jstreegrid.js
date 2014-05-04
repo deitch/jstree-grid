@@ -72,12 +72,13 @@
 	};
 
 	renderAWidth = function(node,tree) {
-		var depth, a = node.get(0).tagName.toLowerCase() === "a" ? node : node.children("a"),
-		width = parseInt(tree.settings.grid.columns[0].width,10) + parseInt(tree._gridSettings.treeWidthDiff,10);
+		var depth, a = node.get(0).tagName.toLowerCase() === "a" ? node : node.children("a"), width,
+		fullWidth = parseInt(tree.settings.grid.columns[0].width,10) + parseInt(tree._gridSettings.treeWidthDiff,10);
 		// need to use a selector in jquery 1.4.4+
 		depth = tree.get_node(node).parents.length;
-		width = width - depth*getIndent(node,tree);
+		width = fullWidth - depth*getIndent(node,tree);
 		a.css({width: width, "vertical-align": "top", "overflow":"hidden","float":"left"});
+		return(fullWidth);
 	};
 	renderATitle = function(node,t,tree) {
 		var a = node.get(0).tagName.toLowerCase() === "a" ? node : node.children("a"), title, col = tree.settings.grid.columns[0];
@@ -209,7 +210,7 @@
 			cl, val, margin, last, tr = gs.isThemeroller, classAdd = (tr?"themeroller":"regular"),
 			container = this.element, gridparent = container.parent(), hasHeaders = 0,
 			conf = gs.defaultConf, isClickedSep = false, oldMouseX = 0, newMouseX = 0, maxMouseX, maxRightElement,
-			currentTree = null, colNum = 0, toResize = {}, clickedSep = null, borPadWidth = 0;
+			currentTree = null, colNum = 0, toResize = {}, clickedSep = null, borPadWidth = 0, totalWidth = 0;
 			// save the original parent so we can reparent on destroy
 			this.parent = gridparent;
 			
@@ -226,13 +227,15 @@
 				borPadWidth = tr ? 1+6 : 2+8; // account for the borders and padding
 				width -= borPadWidth;
 				margin = i === 0 ? 3 : 0;
+				totalWidth += width + margin;
 				last = $("<div></div>").css(conf).css({"margin-left": margin,"width":width, "padding": "1px 3px 2px 5px"}).addClass((tr?"ui-widget-header ":"")+"jstree-grid-header jstree-grid-header-cell jstree-grid-header-"+classAdd+" "+cl).text(val).appendTo(header)
 					.after("<div class='jstree-grid-separator jstree-grid-separator-"+classAdd+(tr ? " ui-widget-header" : "")+(resizable? " jstree-grid-resizable-separator":"")+"'>&nbsp;</div>");
 			}
 			if (last) {
 				last.addClass((tr?"ui-widget-header ":"")+"jstree-grid-header jstree-grid-header-"+classAdd);
-				// remove jstree-grid-separator last one
-				//last.next(".jstree-grid-separator").removeClass("jstree-grid-resizable-separator");
+				totalWidth -= width;
+				gs.lastColumnMarginLeft = gs.lastColumnMarginLeft || totalWidth;
+				last.css({width:"auto",float:"none","margin-left":gs.lastColumnMarginLeft,display:"block"}).addClass("jstree-grid-header-last").next(".jstree-grid-separator").remove();
 			}
 			// add a clearer
 			$("<div></div>").css("clear","both").appendTo(header);
@@ -302,10 +305,16 @@
 								// only do this if we are not shrinking past 0 on left or right - and limit it to that amount
 								if ((diff < 0 && innerLeft > 0) || (diff > 0 && innerRight > 0)) {
 									toResize.prev.each(function () { 
-										this.style.width = newLeft; 
+										// cannot use newLeft, because it might be the <a>, which has indent-level size
+										this.style.width = parseFloat($(this).css("width"))+diff;
 									});
-									toResize.next.each(function () { 
-										this.style.width = newRight; 
+									toResize.next.each(function () {
+										var j = $(this);
+										if (j.hasClass("jstree-grid-header-last") || j.hasClass("jstree-grid-cell-last")) {
+											j.css("margin-left",parseFloat(j.css("margin-left"))+diff);
+										} else {
+											this.style.width = newRight; 
+										}
 									});
 									oldMouseX = newMouseX;
 								}
@@ -328,7 +337,7 @@
 		};
 		this._prepare_grid = function (obj) {
 			var gs = this._gridSettings, c = gs.treeClass, _this = this, t, cols = gs.columns || [], width, tr = gs.isThemeroller, 
-			classAdd = (tr?"themeroller":"regular"), img, objData = this.get_node(obj),
+			classAdd = (tr?"themeroller":"regular"), img, objData = this.get_node(obj), totalWidth = 0,
 			defaultWidth = gs.columnWidth, conf = gs.defaultConf, cellClickHandler = function (val,col,s) {
 				return function() {
 					$(this).trigger("select_cell.jstree-grid", [{value: val,column: col.header,node: $(this).closest("li"),sourceName: col.value,sourceType: s}]);
@@ -345,7 +354,7 @@
 			if (a.length === 1) {
 			  a.prev().css("float","left");
 				a.addClass(c);
-				renderAWidth(a,_this);
+				totalWidth += renderAWidth(a,_this);
 				renderATitle(a,t,_this);
 				last = a;
 				for (i=1;i<cols.length;i++) {
@@ -395,6 +404,8 @@
 					//tmpWidth = $.support.boxModel ? $(".jstree-grid-col-"+i+":first",t).width() : $(".jstree-grid-col-"+i+":first",t).outerWidth();
 					width = tmpWidth || (width - paddingleft);
 					
+					totalWidth += width;
+					
 					last = isAlreadyGrid ? a.nextAll("div:eq("+(i-1)+")") : $("<div></div>").insertAfter(last);
 					span = isAlreadyGrid ? last.children("span") : $("<span></span>").appendTo(last);
 
@@ -410,6 +421,9 @@
 
 				}		
 				last.addClass("jstree-grid-cell-last"+(tr?" ui-state-default":""));
+				totalWidth -= width;
+				gs.lastColumnMarginLeft = gs.lastColumnMarginLeft || totalWidth;
+				last.css({width:"auto",float:"none","margin-left":gs.lastColumnMarginLeft,display:"block"}).addClass("jstree-grid-header-last").next(".jstree-grid-separator").remove();
 				$("<div></div>").css("clear","both").insertAfter(last);
 			}
 			this.element.css({'overflow-y':'auto !important'});			
