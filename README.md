@@ -66,7 +66,7 @@ The options are as follows:
 
 * width: default width for a column for which no width is given. If no width is given, the default is 25px
 * columns: an array of columns to create, on order. Each entry is an object with the following parameters:
-	width: width of the column in pixels.
+	width: width of the column in pixels. If no width is given, the default is 25 px **except for the last column**. In the last column, if not width is given, it is treated as 'auto' and fills the entire rest of the grid to the right.
 	header: string to use as a header for the column.
 	cellClass: a CSS class to add to each cell in this column (except for the header) - added to the <span>
 	wideCellClass: a CSS class to add to each cell in this column (except for the header) - added to the <div>
