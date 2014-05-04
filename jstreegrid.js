@@ -232,7 +232,7 @@
 			if (last) {
 				last.addClass((tr?"ui-widget-header ":"")+"jstree-grid-header jstree-grid-header-"+classAdd);
 				// remove jstree-grid-separator last one
-				last.next(".jstree-grid-separator").removeClass("jstree-grid-resizable-separator");
+				//last.next(".jstree-grid-separator").removeClass("jstree-grid-resizable-separator");
 			}
 			// add a clearer
 			$("<div></div>").css("clear","both").appendTo(header);
