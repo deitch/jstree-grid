@@ -283,19 +283,32 @@
 					.mousemove(function (e) {
 						if (isClickedSep) {
 							newMouseX = e.clientX;
-							var diff = newMouseX - oldMouseX, rightMostLocation = maxRightElement.offset().left+maxRightElement.width();
+							var diff = newMouseX - oldMouseX, rightMostLocation = maxRightElement.offset().left+maxRightElement.width(), 
+							newLeft, newRight, oldLeft, oldRight, innerLeft, innerRight;
 							// how far to the right will this shove the right-most element
 							if (rightMostLocation + diff > maxMouseX) {
 								diff = 0;
 							}
 							if(diff !== 0){
-								toResize.prev.each(function () { 
-									this.style.width = (parseFloat(this.style.width) + diff) + "px"; 
-								});
-								toResize.next.each(function () { 
-									this.style.width = (parseFloat(this.style.width) - diff) + "px"; 
-								});
-								oldMouseX = newMouseX;
+								innerLeft = toResize.prev.first().width();
+								innerRight = toResize.next.first().width();
+								oldLeft = parseFloat(toResize.prev.first().css("width"));
+								oldRight = parseFloat(toResize.next.first().css("width"));
+								
+								// make sure that diff cannot be beyond the left/right limits
+								diff = diff < 0 ? Math.max(diff,-innerLeft) : Math.min(diff,innerRight);
+								newLeft = (oldLeft + diff) + "px";
+								newRight = (oldRight - diff) + "px";
+								// only do this if we are not shrinking past 0 on left or right - and limit it to that amount
+								if ((diff < 0 && innerLeft > 0) || (diff > 0 && innerRight > 0)) {
+									toResize.prev.each(function () { 
+										this.style.width = newLeft; 
+									});
+									toResize.next.each(function () { 
+										this.style.width = newRight; 
+									});
+									oldMouseX = newMouseX;
+								}
 							}
 						}
 					});
