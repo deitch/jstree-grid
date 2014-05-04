@@ -209,7 +209,7 @@
 			cl, val, margin, last, tr = gs.isThemeroller, classAdd = (tr?"themeroller":"regular"),
 			container = this.element, gridparent = container.parent(), hasHeaders = 0,
 			conf = gs.defaultConf, isClickedSep = false, oldMouseX = 0, newMouseX = 0, maxMouseX, maxRightElement,
-			currentTree = null, colNum = 0, toResize = null, clickedSep = null, borPadWidth = 0;
+			currentTree = null, colNum = 0, toResize = {}, clickedSep = null, borPadWidth = 0;
 			// save the original parent so we can reparent on destroy
 			this.parent = gridparent;
 			
@@ -231,6 +231,8 @@
 			}
 			if (last) {
 				last.addClass((tr?"ui-widget-header ":"")+"jstree-grid-header jstree-grid-header-"+classAdd);
+				// remove jstree-grid-separator last one
+				last.next(".jstree-grid-separator").removeClass("jstree-grid-resizable-separator");
 			}
 			// add a clearer
 			$("<div></div>").css("clear","both").appendTo(header);
@@ -244,15 +246,16 @@
 
 			if (!bound && resizable) {
 				bound = true;
-				header.on("selectstart", ".jstree-grid-separator", function () { return false; })
-					.on("mousedown", ".jstree-grid-separator", function (e) {
+				header.on("selectstart", ".jstree-grid-resizable-separator", function () { return false; })
+					.on("mousedown", ".jstree-grid-resizable-separator", function (e) {
 						var headerWrapper;
 						clickedSep = $(this);
 						isClickedSep = true;
 						currentTree = clickedSep.parents(".jstree-grid-wrapper").children(".jstree");
 						oldMouseX = e.clientX;
 						colNum = clickedSep.prevAll(".jstree-grid-header").length-1;
-						toResize = clickedSep.prev().add(currentTree.find(".jstree-grid-col-"+colNum));
+						toResize.prev = clickedSep.prev().add(currentTree.find(".jstree-grid-col-"+colNum));
+						toResize.next = clickedSep.next().add(currentTree.find(".jstree-grid-col-"+(colNum+1)));
 						// the max rightmost position we will allow is the right-most of the wrapper minus a buffer (10)
 						headerWrapper = clickedSep.parent();
 						maxMouseX = headerWrapper.offset().left+headerWrapper.width() - 15;
@@ -286,7 +289,12 @@
 								diff = 0;
 							}
 							if(diff !== 0){
-								toResize.each(function () { this.style.width = (parseFloat(this.style.width) + diff) + "px"; });
+								toResize.prev.each(function () { 
+									this.style.width = (parseFloat(this.style.width) + diff) + "px"; 
+								});
+								toResize.next.each(function () { 
+									this.style.width = (parseFloat(this.style.width) - diff) + "px"; 
+								});
 								oldMouseX = newMouseX;
 							}
 						}
