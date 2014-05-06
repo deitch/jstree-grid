@@ -49,6 +49,8 @@ $("div#id").jstree({
 
 As of 3.0.0-beta5, jstree-grid supports AMD, thanks https://github.com/jochenberger
 
+As of 3.1.0-beta1, jstree-grid uses a wrapping table, rather than inserted `div`s in the tree. This does a much better job with widths, alignment, editing, etc. etc. 
+
 Structure
 ---------
 The grid is built by adding divs `<div></div>` to each `<li>` entry for a row in the tree. Inside the `<div>` is a `<span></span>` with the data.
