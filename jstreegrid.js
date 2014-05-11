@@ -9,7 +9,7 @@
  * Works only with jstree "v3.0.0-beta5" and higher
  *
  * $Date: 2014-04-18 $
- * $Revision:  3.1.0-beta1 $
+ * $Revision:  3.1.0-beta2 $
  */
 
 /*jslint nomen:true */
@@ -144,7 +144,7 @@
 					styles = [
 						'.jstree-grid-cell {vertical-align: top; overflow:hidden;}',
 						'.jstree-grid-separator {position:absolute; margin-left: -2px; border-width: 0 2px 0 0; *display:inline; *+display:inline; margin-right:0px;width:0px;}',
-	          '.jstree-grid-header-cell {overflow: hidden;}',
+	          '.jstree-grid-header-cell {overflow: hidden; white-space: nowrap;}',
 						'.jstree-grid-header-themeroller {border: 0; padding: 1px 3px;}',
 						'.jstree-grid-header-regular {background-color: #EBF3FD;}',
 						'.jstree-grid-resizable-separator {cursor: col-resize;}',
@@ -160,10 +160,8 @@
 				this.gridWrapper = $("<div></div>").addClass("jstree-grid-wrapper").appendTo(gridparent).append(this.table);
 				this.dataRow = $("<tr></tr>");
 				this.headerRow = $("<tr></tr>");
-				this.headerPullers = $("<div></div>");
 				this.table.append(this.headerRow);
 				this.table.append(this.dataRow);
-				this.gridWrapper.prepend(this.headerPullers);
 				// create the data columns
 				for (i=0;i<cols.length;i++) {
 					this.dataRow.append($("<td></td>").addClass("jstree-grid-cell"));
@@ -253,8 +251,8 @@
 		this._prepare_headers = function() {
 			var header, i, gs = this._gridSettings,cols = gs.columns || [], width, defaultWidth = gs.columnWidth, resizable = gs.resizable || false,
 			cl, val, margin, last, tr = gs.isThemeroller, classAdd = (tr?"themeroller":"regular"), puller,
-			hasHeaders = 0, gridparent = this.gridparent, hp = this.headerPullers,
-			conf = gs.defaultConf, isClickedSep = false, oldMouseX = 0, newMouseX = 0, maxMouseX, maxRightElement,
+			hasHeaders = 0, gridparent = this.gridparent,
+			conf = gs.defaultConf, isClickedSep = false, oldMouseX = 0, newMouseX = 0,
 			currentTree = null, colNum = 0, toResize = {}, clickedSep = null, borPadWidth = 0, totalWidth = 0;
 			// save the original parent so we can reparent on destroy
 			this.parent = gridparent;
@@ -275,8 +273,8 @@
 				margin = i === 0 ? 3 : 0;
 				last = $("<th></th>").css(conf).css({"margin-left": margin,"width":width, "padding": "1px 3px 2px 5px"}).addClass((tr?"ui-widget-header ":"")+"jstree-grid-header jstree-grid-header-cell jstree-grid-header-"+classAdd+" "+cl).text(val).appendTo(header);
 				totalWidth += last.outerWidth();
-				puller = $("<div class='jstree-grid-separator jstree-grid-separator-"+classAdd+(tr ? " ui-widget-header" : "")+(resizable? " jstree-grid-resizable-separator":"")+"'>&nbsp;</div>").appendTo(hp);
-				puller.css({height:24,left:totalWidth});
+				puller = $("<div class='jstree-grid-separator jstree-grid-separator-"+classAdd+(tr ? " ui-widget-header" : "")+(resizable? " jstree-grid-resizable-separator":"")+"'>&nbsp;</div>").appendTo(last);
+				puller.css({height:24,float:"right",position:"relative"});
 			}
 			// get rid of last puller
 			puller.remove();
@@ -286,9 +284,6 @@
 				totalWidth -= width;
 				last.css({width:"auto",display:"block"}).addClass("jstree-grid-width-auto").next(".jstree-grid-separator").remove();
 			}
-				// add a clearer
-			//$("<div></div>").css("clear","both").appendTo(header);
-			// did we have any real columns?
 			if (hasHeaders) {
 				// save the offset of the div from the body
 				gs.divOffset = header.parent().offset().left;
@@ -319,62 +314,50 @@
 				}).mousemove(function (e) {
 						if (isClickedSep) {
 							newMouseX = e.clientX;
-							var diff = newMouseX - oldMouseX, rightMostLocation = maxRightElement.offset().left+maxRightElement.width(), 
-							oldPrevHeaderInner, oldNextHeaderInner, oldPrevHeaderWidth, oldNextHeaderWidth, oldPrevSeparatorLeft,
-							oldNextSeparatorLeft, oldNextHeaderMarginLeft, newPrevHeaderWidth, newNextHeaderWidth, newPrevSeparatorLeft,
-							newNextSeparatorLeft, newNextHeaderMarginLeft;
-							// how far to the right will this shove the right-most element
-							if (rightMostLocation + diff > maxMouseX) {
-								diff = 0;
-							}
+							console.log("mousemove newMouseX oldMouseX "+newMouseX + " " + oldMouseX);
+							var diff = newMouseX - oldMouseX,
+							oldPrevHeaderInner, oldNextHeaderInner, oldPrevHeaderWidth, oldNextHeaderWidth, oldNextHeaderMarginLeft, 
+							newPrevHeaderWidth, newNextHeaderWidth, newNextHeaderMarginLeft;
+
 							if (diff !== 0){
 								oldPrevHeaderInner = toResize.prevHeader.width();
 								oldNextHeaderInner = toResize.nextHeader.width();
 								oldPrevHeaderWidth = parseFloat(toResize.prevHeader.css("width"));
 								oldNextHeaderWidth = parseFloat(toResize.nextHeader.css("width"));
-								oldPrevSeparatorLeft = parseFloat(toResize.prevSeparator.css("left"));
-								oldNextSeparatorLeft = parseFloat(toResize.nextSeparator.css("left"));
 								oldNextHeaderMarginLeft = parseFloat(toResize.prevHeader.css("margin-left"));
 								
 								// make sure that diff cannot be beyond the left/right limits
 								diff = diff < 0 ? Math.max(diff,-oldPrevHeaderInner) : Math.min(diff,oldNextHeaderInner);
 								newPrevHeaderWidth = (oldPrevHeaderInner + diff) + "px";
 								newNextHeaderWidth = (oldNextHeaderInner - diff) + "px";
-								newPrevSeparatorLeft = oldPrevSeparatorLeft + diff;
-								newNextSeparatorLeft = oldNextSeparatorLeft - diff;
 								newNextHeaderMarginLeft = oldNextHeaderMarginLeft + diff;
 								
+								console.log("diff/newPrevHeaderWidth/newNextHeaderWidth "+[diff,newPrevHeaderWidth,newNextHeaderWidth].join("/"));
 								// only do this if we are not shrinking past 0 on left or right - and limit it to that amount
 								if ((diff < 0 && oldPrevHeaderInner > 0) || (diff > 0 && oldNextHeaderInner > 0)) {
 									toResize.prevHeader.width(newPrevHeaderWidth);
-									toResize.prevSeparator.css("left",newPrevSeparatorLeft);
 									if (toResize.nextHeader.hasClass("jstree-grid-width-auto")) {
 										toResize.nextHeader.css("margin-left",newNextHeaderMarginLeft);
 									} else {
 										toResize.nextHeader.width(newNextHeaderWidth);
 									}
-									//toResize.nextSeparator.css("left",newNextSeparatorLeft);
 									oldMouseX = newMouseX;
 								}
 							}
 						}
 					});
-				hp.on("selectstart", ".jstree-grid-resizable-separator", function () { return false; })
+				header.on("selectstart", ".jstree-grid-resizable-separator", function () { return false; })
 					.on("mousedown", ".jstree-grid-resizable-separator", function (e) {
 						var headerWrapper;
 						clickedSep = $(this);
 						isClickedSep = true;
 						currentTree = clickedSep.closest(".jstree-grid-wrapper").find(".jstree");
 						oldMouseX = e.clientX;
-						colNum = clickedSep.prevAll(".jstree-grid-resizable-separator").length-1;
-						toResize.prevSeparator = clickedSep;
-						toResize.prevHeader = header.find(".jstree-grid-header:eq("+(colNum+1)+")");
-						toResize.nextSeparator = clickedSep.next();
-						toResize.nextHeader = header.find(".jstree-grid-header:eq("+(colNum+2)+")");
+						colNum = clickedSep.closest("th").prevAll("th").length;
+						toResize.prevHeader = clickedSep.closest("th");
+						toResize.nextHeader = toResize.prevHeader.next("th");
 						// the max rightmost position we will allow is the right-most of the wrapper minus a buffer (10)
 						headerWrapper = clickedSep.parent();
-						maxMouseX = headerWrapper.offset().left+headerWrapper.width() - 15;
-						maxRightElement = headerWrapper.children(".jstree-grid-separator:last");
 						return false;
 					});
 			}
