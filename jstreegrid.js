@@ -314,7 +314,6 @@
 				}).mousemove(function (e) {
 						if (isClickedSep) {
 							newMouseX = e.clientX;
-							console.log("mousemove newMouseX oldMouseX "+newMouseX + " " + oldMouseX);
 							var diff = newMouseX - oldMouseX,
 							oldPrevHeaderInner, oldNextHeaderInner, oldPrevHeaderWidth, oldNextHeaderWidth, oldNextHeaderMarginLeft, 
 							newPrevHeaderWidth, newNextHeaderWidth, newNextHeaderMarginLeft;
@@ -332,7 +331,6 @@
 								newNextHeaderWidth = (oldNextHeaderInner - diff) + "px";
 								newNextHeaderMarginLeft = oldNextHeaderMarginLeft + diff;
 								
-								console.log("diff/newPrevHeaderWidth/newNextHeaderWidth "+[diff,newPrevHeaderWidth,newNextHeaderWidth].join("/"));
 								// only do this if we are not shrinking past 0 on left or right - and limit it to that amount
 								if ((diff < 0 && oldPrevHeaderInner > 0) || (diff > 0 && oldNextHeaderInner > 0)) {
 									toResize.prevHeader.width(newPrevHeaderWidth);
