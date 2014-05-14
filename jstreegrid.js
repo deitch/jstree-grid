@@ -27,7 +27,7 @@
         factory(jQuery);
     }
 }(function ($) {
-	var renderAWidth, renderATitle, getIndent, htmlstripre, findLastClosedNode,
+	var renderAWidth, renderATitle, getIndent, htmlstripre, findLastClosedNode, BLANKRE = /^\s*$/g,
 	SPECIAL_TITLE = "_DATA_", LEVELINDENT = 24, bound = false, styled = false, GRIDCELLID_PREFIX = "jsgrid_",GRIDCELLID_POSTFIX = "_col";
 	
 	/*jslint regexp:true */
@@ -431,7 +431,7 @@
 					} else { content = val; }
 					
 					// content cannot be blank, or it messes up heights
-					if (content.match(/^\s*$/g)) {
+					if (content === undefined || content === null || BLANKRE.test(content)) {
 						content = "&nbsp;";
 					}
 
