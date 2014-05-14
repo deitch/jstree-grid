@@ -142,9 +142,10 @@
 				if (!styled) {
 					styled = true;
 					styles = [
-						'.jstree-grid-cell {vertical-align: top; overflow:hidden;}',
-						'.jstree-grid-separator {position:absolute; margin-left: -2px; border-width: 0 2px 0 0; *display:inline; *+display:inline; margin-right:0px;width:0px;}',
-	          '.jstree-grid-header-cell {overflow: hidden; white-space: nowrap;}',
+						'.jstree-grid-cell {vertical-align: top; overflow:hidden;margin-left:0,position:relative,width: 100%,padding-left:7px;}',
+						'.jstree-grid-cell span {margin-right:0px;margin-right:0px;*display:inline;*+display:inline;}',
+						'.jstree-grid-separator {position:relative; height:24px; float:right;margin-left: -2px; border-width: 0 2px 0 0; *display:inline; *+display:inline; margin-right:0px;width:0px;}',
+	          '.jstree-grid-header-cell {overflow: hidden; white-space: nowrap;padding: 1px 3px 2px 5px;}',
 						'.jstree-grid-header-themeroller {border: 0; padding: 1px 3px;}',
 						'.jstree-grid-header-regular {background-color: #EBF3FD;}',
 						'.jstree-grid-resizable-separator {cursor: col-resize;}',
@@ -271,10 +272,9 @@
 				borPadWidth = tr ? 1+6 : 2+8; // account for the borders and padding
 				width -= borPadWidth;
 				margin = i === 0 ? 3 : 0;
-				last = $("<th></th>").css(conf).css({"margin-left": margin,"width":width, "padding": "1px 3px 2px 5px"}).addClass((tr?"ui-widget-header ":"")+"jstree-grid-header jstree-grid-header-cell jstree-grid-header-"+classAdd+" "+cl).text(val).appendTo(header);
+				last = $("<th></th>").css(conf).css({"margin-left": margin,"width":width}).addClass((tr?"ui-widget-header ":"")+"jstree-grid-header jstree-grid-header-cell jstree-grid-header-"+classAdd+" "+cl).text(val).appendTo(header);
 				totalWidth += last.outerWidth();
 				puller = $("<div class='jstree-grid-separator jstree-grid-separator-"+classAdd+(tr ? " ui-widget-header" : "")+(resizable? " jstree-grid-resizable-separator":"")+"'>&nbsp;</div>").appendTo(last);
-				puller.css({height:24,float:"right",position:"relative"});
 			}
 			// get rid of last puller
 			puller.remove();
@@ -495,10 +495,10 @@
 					span = last.children("span");
 
 					// create a span inside the div, so we can control what happens in the whole div versus inside just the text/background
-					span.addClass(cl+" "+valClass).css({"margin-right":"0px","*display":"inline","*+display":"inline"}).html(content)
+					span.addClass(cl+" "+valClass).html(content)
 					// add click handler for clicking inside a grid cell
 					.click(cellClickHandler(val,col,s));
-					last = last.css(conf).css({"margin-left":0,position:"relative",width: "100%","padding-left":paddingleft+"px"}).addClass("jstree-grid-cell jstree-grid-cell-"+classAdd+" "+wcl+ " " + wideValClass + (tr?" ui-state-default":"")).addClass("jstree-grid-col-"+i);
+					last = last.css(conf).addClass("jstree-grid-cell jstree-grid-cell-"+classAdd+" "+wcl+ " " + wideValClass + (tr?" ui-state-default":"")).addClass("jstree-grid-col-"+i);
 					
 					if (title) {
 						span.attr("title",title);
