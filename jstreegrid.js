@@ -429,6 +429,11 @@
 					img = col.images[val] || col.images["default"];
 					if (img) {content = img[0] === "*" ? '<span class="'+img.substr(1)+'"></span>' : '<img src="'+img+'">';}
 					} else { content = val; }
+					
+					// content cannot be blank, or it messes up heights
+					if (content.match(/^\s*$/g)) {
+						content = "&nbsp;";
+					}
 
 					// get the valueClass
 					valClass = col.valueClass && t.attr(col.valueClass) ? t.attr(col.valueClass) : "";
