@@ -152,6 +152,7 @@
 						'.jstree-grid-separator-regular {border-color: #d0d0d0; border-style: solid;}',
 						'.jstree-grid-cell-themeroller {border: none !important; background: transparent !important;}',
 						'.jstree-grid-table {table-layout: fixed; width: 100%;}',
+						'.jstree-grid-width-auto {width:auto;display:block;}',
 						'.jstree-grid-col-0 {width: 100%;}'
 					];
 
@@ -282,7 +283,7 @@
 			// if there is no width given for the last column, do it via automatic
 			if (cols[cols.length-1].width === undefined) {
 				totalWidth -= width;
-				last.css({width:"auto",display:"block"}).addClass("jstree-grid-width-auto").next(".jstree-grid-separator").remove();
+				last.css({width:""}).addClass("jstree-grid-width-auto").next(".jstree-grid-separator").remove();
 			}
 			if (hasHeaders) {
 				// save the offset of the div from the body
@@ -508,7 +509,7 @@
 				last.addClass("jstree-grid-cell-last"+(tr?" ui-state-default":""));
 				// if there is no width given for the last column, do it via automatic
 				if (cols[cols.length-1].width === undefined) {
-					last.css({width:"auto",display:"block"}).addClass("jstree-grid-width-auto").next(".jstree-grid-separator").remove();
+					last.addClass("jstree-grid-width-auto").next(".jstree-grid-separator").remove();
 				}
 			}
 			this.element.css({'overflow-y':'auto !important'});			
