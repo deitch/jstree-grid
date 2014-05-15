@@ -89,7 +89,8 @@
 		// need to use a selector in jquery 1.4.4+
 		depth = tree.get_node(node).parents.length;
 		width = fullWidth - depth*getIndent(node,tree);
-		a.css({"vertical-align": "top", "overflow":"hidden"});
+		// the following line is no longer needed, since we are doing this inside a <td>
+		//a.css({"vertical-align": "top", "overflow":"hidden"});
 		return(fullWidth);
 	};
 	renderATitle = function(node,t,tree) {
