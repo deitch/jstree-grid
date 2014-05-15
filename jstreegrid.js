@@ -244,9 +244,9 @@
 			}
 		};
 		this.teardown = function() {
-			var gridparent = this.parent, container = this.element;
+			var gw = this.gridWrapper, container = this.element, gridparent = gw.parent();
 			container.detach();
-			$("div.jstree-grid-wrapper",gridparent).remove();
+			gw.remove();
 			gridparent.append(container);
 			parent.teardown.call(this);
 		};
