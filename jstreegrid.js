@@ -181,10 +181,16 @@
 		this.bind = function () {
 			parent.bind.call(this);
 			this._initialize();
-			this.element.on("create_node.jstree redraw.jstree clean_node.jstree change_node.jstree", $.proxy(function (e, data) { 
-					var target = this.get_node(data || "#",true);
+			this.element.on("redraw.jstree", $.proxy(function (e, data) { 
+					var target = this.get_node(data.nodes || "#",true);
 					this._prepare_grid(target);
 				}, this))
+			.on("create_node.jstree clean_node.jstree change_node.jstree", $.proxy(function (e, data) { 
+				var target = this.get_node(data || "#",true);
+				this._prepare_grid(target);
+			}, this))
+			.on("delete_node.jstree",$.proxy(function (e,data) {
+			}, this))
 			.on("close_node.jstree",$.proxy(function (e,data) {
 				this._hide_grid(data);
 			}, this))
@@ -244,6 +250,7 @@
 					},this));
 			}
 		};
+		// tear down the tree entirely
 		this.teardown = function() {
 			var gw = this.gridWrapper, container = this.element, gridparent = gw.parent();
 			container.detach();
@@ -251,6 +258,17 @@
 			gridparent.append(container);
 			parent.teardown.call(this);
 		};
+		// clean the grid in case of redraw or refresh entire tree
+		this._clean_grid = function (target,id) {
+			var dataRow = this.dataRow;
+			if (target) {
+				dataRow.find("div.jsgrid_"+id+"_col").remove();
+			} else {
+				// get all of the `div` children in all of the `td` in dataRow except for :first (that is the tree itself) and remove
+				dataRow.children("td:gt(0)").find("div").remove();
+			}
+		};
+		// prepare the headers
 		this._prepare_headers = function() {
 			var header, i, gs = this._gridSettings,cols = gs.columns || [], width, defaultWidth = gs.columnWidth, resizable = gs.resizable || false,
 			cl, val, margin, last, tr = gs.isThemeroller, classAdd = (tr?"themeroller":"regular"), puller,
@@ -373,6 +391,10 @@
 				this._prepare_grid(obj);
 			}
 			return obj;
+		};
+		this.refresh = function () {
+			this._clean_grid();
+			return parent.refresh.call(this);
 		};
 		this._hide_grid = function (data) {
 			var dataRow = this.dataRow, children = data.node.children_d || [], i;
