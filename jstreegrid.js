@@ -236,6 +236,13 @@
 			.on("deselect_node.jstree",$.proxy(function(node,selected,event){
 				var id = selected.node.id;
 				this.dataRow.find("."+GRIDCELLID_PREFIX+id+GRIDCELLID_POSTFIX).removeClass("jstree-clicked");
+			},this))
+			.on("deselect_all.jstree",$.proxy(function(node,selected,event){
+				// get all of the ids that were unselected
+				var ids = selected.node || [], i;
+				for (i=0;i<ids.length;i++) {
+					this.dataRow.find("."+GRIDCELLID_PREFIX+ids[i]+GRIDCELLID_POSTFIX).removeClass("jstree-clicked");
+				}
 			},this));
 			if (this._gridSettings.isThemeroller) {
 				this.element
