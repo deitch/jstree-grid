@@ -440,6 +440,7 @@
 			
 			if (a.length === 1) {
 				gridCellName = GRIDCELLID_PREFIX+lid+GRIDCELLID_POSTFIX;
+				gridCellName = gridCellName.replace($.jstree.idregex,'\\$&');
 				gridCellParentId = objData.parent === "#" ? null : GRIDCELLID_PREFIX+objData.parent+GRIDCELLID_POSTFIX;
 				a.addClass(c);
 				renderAWidth(a,_this);
