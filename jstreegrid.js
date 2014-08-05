@@ -185,7 +185,7 @@
 					var target = this.get_node(data.nodes || "#",true);
 					this._prepare_grid(target);
 				}, this))
-			.on("create_node.jstree clean_node.jstree change_node.jstree", $.proxy(function (e, data) { 
+			.on("move_node.jstree create_node.jstree clean_node.jstree change_node.jstree", $.proxy(function (e, data) { 
 				var target = this.get_node(data || "#",true);
 				this._prepare_grid(target);
 			}, this))
@@ -436,8 +436,10 @@
 				};
 			},i, val, cl, wcl, a, last, valClass, wideValClass, span, paddingleft, title, gridCellName, gridCellParentId, gridCellParent,
 			gridCellPrev, gridCellPrevId, gridCellNext, gridCellNextId, gridCellChild, gridCellChildId, 
-			col, content, s, tmpWidth, dataRow = this.dataRow, dataCell, lid = objData.id, 
-			peers = this.get_node(objData.parent).children, pos,
+			col, content, s, tmpWidth, dataRow = this.dataRow, dataCell, lid = objData.id,
+			peers = this.get_node(objData.parent).children,
+			// find my position in the list of peers. "peers" is the list of everyone at my level under my parent, in order
+			pos = jQuery.inArray(lid,peers),
 			hc = this.holdingCells, rendered = false;
 			// get our column definition
 			t = $(obj);
@@ -508,66 +510,76 @@
 					last = dataCell.children("div#"+gridCellName+i);
 					if (!last || last.length < 1) {
 						last = $("<div></div>");
-						// we need to put it in the dataCell - after the parent, but the position matters
-						if (gridCellParentId) {
-							// first find my position in the list of peers. "peers" is the list of everyone at my level under my parent, in order
-							pos = jQuery.inArray(lid,peers);
-							// if we are first, i.e. pos === 0, we go right after the parent;
-							// if we are not first, and our previous peer (one before us) is closed, we go right after the previous peer cell
-							// if we are not first, and our previous peer is opened, then we have to find its youngest & lowest closed child (incl. leaf)
-							//
-							// probably be much easier to go *before* our next one
-							// but that one might not be drawn yet
-							// here is the logic for jstree drawing:
-							//   it draws peers from first to last or from last to first
-							//   it draws children before a parent
-							// 
-							// so I can rely on my *parent* not being drawn, but I cannot rely on my previous peer or my next peer being drawn
-							
-							// so we do the following:
-							//   1- We are the first child: install after the parent
-							//   2- Our previous peer is already drawn: install after the previous peer
-							//   3- Our previous peer is not drawn, we have a child that is drawn: install right before our first child
-							//   4- Our previous peer is not drawn, we have no child that is drawn, our next peer is drawn: install right before our next peer
-							//   5- Our previous peer is not drawn, we have no child that is drawn, our next peer is not drawn: install right after parent
-							gridCellPrevId = GRIDCELLID_PREFIX+ (pos <=0 ? objData.parent : findLastClosedNode(this,peers[pos-1])) +GRIDCELLID_POSTFIX+i;
-							gridCellPrev = dataCell.find("div#"+gridCellPrevId);
-							gridCellNextId = GRIDCELLID_PREFIX+ (pos >= peers.length-1 ? "NULL" : peers[pos+1]) +GRIDCELLID_POSTFIX+i;
-							gridCellNext = dataCell.find("div#"+gridCellNextId);
-							gridCellChildId = GRIDCELLID_PREFIX+ (objData.children && objData.children.length > 0 ? objData.children[0] : "NULL") +GRIDCELLID_POSTFIX+i;
-							gridCellChild = dataCell.find("div#"+gridCellChildId);
-							gridCellParent = dataCell.find("div#"+gridCellParentId+i);
-							
-							// if our parent is already drawn, then we put this in the right order under our parent
-							if (gridCellParent && gridCellParent.length > 0) {
-								if (gridCellPrev && gridCellPrev.length > 0) {
-									last.insertAfter(gridCellPrev);
-								} else if (gridCellChild && gridCellChild.length > 0) {
-									last.insertBefore(gridCellChild);
-								} else if (gridCellNext && gridCellNext.length > 0) {
-									last.insertBefore(gridCellNext);
-								} else {
-									last.insertAfter(gridCellParent);
-								}
-								rendered = true;
-							} else {
-								// if you parent is not drawn, we put it in the holding cells, and then sort when the parent comes in
-								hc[gridCellName+i] = last;
-								rendered = false;
-							}
-							
-						} else {
-							last.appendTo(dataCell);
-							rendered = true;
-						}
 						$("<span></span>").appendTo(last);
 						last.attr("id",gridCellName+i);
 						last.addClass(gridCellName);
 
-						// do we have any children waiting for this cell?
-						if (rendered) {
-							last.after(this.getHoldingCells(objData,i,hc));
+					}
+					// we need to put it in the dataCell - after the parent, but the position matters
+					// if we have no parent, then we are one of the root nodes, but still need to look at peers
+
+
+					// if we are first, i.e. pos === 0, we go right after the parent;
+					// if we are not first, and our previous peer (one before us) is closed, we go right after the previous peer cell
+					// if we are not first, and our previous peer is opened, then we have to find its youngest & lowest closed child (incl. leaf)
+					//
+					// probably be much easier to go *before* our next one
+					// but that one might not be drawn yet
+					// here is the logic for jstree drawing:
+					//   it draws peers from first to last or from last to first
+					//   it draws children before a parent
+					// 
+					// so I can rely on my *parent* not being drawn, but I cannot rely on my previous peer or my next peer being drawn
+					
+					// so we do the following:
+					//   1- We are the first child: install after the parent
+					//   2- Our previous peer is already drawn: install after the previous peer
+					//   3- Our previous peer is not drawn, we have a child that is drawn: install right before our first child
+					//   4- Our previous peer is not drawn, we have no child that is drawn, our next peer is drawn: install right before our next peer
+					//   5- Our previous peer is not drawn, we have no child that is drawn, our next peer is not drawn: install right after parent
+					gridCellPrevId = GRIDCELLID_PREFIX+ (pos <=0 ? objData.parent : findLastClosedNode(this,peers[pos-1])) +GRIDCELLID_POSTFIX+i;
+					gridCellPrev = dataCell.find("div#"+gridCellPrevId);
+					gridCellNextId = GRIDCELLID_PREFIX+ (pos >= peers.length-1 ? "NULL" : peers[pos+1]) +GRIDCELLID_POSTFIX+i;
+					gridCellNext = dataCell.find("div#"+gridCellNextId);
+					gridCellChildId = GRIDCELLID_PREFIX+ (objData.children && objData.children.length > 0 ? objData.children[0] : "NULL") +GRIDCELLID_POSTFIX+i;
+					gridCellChild = dataCell.find("div#"+gridCellChildId);
+					gridCellParent = dataCell.find("div#"+gridCellParentId+i);
+
+
+					// if our parent is already drawn, then we put this in the right order under our parent
+					if (gridCellParentId) {
+						if (gridCellParent && gridCellParent.length > 0) {
+							if (gridCellPrev && gridCellPrev.length > 0) {
+								last.insertAfter(gridCellPrev);
+							} else if (gridCellChild && gridCellChild.length > 0) {
+								last.insertBefore(gridCellChild);
+							} else if (gridCellNext && gridCellNext.length > 0) {
+								last.insertBefore(gridCellNext);
+							} else {
+								last.insertAfter(gridCellParent);
+							}
+							rendered = true;
+						} else {
+							// if you parent is not drawn, we put it in the holding cells, and then sort when the parent comes in
+							hc[gridCellName+i] = last;
+							rendered = false;
 						}
+					} else {
+						if (gridCellPrev && gridCellPrev.length > 0) {
+							last.insertAfter(gridCellPrev);
+						} else if (gridCellChild && gridCellChild.length > 0) {
+							last.insertBefore(gridCellChild);
+						} else if (gridCellNext && gridCellNext.length > 0) {
+							last.insertBefore(gridCellNext);
+						} else {
+							last.appendTo(dataCell);
+						}
+						rendered = true;
+					}
+
+					// do we have any children waiting for this cell?
+					if (rendered) {
+						last.after(this.getHoldingCells(objData,i,hc));
 					}
 					// need to make the height of this match the line height of the tree. How?
 					span = last.children("span");
