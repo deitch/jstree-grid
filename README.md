@@ -78,8 +78,8 @@ The options are as follows:
 	* `valueClassPrefix`: a prefix to add to the valueClass to use as a class on this cell
 	* `wideValueClass`: the attribute on the node to use as a class on this cell - added to the <div>
 	* `wideValueClassPrefix`: a prefix to add to the wideValueClass to use as a class on this cell
-* `resizable`: true/false if the columns should be resizable. Defaults to false.	
-	
+	* `resizable`: true/false if the columns should be resizable. Defaults to false.
+
 The reason for both `valueClass` and `wideValueClass` is to give you the ability to control both the narrow part of the text, and the entire width of the cell. For example, if the cell is 56px wide, but the text in it is "OK" and thus only 20px wide.
 Suppose you have a class "important" which backgrounds in red, and a class "clickable" which changes the cursor to a pointer.
 You want the entire width of the cell to be red, but just the word "OK" to be clickable. 
