@@ -64,27 +64,27 @@ We use the div to control the entire height and width, and the span to get acces
 
 Options
 -------
-The options are as follows:
 
-* width: default width for a column for which no width is given. If no width is given, the default is 25px
-* columns: an array of columns to create, on order. Each entry is an object with the following parameters:
-	width: width of the column in pixels. If no width is given, the default is 25 px **except for the last column**. In the last column, if not width is given, it is treated as 'auto' and fills the entire rest of the grid to the right.
-	header: string to use as a header for the column.
-	cellClass: a CSS class to add to each cell in this column (except for the header) - added to the <span>
-	wideCellClass: a CSS class to add to each cell in this column (except for the header) - added to the <div>
-	headerClass: a CSS class to add to the header cell in this column - added to the <div>
-	value: the attribute on the node to use as the value for this cell - entered as the <span> text. Can be a string or a function.
-	valueClass: the attribute on the node to use as a class on this cell - added to the <span>
-	valueClassPrefix: a prefix to add to the valueClass to use as a class on this cell
-	wideValueClass: the attribute on the node to use as a class on this cell - added to the <div>
-	wideValueClassPrefix: a prefix to add to the wideValueClass to use as a class on this cell
-* resizable: true/false if the columns should be resizable. Defaults to false.	
-	
-The reason for both valueClass and wideValueClass is to give you the ability to control both the narrow part of the text, and the entire width of the cell. For example, if the cell is 56px wide, but the text in it is "OK" and thus only 20px wide.
+### The options are as follows:
+
+	* width: default width for a column for which no width is given. If no width is given, the default is 25px
+	* columns: an array of columns to create, on order. Each entry is an object with the following parameters:
+		* width: width of the column in pixels. If no width is given, the default is 25 px **except for the last column**. In the last column, if not width is given, it is treated as 'auto' and fills the entire rest of the grid to the right.
+		* header: string to use as a header for the column.
+		* headerClass: a CSS class to add to the header cell in this column - added to the <div>
+		* cellClass: a CSS class to add to each cell in this column (except for the header) - added to the <span>
+		* wideCellClass: a CSS class to add to each cell in this column (except for the header) - added to the <div>
+		* value: the attribute on the node to use as the value for this cell - entered as the <span> text. Can be a string or a function.
+		* valueClass: the attribute on the node to use as a class on this cell - added to the <span>
+		* valueClassPrefix: a prefix to add to the valueClass to use as a class on this cell
+		* wideValueClass: the attribute on the node to use as a class on this cell - added to the <div>
+		* wideValueClassPrefix: a prefix to add to the wideValueClass to use as a class on this cell
+	* resizable: true/false if the columns should be resizable. Defaults to false.
+
+The reason for both `valueClass` and `wideValueClass` is to give you the ability to control both the narrow part of the text,  and the entire width of the cell. For example, if the cell is 56px wide, but the text in it is "OK" and thus only 20px wide.
 Suppose you have a class "important" which backgrounds in red, and a class "clickable" which changes the cursor to a pointer.
 You want the entire width of the cell to be red, but just the word "OK" to be clickable. 
 You would ensure that "clickable" is applied to the span, but important to the div.
-
 
 Value is one of:
 
