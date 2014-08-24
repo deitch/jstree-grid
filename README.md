@@ -71,7 +71,8 @@ Options
 	* columns: an array of columns to create, on order. Each entry is an object with the following parameters:
 		* width: width of the column in pixels. If no width is given, the default is 25 px **except for the last column**. In the last column, if not width is given, it is treated as 'auto' and fills the entire rest of the grid to the right.
 		* header: string to use as a header for the column.
-		* headerClass: a CSS class to add to the header cell in this column - added to the <div>
+		* headerClass: a CSS class to add to the header cell in this column
+		* columnClass: a CSS class to add to the header cell and the column cell
 		* cellClass: a CSS class to add to each cell in this column (except for the header) - added to the <span>
 		* wideCellClass: a CSS class to add to each cell in this column (except for the header) - added to the <div>
 		* value: the attribute on the node to use as the value for this cell - entered as the <span> text. Can be a string or a function.

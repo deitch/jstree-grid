@@ -281,7 +281,7 @@
 		// prepare the headers
 		this._prepare_headers = function() {
 			var header, i, gs = this._gridSettings,cols = gs.columns || [], width, defaultWidth = gs.columnWidth, resizable = gs.resizable || false,
-			cl, val, margin, last, tr = gs.isThemeroller, classAdd = (tr?"themeroller":"regular"), puller,
+			cl, ccl, val, margin, last, tr = gs.isThemeroller, classAdd = (tr?"themeroller":"regular"), puller,
 			hasHeaders = false, gridparent = this.gridparent,
 			conf = gs.defaultConf, isClickedSep = false, oldMouseX = 0, newMouseX = 0,
 			currentTree = null, colNum = 0, toResize = {}, clickedSep = null, borPadWidth = 0, totalWidth = 0;
@@ -296,13 +296,14 @@
 			// create the headers
 			for (i=0;i<cols.length;i++) {
 				cl = cols[i].headerClass || "";
+				ccl = cols[i].columnClass || "";
 				val = cols[i].header || "";
 				if (val) {hasHeaders = true;}
 				width = cols[i].width || defaultWidth;
 				borPadWidth = tr ? 1+6 : 2+8; // account for the borders and padding
 				width -= borPadWidth;
 				margin = i === 0 ? 3 : 0;
-				last = $("<th></th>").css(conf).css({"margin-left": margin,"width":width}).addClass((tr?"ui-widget-header ":"")+"jstree-grid-header jstree-grid-header-cell jstree-grid-header-"+classAdd+" "+cl).text(val).appendTo(header);
+				last = $("<th></th>").css(conf).css({"margin-left": margin,"width":width}).addClass((tr?"ui-widget-header ":"")+"jstree-grid-header jstree-grid-header-cell jstree-grid-header-"+classAdd+" "+cl+" "+ccl).text(val).appendTo(header);
 				totalWidth += last.outerWidth();
 				puller = $("<div class='jstree-grid-separator jstree-grid-separator-"+classAdd+(tr ? " ui-widget-header" : "")+(resizable? " jstree-grid-resizable-separator":"")+"'>&nbsp;</div>").appendTo(last);
 			}
@@ -434,7 +435,7 @@
 				return function() {
 					$(this).trigger("select_cell.jstree-grid", [{value: val,column: col.header,node: $(this).closest("li"),sourceName: col.value,sourceType: s}]);
 				};
-			},i, val, cl, wcl, a, last, valClass, wideValClass, span, paddingleft, title, gridCellName, gridCellParentId, gridCellParent,
+			},i, val, cl, wcl, ccl, a, last, valClass, wideValClass, span, paddingleft, title, gridCellName, gridCellParentId, gridCellParent,
 			gridCellPrev, gridCellPrevId, gridCellNext, gridCellNextId, gridCellChild, gridCellChildId, 
 			col, content, s, tmpWidth, dataRow = this.dataRow, dataCell, lid = objData.id,
 			peers = this.get_node(objData.parent).children,
@@ -458,9 +459,13 @@
 				for (i=1;i<cols.length;i++) {
 					dataCell = dataRow.children("td:eq("+i+")");
 					col = cols[i];
-					// get the cellClass and the wideCellClass
+					// get the cellClass, the wideCellClass, and the columnClass
 					cl = col.cellClass || "";
 					wcl = col.wideCellClass || "";
+					ccl = col.columnClass || "";
+
+					// add a column class to the dataCell
+					dataCell.addClass(ccl);
 
 
 					// get the contents of the cell - value could be a string or a function
