@@ -272,7 +272,7 @@
 		this._clean_grid = function (target,id) {
 			var dataRow = this.dataRow;
 			if (target) {
-				dataRow.find("div.jsgrid_"+id+"_col").remove();
+				dataRow.find("div."+GRIDCELLID_PREFIX+id+GRIDCELLID_POSTFIX).remove();
 			} else {
 				// get all of the `div` children in all of the `td` in dataRow except for :first (that is the tree itself) and remove
 				dataRow.children("td:gt(0)").find("div").remove();
@@ -282,7 +282,7 @@
 		this._prepare_headers = function() {
 			var header, i, gs = this._gridSettings,cols = gs.columns || [], width, defaultWidth = gs.columnWidth, resizable = gs.resizable || false,
 			cl, val, margin, last, tr = gs.isThemeroller, classAdd = (tr?"themeroller":"regular"), puller,
-			hasHeaders = 0, gridparent = this.gridparent,
+			hasHeaders = false, gridparent = this.gridparent,
 			conf = gs.defaultConf, isClickedSep = false, oldMouseX = 0, newMouseX = 0,
 			currentTree = null, colNum = 0, toResize = {}, clickedSep = null, borPadWidth = 0, totalWidth = 0;
 			// save the original parent so we can reparent on destroy
