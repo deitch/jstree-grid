@@ -222,10 +222,15 @@
 			},this))
 			.on("hover_node.jstree",$.proxy(function(node,selected,event){
 				var id = selected.node.id;
+				if (this._hover_node !== null && this._hover_node !== undefined) {
+					this.dataRow.find("."+GRIDCELLID_PREFIX+this._hover_node+GRIDCELLID_POSTFIX).removeClass("jstree-hovered");
+				}
+				this._hover_node = id;
 				this.dataRow.find("."+GRIDCELLID_PREFIX+id+GRIDCELLID_POSTFIX).addClass("jstree-hovered");
 			},this))
 			.on("dehover_node.jstree",$.proxy(function(node,selected,event){
 				var id = selected.node.id;
+				this._hover_node = null;
 				this.dataRow.find("."+GRIDCELLID_PREFIX+id+GRIDCELLID_POSTFIX).removeClass("jstree-hovered");
 			},this))
 			.on("select_node.jstree",$.proxy(function(node,selected,event){
