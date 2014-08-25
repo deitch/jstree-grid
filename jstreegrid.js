@@ -9,7 +9,7 @@
  * Works only with jstree "v3.0.0-beta5" and higher
  *
  * $Date: 2014-04-18 $
- * $Revision:  3.1.0-beta2 $
+ * $Revision:  3.1.1 $
  */
 
 /*jslint nomen:true */
@@ -192,7 +192,7 @@
 			.on("delete_node.jstree",$.proxy(function (e,data) {
 			}, this))
 			.on("close_node.jstree",$.proxy(function (e,data) {
-				this._hide_grid(data);
+				this._hide_grid(data.node);
 			}, this))
 			.on("open_node.jstree",$.proxy(function (e,data) {
 			}, this))
@@ -412,8 +412,8 @@
 			this._clean_grid();
 			return parent.refresh.call(this);
 		};
-		this._hide_grid = function (data) {
-			var dataRow = this.dataRow, children = data.node.children_d || [], i;
+		this._hide_grid = function (node) {
+			var dataRow = this.dataRow, children = node && node.children_d ? node.children_d : [], i;
 			// go through each column, remove all children with the correct ID name
 			for (i=0;i<children.length;i++) {
 				dataRow.find("td div."+GRIDCELLID_PREFIX+children[i]+GRIDCELLID_POSTFIX).remove();
@@ -446,7 +446,7 @@
 			peers = this.get_node(objData.parent).children,
 			// find my position in the list of peers. "peers" is the list of everyone at my level under my parent, in order
 			pos = jQuery.inArray(lid,peers),
-			hc = this.holdingCells, rendered = false;
+			hc = this.holdingCells, rendered = false, closed;
 			// get our column definition
 			t = $(obj);
 			
@@ -454,6 +454,7 @@
 			a = t.children("a");
 			
 			if (a.length === 1) {
+				closed = !objData.state.opened;
 				gridCellName = GRIDCELLID_PREFIX+lid+GRIDCELLID_POSTFIX;
 				gridCellName = gridCellName.replace($.jstree.idregex,'\\$&');
 				gridCellParentId = objData.parent === "#" ? null : GRIDCELLID_PREFIX+objData.parent+GRIDCELLID_POSTFIX;
@@ -609,6 +610,11 @@
 				// if there is no width given for the last column, do it via automatic
 				if (cols[cols.length-1].width === undefined) {
 					last.addClass("jstree-grid-width-auto").next(".jstree-grid-separator").remove();
+				}
+				
+				// remove any hanging around children if it is closed
+				if (closed) {
+					this._hide_grid(objData);
 				}
 			}
 			this.element.css({'overflow-y':'auto !important'});			
