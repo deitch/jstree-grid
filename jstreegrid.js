@@ -75,9 +75,9 @@
 		// first get our node
 		var ret, node = tree.get_node(id), children = node.children;
 		// is it closed?
-		if (!node.state.opened) {
+		if (!children || children.length <= 0 || !node.state.opened) {
 			ret = id;
-		} else if (children && children.length > 0){
+		} else {
 			ret = findLastClosedNode(tree,children[children.length-1]);
 		}
 		return(ret);
