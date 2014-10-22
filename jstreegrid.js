@@ -190,6 +190,16 @@
 				this._prepare_grid(target);
 			}, this))
 			.on("delete_node.jstree",$.proxy(function (e,data) {
+				if (data.node.id !== undefined) {
+					var dataRow = this.dataRow, removeNodes = [data.node.id], i;
+					// add children to remove list
+					if (data.node && data.node.children_d) {
+						removeNodes = removeNodes.concat(data.node.children_d);
+					}
+					for (i=0;i<removeNodes.length;i++) {
+						dataRow.find("div."+GRIDCELLID_PREFIX+removeNodes[i]+GRIDCELLID_POSTFIX).remove();
+					}
+				}
 			}, this))
 			.on("close_node.jstree",$.proxy(function (e,data) {
 				this._hide_grid(data.node);
