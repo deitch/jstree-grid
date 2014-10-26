@@ -224,10 +224,10 @@
 			},this))
 			.on("move_node.jstree",$.proxy(function(e,data){
 				var node = data.new_instance.element;
-				renderAWidth(node,this);
+				//renderAWidth(node,this);
 				// check all the children, because we could drag a tree over
 				node.find("li > a").each($.proxy(function(i,elm){
-					renderAWidth($(elm),this);
+					//renderAWidth($(elm),this);
 				},this));
 				
 			},this))
@@ -470,7 +470,7 @@
 				gridCellName = gridCellName.replace($.jstree.idregex,'\\$&');
 				gridCellParentId = objData.parent === "#" ? null : GRIDCELLID_PREFIX+objData.parent+GRIDCELLID_POSTFIX;
 				a.addClass(c);
-				renderAWidth(a,_this);
+				//renderAWidth(a,_this);
 				renderATitle(a,t,_this);
 				last = a;
 				for (i=1;i<cols.length;i++) {
