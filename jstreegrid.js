@@ -9,7 +9,7 @@
  * Works only with jstree "v3.0.0" and higher
  *
  * $Date: 2014-10-26 $
- * $Revision:  3.1.2 $
+ * $Revision:  3.1.3 $
  */
 
 /*jslint nomen:true */
@@ -620,11 +620,6 @@
 				// if there is no width given for the last column, do it via automatic
 				if (cols[cols.length-1].width === undefined) {
 					last.addClass("jstree-grid-width-auto").next(".jstree-grid-separator").remove();
-				}
-				
-				// remove any hanging around children if it is closed
-				if (closed) {
-					this._hide_grid(objData);
 				}
 			}
 			this.element.css({'overflow-y':'auto !important'});			

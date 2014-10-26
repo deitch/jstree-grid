@@ -17,7 +17,9 @@
 					data: {price: "$5.00", size: "4"},
 					children: [
 						{text: "Really long named child whose name gets cut off", data: {price: "<b>$4.00</b>", size: "3"}},
-						{text: "Child 2", data: {price: "<i>$3.00</i>", size: "2"}}
+						{text: "Child 2", data: {price: "<i>$3.00</i>", size: "2"}, children:[
+							{text:"Grandchild",data:{price: "EXPENSIVE!",size:"10"}}
+						]}
 					]
 				}];
 				
@@ -172,7 +174,7 @@
                 }; 
             } 
 					}
-				});        
+				});
 			});
 		</script>
 	</head>
