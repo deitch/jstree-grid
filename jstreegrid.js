@@ -13,7 +13,8 @@
  */
 
 /*jslint nomen:true */
-/*global window,navigator, document, jQuery, console, define */
+/*jshint unused:vars */
+/*global navigator, document, jQuery, define */
 
 /* AMD support added by jochenberger per https://github.com/deitch/jstree-grid/pull/49
  *
