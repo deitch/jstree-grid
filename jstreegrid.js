@@ -409,9 +409,9 @@
 		/*
 		 * Override redraw_node to correctly insert the grid
 		 */
-		this.redraw_node = function(obj, deep, is_callback) {
+		this.redraw_node = function(obj, deep, is_callback, force_render) {
 			// first allow the parent to redraw the node
-			obj = parent.redraw_node.call(this, obj, deep, is_callback);
+			obj = parent.redraw_node.call(this, obj, deep, is_callback, force_render);
 			// next prepare the grid
 			if(obj) {
 				this._prepare_grid(obj);
