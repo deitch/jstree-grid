@@ -8,8 +8,8 @@
  * 
  * Works only with jstree "v3.0.0" and higher
  *
- * $Date: 2014-10-26 $
- * $Revision:  3.1.3 $
+ * $Date: 2014-10-31 $
+ * $Revision:  3.1.4 $
  */
 
 /*jslint nomen:true */
@@ -182,10 +182,7 @@
 		this.bind = function () {
 			parent.bind.call(this);
 			this._initialize();
-			this.element.on("redraw.jstree", $.proxy(function (e, data) { 
-					var target = this.get_node(data.nodes || "#",true);
-					this._prepare_grid(target);
-				}, this))
+			this.element
 			.on("move_node.jstree create_node.jstree clean_node.jstree change_node.jstree", $.proxy(function (e, data) { 
 				var target = this.get_node(data || "#",true);
 				this._prepare_grid(target);
@@ -446,10 +443,11 @@
 		
 		this._prepare_grid = function (obj) {
 			var gs = this._gridSettings, c = gs.treeClass, _this = this, t, cols = gs.columns || [], width, tr = gs.isThemeroller, 
+			tree = this.element,
 			classAdd = (tr?"themeroller":"regular"), img, objData = this.get_node(obj),
-			defaultWidth = gs.columnWidth, conf = gs.defaultConf, cellClickHandler = function (val,col,s) {
+			defaultWidth = gs.columnWidth, conf = gs.defaultConf, cellClickHandler = function (tree,val,col,s) {
 				return function() {
-					$(this).trigger("select_cell.jstree-grid", [{value: val,column: col.header,node: $(this).closest("li"),sourceName: col.value,sourceType: s}]);
+					tree.trigger("select_cell.jstree-grid", [{value: val,column: col.header,node: $(this).closest("li"),sourceName: col.value,sourceType: s}]);
 				};
 			},i, val, cl, wcl, ccl, a, last, valClass, wideValClass, span, paddingleft, title, gridCellName, gridCellParentId, gridCellParent,
 			gridCellPrev, gridCellPrevId, gridCellNext, gridCellNextId, gridCellChild, gridCellChildId, 
@@ -609,7 +607,7 @@
 					// create a span inside the div, so we can control what happens in the whole div versus inside just the text/background
 					span.addClass(cl+" "+valClass).html(content)
 					// add click handler for clicking inside a grid cell
-					.click(cellClickHandler(val,col,s));
+					.click(cellClickHandler(tree,val,col,s));
 					last = last.css(conf).addClass("jstree-grid-cell jstree-grid-cell-"+classAdd+" "+wcl+ " " + wideValClass + (tr?" ui-state-default":"")).addClass("jstree-grid-col-"+i);
 					
 					if (title) {

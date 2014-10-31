@@ -25,6 +25,8 @@
 				
 				$("div#jstree").bind("loaded_grid.jstree",function(){
 					$("span#status").text("loaded");
+				}).on("select_cell.jstree-grid",function (e,data) {
+					$("span#clicked").html("clicked "+data.column+" of value "+data.value);
 				});
 				
 				
@@ -198,6 +200,7 @@
 			<div>Tree grid is <span id="status">loading</span>.</div>
 			<div><a href="#" id="change">Click here to double the root Qty</a></div>
 			<div><a href="#" id="refresh">Click here to refresh the tree</a></div>
+			<div>Click a cell to see results: <span id="clicked"></span></div>
 		</div>
 		<div id="jstree2">
 			<h4>Second Tree</h4>
