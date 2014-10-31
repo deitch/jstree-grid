@@ -445,15 +445,15 @@
 			var gs = this._gridSettings, c = gs.treeClass, _this = this, t, cols = gs.columns || [], width, tr = gs.isThemeroller, 
 			tree = this.element,
 			classAdd = (tr?"themeroller":"regular"), img, objData = this.get_node(obj),
-			defaultWidth = gs.columnWidth, conf = gs.defaultConf, cellClickHandler = function (tree,node,val,col,s,t) {
+			defaultWidth = gs.columnWidth, conf = gs.defaultConf, cellClickHandler = function (tree,node,val,col,t) {
 				return function() {
 					t.deselect_all();
 					t.select_node(node.attr("id"));
-					tree.trigger("select_cell.jstree-grid", [{value: val,column: col.header,node: node,grid:$(this),sourceName: col.value,sourceType: s}]);
+					tree.trigger("select_cell.jstree-grid", [{value: val,column: col.header,node: node,grid:$(this),sourceName: col.value}]);
 				};
 			},i, val, cl, wcl, ccl, a, last, valClass, wideValClass, span, paddingleft, title, gridCellName, gridCellParentId, gridCellParent,
 			gridCellPrev, gridCellPrevId, gridCellNext, gridCellNextId, gridCellChild, gridCellChildId, 
-			col, content, s, tmpWidth, dataRow = this.dataRow, dataCell, lid = objData.id,
+			col, content, tmpWidth, dataRow = this.dataRow, dataCell, lid = objData.id,
 			peers = this.get_node(objData.parent).children,
 			// find my position in the list of peers. "peers" is the list of everyone at my level under my parent, in order
 			pos = jQuery.inArray(lid,peers),
@@ -610,7 +610,7 @@
 					span.addClass(cl+" "+valClass).html(content);
 					last = last.css(conf).addClass("jstree-grid-cell jstree-grid-cell-"+classAdd+" "+wcl+ " " + wideValClass + (tr?" ui-state-default":"")).addClass("jstree-grid-col-"+i);
 					// add click handler for clicking inside a grid cell
-					last.click(cellClickHandler(tree,t,val,col,s,this));
+					last.click(cellClickHandler(tree,t,val,col,this));
 					
 					if (title) {
 						span.attr("title",title);
