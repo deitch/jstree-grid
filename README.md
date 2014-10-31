@@ -260,7 +260,7 @@ code after the jsTreeGrid is done loading, just listen for that event. An exampl
 The signature for the select_cell.jstree-grid handler is:
 
 ````JavaScript
-function(event,{value:value,header:header,node:node,grid:grid,sourceName:sourceName,sourceType:sourceType})
+function(event,{value:value,header:header,node:node,grid:grid,sourceName:sourceName})
 ````
 
 where:
@@ -270,7 +270,6 @@ where:
 * node: reference to the &lt;li&gt; element in the tree that starts the row with the clicked cell
 * grid: reference to the &lt;div&gt; element in the grid that was clicked
 * sourceName: name of the element in the original data that contained this value, as provided by the config in the columns "value" for this column
-* sourceType: if the source was from "attr" or "metadata"
 
 
 
