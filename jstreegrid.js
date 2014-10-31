@@ -9,7 +9,7 @@
  * Works only with jstree "v3.0.0" and higher
  *
  * $Date: 2014-10-31 $
- * $Revision:  3.1.5 $
+ * $Revision:  3.1.6 $
  */
 
 /*jslint nomen:true */
