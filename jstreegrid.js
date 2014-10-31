@@ -9,7 +9,7 @@
  * Works only with jstree "v3.0.0" and higher
  *
  * $Date: 2014-10-31 $
- * $Revision:  3.1.4 $
+ * $Revision:  3.1.5 $
  */
 
 /*jslint nomen:true */
@@ -605,10 +605,10 @@
 					span = last.children("span");
 
 					// create a span inside the div, so we can control what happens in the whole div versus inside just the text/background
-					span.addClass(cl+" "+valClass).html(content)
-					// add click handler for clicking inside a grid cell
-					.click(cellClickHandler(tree,val,col,s));
+					span.addClass(cl+" "+valClass).html(content);
 					last = last.css(conf).addClass("jstree-grid-cell jstree-grid-cell-"+classAdd+" "+wcl+ " " + wideValClass + (tr?" ui-state-default":"")).addClass("jstree-grid-col-"+i);
+					// add click handler for clicking inside a grid cell
+					last.click(cellClickHandler(tree,val,col,s));
 					
 					if (title) {
 						span.attr("title",title);
