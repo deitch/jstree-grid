@@ -445,9 +445,11 @@
 			var gs = this._gridSettings, c = gs.treeClass, _this = this, t, cols = gs.columns || [], width, tr = gs.isThemeroller, 
 			tree = this.element,
 			classAdd = (tr?"themeroller":"regular"), img, objData = this.get_node(obj),
-			defaultWidth = gs.columnWidth, conf = gs.defaultConf, cellClickHandler = function (tree,val,col,s) {
+			defaultWidth = gs.columnWidth, conf = gs.defaultConf, cellClickHandler = function (tree,node,val,col,s,t) {
 				return function() {
-					tree.trigger("select_cell.jstree-grid", [{value: val,column: col.header,node: $(this).closest("li"),sourceName: col.value,sourceType: s}]);
+					t.deselect_all();
+					t.select_node(node.attr("id"));
+					tree.trigger("select_cell.jstree-grid", [{value: val,column: col.header,node: node,grid:$(this),sourceName: col.value,sourceType: s}]);
 				};
 			},i, val, cl, wcl, ccl, a, last, valClass, wideValClass, span, paddingleft, title, gridCellName, gridCellParentId, gridCellParent,
 			gridCellPrev, gridCellPrevId, gridCellNext, gridCellNextId, gridCellChild, gridCellChildId, 
@@ -608,7 +610,7 @@
 					span.addClass(cl+" "+valClass).html(content);
 					last = last.css(conf).addClass("jstree-grid-cell jstree-grid-cell-"+classAdd+" "+wcl+ " " + wideValClass + (tr?" ui-state-default":"")).addClass("jstree-grid-col-"+i);
 					// add click handler for clicking inside a grid cell
-					last.click(cellClickHandler(tree,val,col,s));
+					last.click(cellClickHandler(tree,t,val,col,s,this));
 					
 					if (title) {
 						span.attr("title",title);
