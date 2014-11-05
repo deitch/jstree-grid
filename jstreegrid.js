@@ -8,8 +8,8 @@
  * 
  * Works only with jstree "v3.0.0" and higher
  *
- * $Date: 2014-10-31 $
- * $Revision:  3.1.6 $
+ * $Date: 2014-11-05 $
+ * $Revision:  3.1.7 $
  */
 
 /*jslint nomen:true */
@@ -164,6 +164,8 @@
 				this.gridWrapper = $("<div></div>").addClass("jstree-grid-wrapper").appendTo(gridparent).append(this.table);
 				this.dataRow = $("<tr></tr>");
 				this.headerRow = $("<tr></tr>");
+				this.colgroup = $("<colgroup></colgroup>");
+				this.table.append(this.colgroup);
 				this.table.append(this.headerRow);
 				this.table.append(this.dataRow);
 				// create the data columns
@@ -293,9 +295,9 @@
 		};
 		// prepare the headers
 		this._prepare_headers = function() {
-			var header, i, gs = this._gridSettings,cols = gs.columns || [], width, defaultWidth = gs.columnWidth, resizable = gs.resizable || false,
+			var header, i, col, gs = this._gridSettings,cols = gs.columns || [], width, defaultWidth = gs.columnWidth, resizable = gs.resizable || false,
 			cl, ccl, val, margin, last, tr = gs.isThemeroller, classAdd = (tr?"themeroller":"regular"), puller,
-			hasHeaders = false, gridparent = this.gridparent,
+			hasHeaders = false, gridparent = this.gridparent, colgroup,
 			conf = gs.defaultConf, isClickedSep = false, oldMouseX = 0, newMouseX = 0,
 			currentTree = null, colNum = 0, toResize = {}, clickedSep = null, borPadWidth = 0, totalWidth = 0;
 			// save the original parent so we can reparent on destroy
@@ -305,9 +307,12 @@
 			// set up the wrapper, if not already done
 			header = this.headerRow;
 			header.addClass((tr?"ui-widget-header ":"")+"jstree-grid-header jstree-grid-header-"+classAdd);
+			colgroup = this.colgroup;
 			
 			// create the headers
 			for (i=0;i<cols.length;i++) {
+				col = $("<col/>");
+				col.appendTo(colgroup);
 				cl = cols[i].headerClass || "";
 				ccl = cols[i].columnClass || "";
 				val = cols[i].header || "";
@@ -316,7 +321,8 @@
 				borPadWidth = tr ? 1+6 : 2+8; // account for the borders and padding
 				width -= borPadWidth;
 				margin = i === 0 ? 3 : 0;
-				last = $("<th></th>").css(conf).css({"margin-left": margin,"width":width}).addClass((tr?"ui-widget-header ":"")+"jstree-grid-header jstree-grid-header-cell jstree-grid-header-"+classAdd+" "+cl+" "+ccl).text(val).appendTo(header);
+				col.css({width:width});
+				last = $("<th></th>").css(conf).css({"margin-left": margin}).addClass((tr?"ui-widget-header ":"")+"jstree-grid-header jstree-grid-header-cell jstree-grid-header-"+classAdd+" "+cl+" "+ccl).text(val).appendTo(header);
 				totalWidth += last.outerWidth();
 				puller = $("<div class='jstree-grid-separator jstree-grid-separator-"+classAdd+(tr ? " ui-widget-header" : "")+(resizable? " jstree-grid-resizable-separator":"")+"'>&nbsp;</div>").appendTo(last);
 			}
@@ -326,7 +332,8 @@
 			// if there is no width given for the last column, do it via automatic
 			if (cols[cols.length-1].width === undefined) {
 				totalWidth -= width;
-				last.css({width:""}).addClass("jstree-grid-width-auto").next(".jstree-grid-separator").remove();
+				col.css({width:"auto"});
+				last.addClass("jstree-grid-width-auto").next(".jstree-grid-separator").remove();
 			}
 			if (hasHeaders) {
 				// save the offset of the div from the body
@@ -343,12 +350,12 @@
 					if (isClickedSep) {
 						ref = $.jstree.reference(currentTree);
 						cols = ref.settings.grid.columns;
-						headers = clickedSep.closest(".jstree-grid-wrapper").find(".jstree-grid-header");
+						headers = colgroup.children("col");
 						widths = [];
 						if (isNaN(colNum) || colNum < 0) { ref._gridSettings.treeWidthDiff = currentTree.find("ins:eq(0)").width() + currentTree.find("a:eq(0)").width() - ref._gridSettings.columns[0].width; }
 						isClickedSep = false;
 						for (i=0;i<cols.length;i++) {
-							w = parseFloat(headers[i].style.width)+borPadWidth;
+							w = parseFloat(headers[i].style.width);
 							widths[i] = {w: w, r: i===colNum };
 							ref._gridSettings.columns[i].width = w;
 						}
@@ -359,29 +366,26 @@
 						if (isClickedSep) {
 							newMouseX = e.clientX;
 							var diff = newMouseX - oldMouseX,
-							oldPrevHeaderInner, oldNextHeaderInner, oldPrevHeaderWidth, oldNextHeaderWidth, oldNextHeaderMarginLeft, 
-							newPrevHeaderWidth, newNextHeaderWidth, newNextHeaderMarginLeft;
+							oldPrevHeaderInner, oldNextHeaderInner, 
+							oldPrevColWidth, oldNextColWidth, newPrevColWidth,
+							newNextColWidth;
 
 							if (diff !== 0){
 								oldPrevHeaderInner = toResize.prevHeader.width();
 								oldNextHeaderInner = toResize.nextHeader.width();
-								oldPrevHeaderWidth = parseFloat(toResize.prevHeader.css("width"));
-								oldNextHeaderWidth = parseFloat(toResize.nextHeader.css("width"));
-								oldNextHeaderMarginLeft = parseFloat(toResize.prevHeader.css("margin-left"));
+								oldPrevColWidth = parseFloat(toResize.prevCol.css("width"));
+								oldNextColWidth = parseFloat(toResize.nextCol.css("width"));
 								
 								// make sure that diff cannot be beyond the left/right limits
 								diff = diff < 0 ? Math.max(diff,-oldPrevHeaderInner) : Math.min(diff,oldNextHeaderInner);
-								newPrevHeaderWidth = (oldPrevHeaderInner + diff) + "px";
-								newNextHeaderWidth = (oldNextHeaderInner - diff) + "px";
-								newNextHeaderMarginLeft = oldNextHeaderMarginLeft + diff;
+								newPrevColWidth = (oldPrevColWidth+diff)+"px";
+								newNextColWidth = (oldNextColWidth-diff)+"px";
 								
 								// only do this if we are not shrinking past 0 on left or right - and limit it to that amount
 								if ((diff < 0 && oldPrevHeaderInner > 0) || (diff > 0 && oldNextHeaderInner > 0)) {
-									toResize.prevHeader.width(newPrevHeaderWidth);
-									if (toResize.nextHeader.hasClass("jstree-grid-width-auto")) {
-										toResize.nextHeader.css("margin-left",newNextHeaderMarginLeft);
-									} else {
-										toResize.nextHeader.width(newNextHeaderWidth);
+									toResize.prevCol.width(newPrevColWidth);
+									if (!toResize.nextHeader.hasClass("jstree-grid-width-auto")) {
+										toResize.nextCol.width(newNextColWidth);
 									}
 									oldMouseX = newMouseX;
 								}
@@ -396,6 +400,8 @@
 						currentTree = clickedSep.closest(".jstree-grid-wrapper").find(".jstree");
 						oldMouseX = e.clientX;
 						colNum = clickedSep.closest("th").prevAll("th").length;
+						toResize.prevCol = colgroup.children("col:eq("+colNum+")");
+						toResize.nextCol = toResize.prevCol.next("col");
 						toResize.prevHeader = clickedSep.closest("th");
 						toResize.nextHeader = toResize.prevHeader.next("th");
 						// the max rightmost position we will allow is the right-most of the wrapper minus a buffer (10)
