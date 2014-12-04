@@ -8,8 +8,8 @@
  * 
  * Works only with jstree "v3.0.0" and higher
  *
- * $Date: 2014-11-05 $
- * $Revision:  3.1.7 $
+ * $Date: 2014-12-03 $
+ * $Revision:  3.1.8 $
  */
 
 /*jslint nomen:true */
@@ -29,6 +29,7 @@
     }
 }(function ($) {
 	var renderAWidth, renderATitle, getIndent, htmlstripre, findLastClosedNode, BLANKRE = /^\s*$/g,
+		IDREGEX = /[\\:&!^|()\[\]<>@*'+~#";,= \/${}%]/g,
 	SPECIAL_TITLE = "_DATA_", LEVELINDENT = 24, bound = false, styled = false, GRIDCELLID_PREFIX = "jsgrid_",GRIDCELLID_POSTFIX = "_col";
 	
 	/*jslint regexp:true */
@@ -473,7 +474,7 @@
 			if (a.length === 1) {
 				closed = !objData.state.opened;
 				gridCellName = GRIDCELLID_PREFIX+lid+GRIDCELLID_POSTFIX;
-				gridCellName = gridCellName.replace($.jstree.idregex,'\\$&');
+				gridCellName = gridCellName.replace(IDREGEX,'\\$&');
 				gridCellParentId = objData.parent === "#" ? null : GRIDCELLID_PREFIX+objData.parent+GRIDCELLID_POSTFIX;
 				a.addClass(c);
 				//renderAWidth(a,_this);
