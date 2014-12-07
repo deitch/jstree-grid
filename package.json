@@ -1,0 +1,30 @@
+{ 
+	"name": "jstreegrid", 
+	"description": "grid plugin for jstree",
+	"version": "0.6.16",
+	"url": "https://github.com/deitch/jstree-grid",
+	"author": {"name":"Avi Deitcher","url":"https://github.com/deitch"},
+	"contributors": [
+		{
+			"name": "jochenberger",
+			"url": "https://github.com/jochenberger"
+		},
+		{
+			"name": "ChrisRaven",
+			"url": "https://github.com/ChrisRaven"
+		}
+	],
+	"dependencies": {
+    "jstree":">=3.0.0"
+	},
+	"keywords":[
+		"jquery",
+		"jstree",
+		"grid",
+		"javascript"
+	],
+	"repository": {
+		"type" : "git",
+		"url" : "http://github.com/deitch/jstree-grid.git"
+	}
+}
