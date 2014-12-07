@@ -31,7 +31,7 @@
 				
 				
 				$("div#jstree").jstree({
-					plugins: ["themes","json","grid","dnd"],
+					plugins: ["themes","json","grid","dnd","contextmenu"],
 					core: {
 						data: data
 					},
@@ -41,7 +41,8 @@
 							{cellClass: "col1", value: "price", width: 60, header: "Price", title:"price"},
 							{cellClass: "col2", value: "size", header: "Qty", title:"size"}
 						],
-						resizable:true
+						resizable:true,
+						contextmenu:true
 					},
 					dnd: {
             drop_finish : function () { 
@@ -189,7 +190,7 @@
 		<p/>
 		Some interesting feature usage. Check out the HTML and JS config to see the details:
 		<ul>
-			<li>The first tree has resizable columns, set to true.</li>
+			<li>The first tree has resizable columns, set to true, and has contextmenu enabled.</li>
 			<li>The second tree has a max-height set to 30px, causing the tree itself - but not the headers - to scroll.</li>
 			<li>The third tree uses an alternate them and styling.</li>
 			<li>The fourth tree uses a function for the <i>value</i>.</li>

@@ -8,8 +8,8 @@
  * 
  * Works only with jstree "v3.0.0" and higher
  *
- * $Date: 2014-12-03 $
- * $Revision:  3.1.8 $
+ * $Date: 2014-12-07 $
+ * $Revision:  3.1.9 $
  */
 
 /*jslint nomen:true */
@@ -124,6 +124,7 @@
 				gs = this._gridSettings = {
 					columns : s.columns || [],
 					treeClass : "jstree-grid-col-0",
+					context: s.contextmenu || false,
 					columnWidth : s.width,
 					defaultConf : {"*display":"inline","*+display":"inline"},
 					isThemeroller : !!this._data.themeroller,
@@ -447,7 +448,88 @@
 			}
 			return(ret);
 		};
-		
+		/**
+		 * put a grid cell in edit mode (input field to edit the data)
+		 * @name edit(obj, col)
+		 * @param  {mixed} obj
+		 * @param  {obj} col definition
+		 * @param  {element} cell element, either span or wrapping div
+		 */
+		this._edit = function (obj, col, element) {
+			if(!obj) { return false; }
+			if (element) {
+				element = $(element);
+				if (element.prop("tagName").toLowerCase() === "div") {
+					element = element.children("span:first");
+				}
+			} else {
+				// need to find the element - later
+				return false;
+			}
+			var rtl = this._data.core.rtl,
+				w  = this.element.width(),
+				t = obj.data[col.value],
+				h1 = $("<"+"div />", { css : { "position" : "absolute", "top" : "-200px", "left" : (rtl ? "0px" : "-1000px"), "visibility" : "hidden" } }).appendTo("body"),
+				h2 = $("<"+"input />", {
+						"value" : t,
+						"class" : "jstree-rename-input",
+						"css" : {
+							"padding" : "0",
+							"border" : "1px solid silver",
+							"box-sizing" : "border-box",
+							"display" : "inline-block",
+							"height" : (this._data.core.li_height) + "px",
+							"lineHeight" : (this._data.core.li_height) + "px",
+							"width" : "150px" // will be set a bit further down
+						},
+						"blur" : $.proxy(function () {
+							var v = h2.val();
+							// save the value if changed
+							if(v === "" || v === t) { 
+								v = t; 
+							} else {
+								obj.data[col.value] = v;
+								this._prepare_grid(this.get_node(obj,true));
+							}
+							h2.remove();
+							element.show();
+						}, this),
+						"keydown" : function (event) {
+							var key = event.which;
+							if(key === 27) {
+								this.value = t;
+							}
+							if(key === 27 || key === 13 || key === 37 || key === 38 || key === 39 || key === 40 || key === 32) {
+								event.stopImmediatePropagation();
+							}
+							if(key === 27 || key === 13) {
+								event.preventDefault();
+								this.blur();
+							}
+						},
+						"click" : function (e) { e.stopImmediatePropagation(); },
+						"mousedown" : function (e) { e.stopImmediatePropagation(); },
+						"keyup" : function (event) {
+							h2.width(Math.min(h1.text("pW" + this.value).width(),w));
+						},
+						"keypress" : function(event) {
+							if(event.which === 13) { return false; }
+						}
+					}),
+				fn = {
+						fontFamily		: element.css('fontFamily')		|| '',
+						fontSize		: element.css('fontSize')			|| '',
+						fontWeight		: element.css('fontWeight')		|| '',
+						fontStyle		: element.css('fontStyle')		|| '',
+						fontStretch		: element.css('fontStretch')		|| '',
+						fontVariant		: element.css('fontVariant')		|| '',
+						letterSpacing	: element.css('letterSpacing')	|| '',
+						wordSpacing		: element.css('wordSpacing')		|| ''
+				};
+			element.hide();
+			element.parent().append(h2);
+			h2.css(fn).width(Math.min(h1.text("pW" + h2[0].value).width(),w))[0].select();
+		};
 		this._prepare_grid = function (obj) {
 			var gs = this._gridSettings, c = gs.treeClass, _this = this, t, cols = gs.columns || [], width, tr = gs.isThemeroller, 
 			tree = this.element,
@@ -458,7 +540,20 @@
 					t.select_node(node.attr("id"));
 					tree.trigger("select_cell.jstree-grid", [{value: val,column: col.header,node: node,grid:$(this),sourceName: col.value}]);
 				};
-			},i, val, cl, wcl, ccl, a, last, valClass, wideValClass, span, paddingleft, title, gridCellName, gridCellParentId, gridCellParent,
+			}, cellRightClickHandler = function (tree,node,val,col,t) {
+				return function (e) {
+					if (gs.context) {
+						e.preventDefault();
+						$.vakata.context.show(this,{ 'x' : e.pageX, 'y' : e.pageY },{
+							"edit":{label:"Edit","action": function (data) {
+								var obj = t.get_node(node);
+								_this._edit(obj,col,e.target);
+							}}
+						});
+					}
+				};
+			},
+			i, val, cl, wcl, ccl, a, last, valClass, wideValClass, span, paddingleft, title, gridCellName, gridCellParentId, gridCellParent,
 			gridCellPrev, gridCellPrevId, gridCellNext, gridCellNextId, gridCellChild, gridCellChildId, 
 			col, content, tmpWidth, dataRow = this.dataRow, dataCell, lid = objData.id,
 			peers = this.get_node(objData.parent).children,
@@ -618,6 +713,7 @@
 					last = last.css(conf).addClass("jstree-grid-cell jstree-grid-cell-"+classAdd+" "+wcl+ " " + wideValClass + (tr?" ui-state-default":"")).addClass("jstree-grid-col-"+i);
 					// add click handler for clicking inside a grid cell
 					last.click(cellClickHandler(tree,t,val,col,this));
+					last.on("contextmenu",cellRightClickHandler(tree,t,val,col,this));
 					
 					if (title) {
 						span.attr("title",title);
