@@ -9,7 +9,7 @@
  * Works only with jstree "v3.0.0" and higher
  *
  * $Date: 2014-12-07 $
- * $Revision:  3.1.9 $
+ * $Revision:  3.1.10 $
  */
 
 /*jslint nomen:true */
@@ -324,7 +324,7 @@
 				width -= borPadWidth;
 				margin = i === 0 ? 3 : 0;
 				col.css({width:width});
-				last = $("<th></th>").css(conf).css({"margin-left": margin}).addClass((tr?"ui-widget-header ":"")+"jstree-grid-header jstree-grid-header-cell jstree-grid-header-"+classAdd+" "+cl+" "+ccl).text(val).appendTo(header);
+				last = $("<th></th>").css(conf).css({"margin-left": margin}).addClass((tr?"ui-widget-header ":"")+"jstree-grid-header jstree-grid-header-cell jstree-grid-header-"+classAdd+" "+cl+" "+ccl).html(val).appendTo(header);
 				totalWidth += last.outerWidth();
 				puller = $("<div class='jstree-grid-separator jstree-grid-separator-"+classAdd+(tr ? " ui-widget-header" : "")+(resizable? " jstree-grid-resizable-separator":"")+"'>&nbsp;</div>").appendTo(last);
 			}
