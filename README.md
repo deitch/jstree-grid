@@ -253,10 +253,11 @@ The themeroller plugin for jstree is supported as of tag 0.9.1 (29 November 2011
 
 Events
 ------
-* loaded.jstree: When the tree is done loading, as usual, it fires a "loaded.jstree" event on the div to which you added jstree. jsTreeGrid uses this event to start its own load process. 
-* loaded_grid.jstree: When jsTreeGrid is done, it fires a "loaded_grid.jstree" event on the same div. If you need to run some 
+* `loaded.jstree`: When the tree is done loading, as usual, it fires a "loaded.jstree" event on the div to which you added jstree. jsTreeGrid uses this event to start its own load process. 
+* `loaded_grid.jstree`: When jsTreeGrid is done, it fires a "loaded_grid.jstree" event on the same div. If you need to run some 
 code after the jsTreeGrid is done loading, just listen for that event. An example is in the treegrid.HTML sample page.
-* select_cell.jstree-grid: If you click in any individual cell, the jstreegrid will fire a "select_cell.jstree_grid" event on the jstree. 
+* `select_cell.jstree-grid`: If you click in any individual cell, the jstreegrid will fire a "select_cell.jstree_grid" event on the jstree. 
+* `update_cell.jstree-grid`: If you right-click a cell and edit it, when the edit is complete, and if the value has changed, the jstreegrid will fire a `update_cell.jstree-grid` event on the jstree.
 
 The signature for the select_cell.jstree-grid handler is:
 
@@ -271,6 +272,21 @@ where:
 * node: reference to the &lt;li&gt; element in the tree that starts the row with the clicked cell
 * grid: reference to the &lt;div&gt; element in the grid that was clicked
 * sourceName: name of the element in the original data that contained this value, as provided by the config in the columns "value" for this column
+
+
+
+The signature for the update_cell.jstree-grid handler is:
+
+````JavaScript
+function(event,{node:node, col:column, value:newvalue,old:oldvalue})
+````
+
+where:
+
+* node: the edited node in the data structure
+* col: name of the column, e.g. "price"
+* value: new value for the cell
+* old: the original value before it was changed
 
 
 

@@ -489,6 +489,7 @@
 								v = t; 
 							} else {
 								obj.data[col.value] = v;
+								this.element.trigger('update_cell.jstree-grid',{node:obj, col:col.value, value:v, old:t});
 								this._prepare_grid(this.get_node(obj,true));
 							}
 							h2.remove();
