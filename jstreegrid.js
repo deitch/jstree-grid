@@ -536,9 +536,9 @@
 			tree = this.element,
 			classAdd = (tr?"themeroller":"regular"), img, objData = this.get_node(obj),
 			defaultWidth = gs.columnWidth, conf = gs.defaultConf, cellClickHandler = function (tree,node,val,col,t) {
-				return function() {
-					t.deselect_all();
-					t.select_node(node.attr("id"));
+				return function(e) {
+					node = tree.find("#"+node.attr("id"));
+					node.children(".jstree-anchor").trigger("click.jstree",e);
 					tree.trigger("select_cell.jstree-grid", [{value: val,column: col.header,node: node,grid:$(this),sourceName: col.value}]);
 				};
 			}, cellRightClickHandler = function (tree,node,val,col,t) {
