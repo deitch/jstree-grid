@@ -260,7 +260,26 @@
 				for (i=0;i<ids.length;i++) {
 					this.dataRow.find("."+GRIDCELLID_PREFIX+ids[i]+GRIDCELLID_POSTFIX).removeClass("jstree-clicked");
 				}
-			},this));
+			},this))
+			.on("search.jstree", $.proxy(function (e, data) {
+				// search sometimes filters, so we need to hide all of the appropriate grid cells as well, and show only the matches
+				var dataRow = this.dataRow;
+				if(this._data.search.som) {
+					if(data.nodes.length) {
+						// hide all of the grid cells
+						dataRow.find('div.jstree-grid-cell').hide();
+						// show only those that match
+						data.nodes.add(data.nodes.parentsUntil(".jstree")).filter(".jstree-node").each(function (i,node) {
+							var id = node.id;
+							if (id) {
+								dataRow.find("."+GRIDCELLID_PREFIX+id+GRIDCELLID_POSTFIX).show();
+							}
+						});
+					}
+				}
+				return true;
+			}, this))
+			;
 			if (this._gridSettings.isThemeroller) {
 				this.element
 					.on("select_node.jstree",$.proxy(function(e,data){
