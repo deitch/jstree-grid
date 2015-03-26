@@ -180,11 +180,39 @@
             } 
 					}
 				});
+				$("div#jstree5").jstree({
+					plugins: ["themes","json","grid","dnd","contextmenu"],
+					core: {
+						data: data
+					},
+					grid: {
+						columns: [
+							{cellClass: "col1", value: "price", width: 60, header: "<i>Price</i>", title:"price"},
+							{width: 110, header: "Nodes",title:"_DATA_",tree:true},
+							{cellClass: "col2", value: "size", header: "Qty", title:"size"}
+						],
+						resizable:true,
+						contextmenu:true
+					},
+					dnd: {
+            drop_finish : function () { 
+            }, 
+            drag_finish : function () { 
+            }, 
+            drag_check : function (data) { 
+                return { 
+                    after : true, 
+                    before : true, 
+                    inside : true 
+                }; 
+            } 
+					}
+				});
 			});
 		</script>
 	</head>
 	<body>
-		<h2>Tree Grid 3.0.0 Demo</h2>
+		<h2>Tree Grid 3.2.0 Demo</h2>
 		This page gives a demo for using the excellent <a href="http://www.jstree.com">jstree</a>, built on the
 		amazing <a href="http://jquery.com">jQuery</a> library, with a tree grid. The treegrid is implemented
 		as a standard jstree plugin. Simply include jquery and jstree, and the plugin library jstreegrid.js,
@@ -196,6 +224,7 @@
 			<li>The second tree has a max-height set to 30px, causing the tree itself - but not the headers - to scroll.</li>
 			<li>The third tree uses an alternate them and styling.</li>
 			<li>The fourth tree uses a function for the <i>value</i>.</li>
+			<li>The fifth tree has 3 columns, but puts the tree in a different column.</li>
 		</ul>
 		<div id="jstree1">
 			<h4>First Tree</h4>
@@ -220,6 +249,11 @@
 			<h4>Fourth Tree</h4>
 			<div id="jstreef" style="max-height: 30px;"></div>
 			<div>Tree grid is <span id="fstatus">loading</span>.</div>
+		</div>
+		<div id="jstree5">
+			<h4>Fifth Tree</h4>
+			<div id="jstree5div" style="max-height: 30px;"></div>
+			<div>Tree grid is <span id="fivestatus">loading</span>.</div>
 		</div>
 		
 	</body>

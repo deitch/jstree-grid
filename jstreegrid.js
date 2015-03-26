@@ -131,7 +131,17 @@
 					treeWidthDiff : 0,
 					resizable : s.resizable,
 					indent: 0
-				}, cols = gs.columns;
+				}, cols = gs.columns, treecol = 0;
+				// find which column our tree shuld go in
+				for (i=0;i<s.columns.length;i++) {
+					if (s.columns[i].tree) {
+						// save which column it was
+						treecol = i;
+						// do not check any others
+						break;
+					}
+				}
+				this.treecol = treecol;
 			
 				var msie = /msie/.test(navigator.userAgent.toLowerCase());
 				if (msie) {
@@ -174,7 +184,7 @@
 				for (i=0;i<cols.length;i++) {
 					this.dataRow.append($("<td></td>").addClass("jstree-grid-cell"));
 				}
-				this.dataRow.children("td:first").append(container);
+				this.dataRow.children("td:eq("+treecol+")").append(container);
 				
 				this._initialized = true;
 			}
@@ -595,9 +605,12 @@
 				//renderAWidth(a,_this);
 				renderATitle(a,t,_this);
 				last = a;
-				for (i=1;i<cols.length;i++) {
-					dataCell = dataRow.children("td:eq("+i+")");
+				for (i=0;i<cols.length;i++) {
+					if (this.treecol === i) {
+						continue;
+					}
 					col = cols[i];
+					dataCell = dataRow.children("td:eq("+i+")");
 					// get the cellClass, the wideCellClass, and the columnClass
 					cl = col.cellClass || "";
 					wcl = col.wideCellClass || "";
