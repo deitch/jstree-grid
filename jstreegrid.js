@@ -6,10 +6,10 @@
  * Licensed under the MIT license:
  *   http://www.opensource.org/licenses/mit-license.php
  * 
- * Works only with jstree "v3.0.0" and higher
+ * Works only with jstree version >= 3.0.0
  *
- * $Date: 2014-12-07 $
- * $Revision:  3.1.10 $
+ * $Date: 2015-03-30 $
+ * $Revision:  3.2.0 $
  */
 
 /*jslint nomen:true */
