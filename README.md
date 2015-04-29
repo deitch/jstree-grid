@@ -92,7 +92,7 @@ You would ensure that "clickable" is applied to the span, but important to the d
 Value is one of:
 
 * the name of the property of the node data whose content will be used; you can choose which once for the entire grid. 
-* a function, which will be passed the node's data, and is expected to return the value to use.
+* a function, which will be passed the node's data given by `tree.get_node(node)` for the individual tree item. If you want your custom data, access it via `node.data`
 
 Thus, if you have a node whose data is given by:
 
@@ -118,7 +118,7 @@ Or, in a function:
 grid: {
 	columns: [
 		{width: 50, header: "Nodes"},
-		{width: 30, header: "Price", value: function(node){return(node.price);}}
+		{width: 30, header: "Price", value: function(node){return(node.data.price);}}
 	]
 }
 ````
@@ -129,7 +129,7 @@ Using a function allows you to calculate things, or make conditions:
 grid: {
 	columns: [
 		{width: 50, header: "Nodes"},
-		{width: 30, header: "Price", value: function(node){return("$"+node.price*2);}}
+		{width: 30, header: "Price", value: function(node){return("$"+(node.data.price*2));}}
 	]
 }
 ````

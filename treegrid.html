@@ -158,10 +158,10 @@
 						columns: [
 							{width: 110, header: "Nodes",title:"_DATA_"},
 							{cellClass: "col1", value: function (node) {
-								return(node.price);
+								return(node.data ? node.data.price : "");
 							}, width: 60, header: "Price", title:"price"},
 							{cellClass: "col2", value: function (node) {
-								return(node.size)
+								return(node.data ? node.data.price : "")
 							}, width: 60, header: "Qty", title:"size"}
 						],
 						resizable:true

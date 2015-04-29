@@ -621,10 +621,10 @@
 
 
 					// get the contents of the cell - value could be a string or a function
-					if (col.value !== undefined && col.value !== null && objData.data !== null && objData.data !== undefined) {
+					if (col.value !== undefined && col.value !== null) {
 						if (typeof(col.value) === "function") {
-							val = col.value(objData.data);
-						} else if (objData.data[col.value] !== undefined) {
+							val = col.value(objData);
+						} else if (objData.data !== null && objData.data !== undefined && objData.data[col.value] !== undefined) {
 							val = objData.data[col.value];
 						} else {
 							val = "";
