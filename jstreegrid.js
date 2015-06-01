@@ -645,17 +645,17 @@
 					}
 
 					// get the valueClass
-					valClass = col.valueClass && t.attr(col.valueClass) ? t.attr(col.valueClass) : "";
+					valClass = col.valueClass && objData.data !== null && objData.data !== undefined ? objData.data[col.valueClass] || "" : "";
 					if (valClass && col.valueClassPrefix && col.valueClassPrefix !== "") {
 						valClass = col.valueClassPrefix + valClass;
 					}
 					// get the wideValueClass
-					wideValClass = col.wideValueClass && t.attr(col.wideValueClass) ? t.attr(col.wideValueClass) : "";
+					wideValClass = col.wideValueClass && objData.data !== null && objData.data !== undefined ? objData.data[col.wideValueClass] || "" : "";
 					if (wideValClass && col.wideValueClassPrefix && col.wideValueClassPrefix !== "") {
 						wideValClass = col.wideValueClassPrefix + wideValClass;
 					}
 					// get the title
-					title = col.title && t.attr(col.title) ? t.attr(col.title) : "";
+					title = col.title && objData.data !== null && objData.data !== undefined ? objData.data[col.title] || "" : "";
 					// strip out HTML
 					title = title.replace(htmlstripre, '');
 					

@@ -14,11 +14,11 @@
 				
 				data = [{
 					text: "Root 1",
-					data: {price: "$5.00", size: "4"},
+					data: {price: "$5.00", size: "4",spanclass:"root"},
 					children: [
-						{text: "Really long named child whose name gets cut off", data: {price: "<b>$4.00</b>", size: "3"}},
-						{text: "Child 2", data: {price: "<i>$3.00</i>", size: "2"}, children:[
-							{text:"Grandchild",data:{price: "EXPENSIVE!",size:"10"}}
+						{text: "Really long named child whose name gets cut off", data: {price: "<b>$4.00</b>", size: "3",spanclass:"first"}},
+						{text: "Child 2", data: {price: "<i>$3.00</i>", size: "2",spanclass:"second"}, children:[
+							{text:"Grandchild",data:{price: "EXPENSIVE!",size:"10",spanclass:"third"}}
 						]}
 					]
 				}];
@@ -33,15 +33,15 @@
 				
 				
 				$("div#jstree").jstree({
-					plugins: ["themes","json","grid","dnd","contextmenu"],
+					plugins: ["themes","json","grid","dnd","contextmenu","search"],
 					core: {
 						data: data
 					},
 					grid: {
 						columns: [
 							{width: 110, header: "Nodes",title:"_DATA_"},
-							{cellClass: "col1", value: "price", width: 60, header: "<i>Price</i>", title:"price"},
-							{cellClass: "col2", value: "size", header: "Qty", title:"size"}
+							{cellClass: "col1", value: "price", width: 60, header: "<i>Price</i>", title:"price", valueClass:"spanclass"},
+							{cellClass: "col2", value: "size", header: "Qty", title:"size",valueClass:"spanclass"}
 						],
 						resizable:true,
 						contextmenu:true
@@ -81,7 +81,10 @@
 					tree.refresh();
 					return(false);
 				});
-				
+				$("input#search").keyup(function (e) {
+					var tree = $("div#jstree").jstree();
+					tree.search($(this).val());
+				});
 				
 				// Do the second tree
 				$("div#jstreex").bind("loaded_grid.jstree",function(){
@@ -161,7 +164,7 @@
 								return(node.data ? node.data.price : "");
 							}, width: 60, header: "Price", title:"price"},
 							{cellClass: "col2", value: function (node) {
-								return(node.data ? node.data.price : "")
+								return(node.data ? node.data.size : "")
 							}, width: 60, header: "Qty", title:"size"}
 						],
 						resizable:true
@@ -232,6 +235,7 @@
 			<div>Tree grid is <span id="status">loading</span>.</div>
 			<div><a href="#" id="change">Click here to double the root Qty</a></div>
 			<div><a href="#" id="refresh">Click here to refresh the tree</a></div>
+			<div>Search <input type="text" id="search"></input></div>
 			<div>Click a cell to see results: <span id="clicked"></span></div>
 			<div>Right-click a cell and edit to see results: <span id="changed"></span></div>
 		</div>
