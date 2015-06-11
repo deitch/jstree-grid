@@ -9,7 +9,7 @@ Allows any number of columns, and can use any property of the node to display da
 
 For significant changes to v3 compared to v1, see the end of this document.
 
-**Note:** treegrid may have issues when using theme autooading as in:
+**Note:** treegrid may have issues when using theme autoloading as in:
 
 ````JavaScript
 core: {
