@@ -8,8 +8,8 @@
  * 
  * Works only with jstree version >= 3.0.0
  *
- * $Date: 2015-06-01 $
- * $Revision:  3.2.2 $
+ * $Date: 2015-06-016 $
+ * $Revision:  3.2.3 $
  */
 
 /*jslint nomen:true */
@@ -472,7 +472,7 @@
 				child = GRIDCELLID_PREFIX+children[i]+GRIDCELLID_POSTFIX+col;
 				if (hc[child]) {
 					ret = ret.add(hc[child]).add(this.getHoldingCells(this.get_node(children[i]),col,hc));
-					delete hc[child];
+					//delete hc[child];
 				}
 			}
 			return(ret);
@@ -717,10 +717,10 @@
 							}
 							rendered = true;
 						} else {
-							// if you parent is not drawn, we put it in the holding cells, and then sort when the parent comes in
-							hc[gridCellName+i] = last;
 							rendered = false;
 						}
+						// always put it in the holding cells, and then sort when the parent comes in, in case parent is (re)drawn later
+						hc[gridCellName+i] = last;
 					} else {
 						if (gridCellPrev && gridCellPrev.length > 0) {
 							last.insertAfter(gridCellPrev);
@@ -733,8 +733,7 @@
 						}
 						rendered = true;
 					}
-
-					// do we have any children waiting for this cell?
+					// do we have any children waiting for this cell? walk down through the children/grandchildren/etc tree
 					if (rendered) {
 						last.after(this.getHoldingCells(objData,i,hc));
 					}
@@ -761,6 +760,8 @@
 			}
 			this.element.css({'overflow-y':'auto !important'});			
 		};
+		// clean up holding cells
+		this.holdingCells = {};
 
 		// need to do alternating background colors or borders
 	};
