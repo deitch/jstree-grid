@@ -470,7 +470,7 @@
 			// run through each child, render it, and then render its children recursively
 			for (i=0;i<children.length;i++) {
 				child = GRIDCELLID_PREFIX+children[i]+GRIDCELLID_POSTFIX+col;
-				if (hc[child]) {
+				if (hc[child] && obj.state.opened) {
 					ret = ret.add(hc[child]).add(this.getHoldingCells(this.get_node(children[i]),col,hc));
 					//delete hc[child];
 				}
