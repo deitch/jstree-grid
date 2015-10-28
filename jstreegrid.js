@@ -632,6 +632,10 @@
 					} else {
 						val = "";
 					}
+					
+					if (typeof(col.format) === "function") {
+						val = col.format(val);
+					}
 
 					// put images instead of text if needed
 					if (col.images) {
