@@ -412,6 +412,11 @@
 								oldPrevColWidth = parseFloat(toResize.prevCol.css("width"));
 								oldNextColWidth = parseFloat(toResize.nextCol.css("width"));
 								
+								// handle a Chrome issue with columns set to auto
+								// thanks to Brabus https://github.com/side-by-side
+								if (!oldPrevColWidth) {oldPrevColWidth = toResize.prevHeader.innerWidth();}
+								if (!oldNextColWidth) {oldNextColWidth = toResize.nextHeader.innerWidth();}
+								
 								// make sure that diff cannot be beyond the left/right limits
 								diff = diff < 0 ? Math.max(diff,-oldPrevHeaderInner) : Math.min(diff,oldNextHeaderInner);
 								newPrevColWidth = (oldPrevColWidth+diff)+"px";
