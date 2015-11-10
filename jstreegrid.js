@@ -455,7 +455,7 @@
 		};
 		this.refresh = function () {
 			this._clean_grid();
-			return parent.refresh.call(this);
+			return parent.refresh.apply(this,arguments);
 		};
 		this._hide_grid = function (node) {
 			var dataRow = this.dataRow, children = node && node.children_d ? node.children_d : [], i;
