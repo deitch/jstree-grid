@@ -1,0 +1,97 @@
+<html>
+	<head>
+		<title>jstree treegrid Chrome resize test</title>
+		<link rel="stylesheet" href="../lib/themes-3/default/style.min.css" />
+		<script type='text/javascript' src='http://code.jquery.com/jquery-2.1.0.js'></script>
+		<script type="text/javascript" src="../lib/jstree-3.0.8.js"></script>
+		<script type="text/javascript" src="../jstreegrid.js"></script>
+		<style type="text/css">
+			@import url('http://getbootstrap.com/dist/css/bootstrap.css');
+		</style>
+		<script type="text/javascript">
+			$(document).ready(function(){
+				var tree_data = [
+				    {
+				        type: 'document',
+				        text: 'Syllabus'
+				    },
+				    {
+				        type: 'folder',
+				        text: 'Introduction',
+				        children: [
+				            {
+				                type: 'document',
+				                text: 'introduction page 1',
+				                data: {
+				                    due_date: '3/18/2015'
+				                }
+				            },
+				            {
+				                type: 'document',
+				                text: 'introduction page 2',
+				                data: {
+				                    due_date: '3/18/2015'
+				                }
+				            }
+				        ]
+				    },
+				    {
+				        type: 'folder',
+				        text: 'Subject',
+				        children: [
+				            {
+				                type: 'document',
+				                text: 'subject page 1',
+				                data: {
+				                    due_date: '4/8/2015'
+				                }
+				            },
+				            {
+				                type: 'document',
+				                text: 'subject page 2',
+                
+				                data: {
+				                    hidden: true,
+				                    due_date: '4/8/2015'
+				                }
+				            },
+				            {
+				                type: 'document',
+				                text: 'subject page 3',
+				                data: {
+				                    due_date: '4/8/2015'
+				                }
+				            }
+				        ]
+				    }
+				];
+
+				$('#tree').jstree({
+				    core: {
+				        data: tree_data
+				    },
+				    plugins: ['grid'],
+				    grid: {
+				        columns: [
+				            {width: 'auto', header: 'File'},
+				            {width: 90, header: 'Due date', value: 'due_date'}
+				        ],
+				        resizable: true
+				    }
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<h1>Column Resize Chrome Test</h1>
+		<p>
+			There is an issue with Chrome/Chromium wherein if a column size is set to 'auto', calling $(col).css("width") returns 0, rather than the actual width. This tests whether or not it works.
+		</p>
+		<p>
+			The bug hits primarily during resizing. To test this, try resizing a column in Firefox and then in Chrome.
+		</p>
+		<div id="tree">
+		</div>
+
+	</body>
+</html>

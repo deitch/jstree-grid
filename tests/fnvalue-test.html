@@ -1,0 +1,177 @@
+<html>
+	<head>
+		<title>jstree treegrid 3.0.0 plugin demo</title>
+		<link rel="stylesheet" href="lib/themes-3/default/style.min.css" />
+		<script type='text/javascript' src='http://code.jquery.com/jquery-2.1.0.js'></script>
+		<style type="text/css" href="https://www.dropbox.com/s/7u7zirpulyj6vvr/jquery-ui.css?dl=0"></style>
+		<script type="text/javascript" src="lib/jstree-3.0.8.js"></script>
+		<script type="text/javascript" src="jstreegrid.js"></script>
+		<script type="text/javascript">
+			$(document).ready(function(){
+				
+				//$( ".stopclick" ).on('click',function( event ) {
+				$( "#wrapper" ).on('click','.stopclick',function( event ) {
+    
+				    if (event.preventDefault) {
+				        event.preventDefault();
+				    }
+				    if (event.stopPropagation) {
+				        event.stopPropagation();
+				    }
+				    if (event.stopImmediatePropagation) {
+				        event.stopImmediatePropagation();
+				    }
+				});				
+				var jsonData = [{
+				    "id": 1,
+				        "text": "Materials and varieties",
+				        "parent": "#",
+				        "data": {
+				        "item_id": 1,
+				            "mal_item_name": null,
+				            "data_needed": "N",
+				            "def_unit_id": null,
+				            "col_unit_id": null,
+				            "shop1_price": null,
+				            "shop2_price": null,
+				            "remarks": null
+				    }
+				}, {
+				    "id": 2,
+				        "text": "Bricks",
+				        "parent": "1",
+				        "data": {
+				        "item_id": 2,
+				            "mal_item_name": null,
+				            "data_needed": "N",
+				            "def_unit_id": null,
+				            "col_unit_id": null,
+				            "shop1_price": null,
+				            "shop2_price": null,
+				            "remarks": null
+				    }
+				}, {
+				    "id": 3,
+				        "text": "Class(Country burnt)(8\" 4\" 4\")(high quality)",
+				        "parent": "2",
+				        "data": {
+				        "item_id": 3,
+				            "mal_item_name": null,
+				            "data_needed": "Y",
+				            "def_unit_id": 9,
+				            "col_unit_id": null,
+				            "shop1_price": null,
+				            "shop2_price": null,
+				            "remarks": null
+				    }
+				}, {
+				    "id": 4,
+				        "text": "Class(Country burnt)(8\" 4\" 4\")(low quality)",
+				        "parent": "2",
+				        "data": {
+				        "item_id": 4,
+				            "mal_item_name": null,
+				            "data_needed": "Y",
+				            "def_unit_id": 9,
+				            "col_unit_id": null,
+				            "shop1_price": null,
+				            "shop2_price": null,
+				            "remarks": null
+				    }
+				}, {
+				    "id": 11,
+				        "text": "River Sand",
+				        "parent": "1",
+				        "data": {
+				        "item_id": 11,
+				            "mal_item_name": null,
+				            "data_needed": "N",
+				            "def_unit_id": null,
+				            "col_unit_id": null,
+				            "shop1_price": null,
+				            "shop2_price": null,
+				            "remarks": null
+				    }
+				}, {
+				    "id": 12,
+				        "text": "Coarse",
+				        "parent": "11",
+				        "data": {
+				        "item_id": 12,
+				            "mal_item_name": null,
+				            "data_needed": "Y",
+				            "def_unit_id": 10,
+				            "col_unit_id": null,
+				            "shop1_price": null,
+				            "shop2_price": null,
+				            "remarks": null
+				    }
+				}];
+
+
+				$('#treeViewDiv').jstree({
+				    "core": {
+				        "animation": 0,
+				            "check_callback": true,
+				            "themes": {
+				            "name": false, //default theme used
+				            "stripes": true,
+				                "variant": "large",
+				                "theme": "default",
+				                "dots": true,
+				                "icons": true,
+				                "url": false, // url of theme's css file
+				            "expand_selected_onload": true,
+				        },
+				            "data": jsonData
+				    },
+				        "checkbox": {
+				        "keep_selected_style": false,
+				            "three_state":false,
+				            "two_state": true,
+				            "whole_node": true
+				    },
+				        "grid": {
+				        "columns": [{
+				            width: 40,
+				            header: "Items",
+				            headerClass: "jtreeHeader",
+				            wideCellClass: "jtreeCell",
+				            title: "_DATA_"
+				        },  {
+				            width: 20,
+				            header: "Shop1 Price",
+				            headerClass: "jtreeHeader",
+				            wideCellClass: "jtreeCell",
+				            title: "Price from Shop1",
+				            value: function (node) {
+				                if (node.data_needed == 'Y') {
+				                    return ('<input type="text" class="stopclick" id="shop1TreeTxt_' + node.item_id + '" maxlength="15" value="' + ((node.shop1_price === null) ? ' ' : node.shop1_price) + '"></input>');
+				                }
+				            }
+				        }, {
+			            width: 20,
+			            header: "Shop2 Price",
+			            headerClass: "jtreeHeader",
+			            wideCellClass: "jtreeCell",
+			            title: "Price from Shop2",
+			            value: "ABC"
+				        }],
+
+				            "contextmenu": true,
+				            "resizable": true
+				    },
+				        "plugins": ["checkbox", "contextmenu", "dnd", "search", "state", "types", "grid", "wholerow"]
+
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<h2>tharasp issue</h2>
+		<div id="wrapper">
+			<div id="treeViewDiv"></div>
+		</div>
+		
+	</body>
+</html>

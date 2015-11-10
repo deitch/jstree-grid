@@ -1,0 +1,85 @@
+<html>
+	<head>
+		<title>jstree treegrid 3.0.0 plugin demo</title>
+		<link rel="stylesheet" href="../lib/themes-3/default/style.min.css" />
+		<script type='text/javascript' src='http://code.jquery.com/jquery-2.1.0.js'></script>
+		<script type="text/javascript" src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
+		<link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css">
+		<script type="text/javascript" src="../lib/jstree-3.0.8.js"></script>
+		<script type="text/javascript" src="../jstreegrid.js"></script>
+		<script type="text/javascript">
+			$(document).ready(function(){
+				
+				var data = [{ "id" : "Root", "parent" : "#", "text" : "Root"},
+				{ "id" : "child1", "parent" : "Root", "text" : "child1", "data" : { "open" : "2/5/2015 2:18:00 PM", "close" : "2/6/2015 10:16:00 AM", "status" : "Closed"}},
+				{ "id" : "child2", "parent" : "Root", "text" : "child2", "data" : { "open" : "2/5/2015 2:18:00 PM", "close" : "2/6/2015 10:16:00 AM", "status" : "Closed"}},
+				{ "id" : "child3", "parent" : "Root", "text" : "child3", "data" : { "open" : "2/5/2015 2:18:00 PM", "close" : "2/6/2015 10:16:00 AM", "status" : "Closed"}}]
+
+
+				$('#jstree').jstree({
+					"core" : { "data" : data },
+					"plugins" : [ "checkbox", "search", "grid" ],
+					"search" : { "show_only_matches" : true},
+					"grid" : { columns: [
+									{width: 90, header: "name"},
+									{width: 40, header: "open", value: "open"},
+									{width: 40, header: "close", value: "close"},
+									{width: 30, header: "status", value: "status"}
+							    ]
+							 }
+				});
+    
+				var to = false;
+				$('#treeSearch').keyup(function () {
+					if(to) { clearTimeout(to); }
+					to = setTimeout(function () {
+						var v = $('#treeSearch').val();
+						$('#jstree').jstree(true).search(v);
+					}, 250);
+				});
+				// solves the issue
+				$('#treeSearch').keyup(function () {
+					var fixit = $("#fixit").is(":checked");
+					if (fixit) {
+				            if(to) { clearTimeout(to); }
+					            to = setTimeout(function () {
+					                var v = $('#treeSearch').val();
+					                $('#jstree').jstree(true).search(v);
+
+					                //hide/show grid values for nodes affected by searching
+					                var hidden = $('ul li:hidden');
+					                var visible = $('ul li:visible');
+
+					                $.each(hidden, function(i){
+					                    $('div[id*=' + hidden[i].id + ']').hide();
+					                });
+
+					                $.each(visible, function(i){
+					                    $('div[id*=' + visible[i].id + ']').show();
+					                });
+
+					            }, 500);
+										}
+				        });
+			});
+		</script>
+	</head>
+	<body>
+		<h2>Search issue</h2>
+		<p>
+			Can be seen at <a href="https://github.com/deitch/jstree-grid/issues/88">https://github.com/deitch/jstree-grid/issues/88</a>
+			<br/>
+			<ol>
+				<li>Open the root branch</li>
+				<li>See 3 children, each with grid info</li>
+				<li>Close the root branch</li>
+				<li>Search for "2"</li>
+				<li>See the single child in the tree, but grid cells for all 3 children</li>
+			</ol>
+		</p>
+		<input type="checkbox" id="fixit"></input>Fix
+			<input type="text" id="treeSearch" value="" class="input" style="margin:0em auto 1em auto; display:block; padding:4px; border-radius:4px; border:1px solid silver;" />
+
+			<div id="jstree"></div>		
+	</body>
+</html>
