@@ -289,6 +289,11 @@
 				}
 				return true;
 			}, this))
+			.on("clear_search.jstree", $.proxy(function (e, data) {
+				// search has been cleared, so we need to show all rows
+				this.dataRow.find('div.jstree-grid-cell').show();
+				return true;
+			}, this))
 			;
 			if (this._gridSettings.isThemeroller) {
 				this.element
