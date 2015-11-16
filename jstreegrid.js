@@ -114,7 +114,7 @@
 	};
 
 	$.jstree.defaults.grid = {
-		width: 25
+		width: 'auto'
 	};
 
 	$.jstree.plugins.grid = function(options,parent) {
