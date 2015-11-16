@@ -355,7 +355,9 @@
 				if (val) {hasHeaders = true;}
 				width = cols[i].width || defaultWidth;
 				borPadWidth = tr ? 1+6 : 2+8; // account for the borders and padding
-				width -= borPadWidth;
+				if (width != 'auto') {
+					width -= borPadWidth;
+				}
 				margin = i === 0 ? 3 : 0;
 				col.css({width:width});
 				last = $("<th></th>").css(conf).css({"margin-left": margin}).addClass((tr?"ui-widget-header ":"")+"jstree-grid-header jstree-grid-header-cell jstree-grid-header-"+classAdd+" "+cl+" "+ccl).html(val).appendTo(header);
@@ -676,7 +678,9 @@
 					// get the width
 					paddingleft = 7;
 					width = col.width || defaultWidth;
-					width = tmpWidth || (width - paddingleft);
+					if (width != 'auto') {
+						width = tmpWidth || (width - paddingleft);
+					}
 					
 					last = dataCell.children("div#"+gridCellName+i);
 					if (!last || last.length < 1) {
