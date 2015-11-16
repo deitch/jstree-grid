@@ -142,6 +142,7 @@
 					}
 				}
 				this.treecol = treecol;
+				this.rootid = container.attr("id");
 			
 				var msie = /msie/.test(navigator.userAgent.toLowerCase());
 				if (msie) {
@@ -182,7 +183,7 @@
 				this.table.append(this.dataRow);
 				// create the data columns
 				for (i=0;i<cols.length;i++) {
-					this.dataRow.append($("<td></td>").addClass("jstree-grid-cell"));
+					this.dataRow.append($("<td></td>").addClass("jstree-grid-cell jstree-grid-cell-root-"+this.rootid));
 				}
 				this.dataRow.children("td:eq("+treecol+")").append(container);
 				
@@ -227,7 +228,7 @@
 			.on("ready.jstree",$.proxy(function (e,data) {
 				// find the line-height of the first known node
 				var lh = this.element.find("li a:first").css("line-height");
-				$('<style type="text/css">td.jstree-grid-cell {line-height: '+lh+'}</style>').appendTo("head");
+				$('<style type="text/css">td.jstree-grid-cell-root-'+this.rootid+' {line-height: '+lh+'}</style>').appendTo("head");
 
 				// add container classes to the wrapper
 				this.gridWrapper.addClass(this.element.attr("class"));
@@ -572,7 +573,7 @@
 		};
 		this._prepare_grid = function (obj) {
 			var gs = this._gridSettings, c = gs.treeClass, _this = this, t, cols = gs.columns || [], width, tr = gs.isThemeroller, 
-			tree = this.element,
+			tree = this.element, rootid = this.rootid,
 			classAdd = (tr?"themeroller":"regular"), img, objData = this.get_node(obj),
 			defaultWidth = gs.columnWidth, conf = gs.defaultConf, cellClickHandler = function (tree,node,val,col,t) {
 				return function(e) {
@@ -756,7 +757,7 @@
 
 					// create a span inside the div, so we can control what happens in the whole div versus inside just the text/background
 					span.addClass(cl+" "+valClass).html(content);
-					last = last.css(conf).addClass("jstree-grid-cell jstree-grid-cell-"+classAdd+" "+wcl+ " " + wideValClass + (tr?" ui-state-default":"")).addClass("jstree-grid-col-"+i);
+					last = last.css(conf).addClass("jstree-grid-cell jstree-grid-cell-root-"+rootid+" jstree-grid-cell-"+classAdd+" "+wcl+ " " + wideValClass + (tr?" ui-state-default":"")).addClass("jstree-grid-col-"+i);
 					// add click handler for clicking inside a grid cell
 					last.click(cellClickHandler(tree,t,val,col,this));
 					last.on("contextmenu",cellRightClickHandler(tree,t,val,col,this));
