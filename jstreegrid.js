@@ -594,6 +594,12 @@
 					}
 				};
 			},
+			hoverInHandler = function (node, jsTreeInstance) {
+				return function() { jsTreeInstance.hover_node(node); }
+			},
+			hoverOutHandler = function (node, jsTreeInstance) {
+				return function() { jsTreeInstance.dehover_node(node); }
+			},
 			i, val, cl, wcl, ccl, a, last, valClass, wideValClass, span, paddingleft, title, gridCellName, gridCellParentId, gridCellParent,
 			gridCellPrev, gridCellPrevId, gridCellNext, gridCellNextId, gridCellChild, gridCellChildId, 
 			col, content, tmpWidth, dataRow = this.dataRow, dataCell, lid = objData.id,
@@ -761,6 +767,7 @@
 					// add click handler for clicking inside a grid cell
 					last.click(cellClickHandler(tree,t,val,col,this));
 					last.on("contextmenu",cellRightClickHandler(tree,t,val,col,this));
+					last.hover(hoverInHandler(t, this), hoverOutHandler(t, this));
 					
 					if (title) {
 						span.attr("title",title);
