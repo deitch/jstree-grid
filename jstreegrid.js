@@ -356,7 +356,7 @@
 				if (val) {hasHeaders = true;}
 				width = cols[i].width || defaultWidth;
 				borPadWidth = tr ? 1+6 : 2+8; // account for the borders and padding
-				if (width != 'auto') {
+				if (width !== 'auto') {
 					width -= borPadWidth;
 				}
 				margin = i === 0 ? 3 : 0;
@@ -597,10 +597,10 @@
 				};
 			},
 			hoverInHandler = function (node, jsTreeInstance) {
-				return function() { jsTreeInstance.hover_node(node); }
+				return function() { jsTreeInstance.hover_node(node); };
 			},
 			hoverOutHandler = function (node, jsTreeInstance) {
-				return function() { jsTreeInstance.dehover_node(node); }
+				return function() { jsTreeInstance.dehover_node(node); };
 			},
 			i, val, cl, wcl, ccl, a, last, valClass, wideValClass, span, paddingleft, title, gridCellName, gridCellParentId, gridCellParent,
 			gridCellPrev, gridCellPrevId, gridCellNext, gridCellNextId, gridCellChild, gridCellChildId, 
@@ -685,7 +685,7 @@
 					// get the width
 					paddingleft = 7;
 					width = col.width || defaultWidth;
-					if (width != 'auto') {
+					if (width !== 'auto') {
 						width = tmpWidth || (width - paddingleft);
 					}
 					
