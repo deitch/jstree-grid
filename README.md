@@ -67,10 +67,10 @@ Options
 
 ### The options are as follows:
 
-	* `width`: default width for a column for which no width is given. If no width is given, the default is 25px
+	* `width`: default width for a column for which no width is given. If no width is given, the default is `auto`.
 	* `columns`: an array of columns to create, on order. Each entry is an object with the following parameters:
 		* `tree`: boolean, whether the jstree should be placed in this column. Only the first `true` is accepted. If no column is set to `tree:true`, then the first column is used.
-		* `width`: width of the column in pixels. If no width is given, the default is 25 px **except for the last column**. In the last column, if not width is given, it is treated as 'auto' and fills the entire rest of the grid to the right.
+		* `width`: width of the column in pixels. If no width is given, the default is `auto` **except for the last column**. In the last column, if not width is given, it is treated as 'auto' and fills the entire rest of the grid to the right.
 		* `header`: string to use as a header for the column.
 		* `headerClass`: a CSS class to add to the header cell in this column
 		* `columnClass`: a CSS class to add to the header cell and the column cell
