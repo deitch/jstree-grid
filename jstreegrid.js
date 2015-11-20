@@ -31,7 +31,7 @@
 	var renderAWidth, renderATitle, getIndent, htmlstripre, findLastClosedNode, BLANKRE = /^\s*$/g,
 		IDREGEX = /[\\:&!^|()\[\]<>@*'+~#";,= \/${}%]/g, escapeId = function (id) {
 			return (id||"").replace(IDREGEX,'\\$&');
-		},
+		}, NODE_DATA_ATTR = "data-jstreegrid",
 	SPECIAL_TITLE = "_DATA_", LEVELINDENT = 24, bound = false, styled = false, GRIDCELLID_PREFIX = "jsgrid_",GRIDCELLID_POSTFIX = "_col";
 	
 	/*jslint regexp:true */
@@ -473,12 +473,10 @@
 			return parent.refresh.apply(this,arguments);
 		};
 		this._hide_grid = function (node) {
-			var dataRow = this.dataRow, children = node && node.children_d ? node.children_d : [], i, j, cols = this._gridSettings.columns;
+			var dataRow = this.dataRow, children = node && node.children_d ? node.children_d : [], i;
 			// go through each column, remove all children with the correct ID name
 			for (i=0;i<children.length;i++) {
-				for (j=1; j<cols.length; j++) {
-					dataRow.find("td div#"+GRIDCELLID_PREFIX+escapeId(children[i])+GRIDCELLID_POSTFIX+j).remove();
-				}
+				dataRow.find("td div["+NODE_DATA_ATTR+"='"+children[i]+"']").remove();
 			}
 		};
 		this.holdingCells = {};
@@ -622,7 +620,7 @@
 			if (a.length === 1) {
 				closed = !objData.state.opened;
 				gridCellName = GRIDCELLID_PREFIX+escapeId(lid)+GRIDCELLID_POSTFIX;
-				gridCellParentId = objData.parent === "#" ? null : GRIDCELLID_PREFIX+objData.parent+GRIDCELLID_POSTFIX;
+				gridCellParentId = objData.parent === "#" ? null : objData.parent;
 				a.addClass(c);
 				//renderAWidth(a,_this);
 				renderATitle(a,t,_this);
@@ -698,6 +696,7 @@
 						$("<span></span>").appendTo(last);
 						last.attr("id",gridCellName+i);
 						last.addClass(gridCellName);
+						last.attr(NODE_DATA_ATTR,lid);
 
 					}
 					// we need to put it in the dataCell - after the parent, but the position matters
@@ -722,13 +721,13 @@
 					//   3- Our previous peer is not drawn, we have a child that is drawn: install right before our first child
 					//   4- Our previous peer is not drawn, we have no child that is drawn, our next peer is drawn: install right before our next peer
 					//   5- Our previous peer is not drawn, we have no child that is drawn, our next peer is not drawn: install right after parent
-					gridCellPrevId = GRIDCELLID_PREFIX+ escapeId(pos <=0 ? objData.parent : findLastClosedNode(this,peers[pos-1])) +GRIDCELLID_POSTFIX+i;
-					gridCellPrev = dataCell.find("div#"+gridCellPrevId);
-					gridCellNextId = GRIDCELLID_PREFIX+ escapeId(pos >= peers.length-1 ? "NULL" : peers[pos+1]) +GRIDCELLID_POSTFIX+i;
-					gridCellNext = dataCell.find("div#"+gridCellNextId);
-					gridCellChildId = GRIDCELLID_PREFIX+ escapeId(objData.children && objData.children.length > 0 ? objData.children[0] : "NULL") +GRIDCELLID_POSTFIX+i;
-					gridCellChild = dataCell.find("div#"+gridCellChildId);
-					gridCellParent = dataCell.find("div#"+gridCellParentId+i);
+					gridCellPrevId = pos <=0 ? objData.parent : findLastClosedNode(this,peers[pos-1]);
+					gridCellPrev = dataCell.find("div["+NODE_DATA_ATTR+"='"+gridCellPrevId+"']");
+					gridCellNextId = pos >= peers.length-1 ? "NULL" : peers[pos+1];
+					gridCellNext = dataCell.find("div["+NODE_DATA_ATTR+"='"+gridCellNextId+"']");
+					gridCellChildId = objData.children && objData.children.length > 0 ? objData.children[0] : "NULL";
+					gridCellChild = dataCell.find("div["+NODE_DATA_ATTR+"='"+gridCellChildId+"']");
+					gridCellParent = dataCell.find("div["+NODE_DATA_ATTR+"='"+gridCellParentId+"']");
 
 
 					// if our parent is already drawn, then we put this in the right order under our parent
