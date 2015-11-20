@@ -473,10 +473,12 @@
 			return parent.refresh.apply(this,arguments);
 		};
 		this._hide_grid = function (node) {
-			var dataRow = this.dataRow, children = node && node.children_d ? node.children_d : [], i;
+			var dataRow = this.dataRow, children = node && node.children_d ? node.children_d : [], i, j, cols = this._gridSettings.columns;
 			// go through each column, remove all children with the correct ID name
 			for (i=0;i<children.length;i++) {
-				dataRow.find("td div."+GRIDCELLID_PREFIX+escapeId(children[i])+GRIDCELLID_POSTFIX).remove();
+				for (j=1; j<cols.length; j++) {
+					dataRow.find("td div#"+GRIDCELLID_PREFIX+escapeId(children[i])+GRIDCELLID_POSTFIX+j).remove();
+				}
 			}
 		};
 		this.holdingCells = {};
