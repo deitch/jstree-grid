@@ -29,7 +29,9 @@
     }
 }(function ($) {
 	var renderAWidth, renderATitle, getIndent, htmlstripre, findLastClosedNode, BLANKRE = /^\s*$/g,
-		IDREGEX = /[\\:&!^|()\[\]<>@*'+~#";,= \/${}%]/g,
+		IDREGEX = /[\\:&!^|()\[\]<>@*'+~#";,= \/${}%]/g, escapeId = function (id) {
+			return (id||"").replace(IDREGEX,'\\$&');
+		},
 	SPECIAL_TITLE = "_DATA_", LEVELINDENT = 24, bound = false, styled = false, GRIDCELLID_PREFIX = "jsgrid_",GRIDCELLID_POSTFIX = "_col";
 	
 	/*jslint regexp:true */
@@ -474,7 +476,7 @@
 			var dataRow = this.dataRow, children = node && node.children_d ? node.children_d : [], i;
 			// go through each column, remove all children with the correct ID name
 			for (i=0;i<children.length;i++) {
-				dataRow.find("td div."+GRIDCELLID_PREFIX+children[i]+GRIDCELLID_POSTFIX).remove();
+				dataRow.find("td div."+GRIDCELLID_PREFIX+escapeId(children[i])+GRIDCELLID_POSTFIX).remove();
 			}
 		};
 		this.holdingCells = {};
@@ -482,7 +484,7 @@
 			var ret = $(), children = obj.children||[], child, i;
 			// run through each child, render it, and then render its children recursively
 			for (i=0;i<children.length;i++) {
-				child = GRIDCELLID_PREFIX+children[i]+GRIDCELLID_POSTFIX+col;
+				child = GRIDCELLID_PREFIX+escapeId(children[i])+GRIDCELLID_POSTFIX+col;
 				if (hc[child] && obj.state.opened) {
 					ret = ret.add(hc[child]).add(this.getHoldingCells(this.get_node(children[i]),col,hc));
 					//delete hc[child];
@@ -617,8 +619,7 @@
 			
 			if (a.length === 1) {
 				closed = !objData.state.opened;
-				gridCellName = GRIDCELLID_PREFIX+lid+GRIDCELLID_POSTFIX;
-				gridCellName = gridCellName.replace(IDREGEX,'\\$&');
+				gridCellName = GRIDCELLID_PREFIX+escapeId(lid)+GRIDCELLID_POSTFIX;
 				gridCellParentId = objData.parent === "#" ? null : GRIDCELLID_PREFIX+objData.parent+GRIDCELLID_POSTFIX;
 				a.addClass(c);
 				//renderAWidth(a,_this);
@@ -719,11 +720,11 @@
 					//   3- Our previous peer is not drawn, we have a child that is drawn: install right before our first child
 					//   4- Our previous peer is not drawn, we have no child that is drawn, our next peer is drawn: install right before our next peer
 					//   5- Our previous peer is not drawn, we have no child that is drawn, our next peer is not drawn: install right after parent
-					gridCellPrevId = GRIDCELLID_PREFIX+ (pos <=0 ? objData.parent : findLastClosedNode(this,peers[pos-1])) +GRIDCELLID_POSTFIX+i;
+					gridCellPrevId = GRIDCELLID_PREFIX+ escapeId(pos <=0 ? objData.parent : findLastClosedNode(this,peers[pos-1])) +GRIDCELLID_POSTFIX+i;
 					gridCellPrev = dataCell.find("div#"+gridCellPrevId);
-					gridCellNextId = GRIDCELLID_PREFIX+ (pos >= peers.length-1 ? "NULL" : peers[pos+1]) +GRIDCELLID_POSTFIX+i;
+					gridCellNextId = GRIDCELLID_PREFIX+ escapeId(pos >= peers.length-1 ? "NULL" : peers[pos+1]) +GRIDCELLID_POSTFIX+i;
 					gridCellNext = dataCell.find("div#"+gridCellNextId);
-					gridCellChildId = GRIDCELLID_PREFIX+ (objData.children && objData.children.length > 0 ? objData.children[0] : "NULL") +GRIDCELLID_POSTFIX+i;
+					gridCellChildId = GRIDCELLID_PREFIX+ escapeId(objData.children && objData.children.length > 0 ? objData.children[0] : "NULL") +GRIDCELLID_POSTFIX+i;
 					gridCellChild = dataCell.find("div#"+gridCellChildId);
 					gridCellParent = dataCell.find("div#"+gridCellParentId+i);
 
