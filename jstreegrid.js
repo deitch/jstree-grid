@@ -32,7 +32,10 @@
 		IDREGEX = /[\\:&!^|()\[\]<>@*'+~#";,= \/${}%]/g, escapeId = function (id) {
 			return (id||"").replace(IDREGEX,'\\$&');
 		}, NODE_DATA_ATTR = "data-jstreegrid",
-	SPECIAL_TITLE = "_DATA_", LEVELINDENT = 24, bound = false, styled = false, GRIDCELLID_PREFIX = "jsgrid_",GRIDCELLID_POSTFIX = "_col";
+	SPECIAL_TITLE = "_DATA_", LEVELINDENT = 24, bound = false, styled = false, GRIDCELLID_PREFIX = "jsgrid_",GRIDCELLID_POSTFIX = "_col",
+		findDataCell = function (from,id) {
+			return from.find("div["+NODE_DATA_ATTR+"='"+id+"']");
+		};
 	
 	/*jslint regexp:true */
 	htmlstripre = /<\/?[^>]+>/gi;
@@ -212,7 +215,7 @@
 						removeNodes = removeNodes.concat(data.node.children_d);
 					}
 					for (i=0;i<removeNodes.length;i++) {
-						dataRow.find("div."+GRIDCELLID_PREFIX+removeNodes[i]+GRIDCELLID_POSTFIX).remove();
+						findDataCell(dataRow,removeNodes[i]).remove();
 					}
 				}
 			}, this))
@@ -248,30 +251,30 @@
 			.on("hover_node.jstree",$.proxy(function(node,selected,event){
 				var id = selected.node.id;
 				if (this._hover_node !== null && this._hover_node !== undefined) {
-					this.dataRow.find("."+GRIDCELLID_PREFIX+this._hover_node+GRIDCELLID_POSTFIX).removeClass("jstree-hovered");
+					findDataCell(this.dataRow,this._hover_node).removeClass("jstree-hovered");
 				}
 				this._hover_node = id;
-				this.dataRow.find("."+GRIDCELLID_PREFIX+id+GRIDCELLID_POSTFIX).addClass("jstree-hovered");
+				findDataCell(this.dataRow,id).addClass("jstree-hovered");
 			},this))
 			.on("dehover_node.jstree",$.proxy(function(node,selected,event){
 				var id = selected.node.id;
 				this._hover_node = null;
-				this.dataRow.find("."+GRIDCELLID_PREFIX+id+GRIDCELLID_POSTFIX).removeClass("jstree-hovered");
+				findDataCell(this.dataRow,id).removeClass("jstree-hovered");
 			},this))
 			.on("select_node.jstree",$.proxy(function(node,selected,event){
 				var id = selected.node.id;
-				this.dataRow.find("."+GRIDCELLID_PREFIX+id+GRIDCELLID_POSTFIX).addClass("jstree-clicked");
+				findDataCell(this.dataRow,id).addClass("jstree-clicked");
 				this.get_node(selected.node.id,true).children("div.jstree-grid-cell").addClass("jstree-clicked");
 			},this))
 			.on("deselect_node.jstree",$.proxy(function(node,selected,event){
 				var id = selected.node.id;
-				this.dataRow.find("."+GRIDCELLID_PREFIX+id+GRIDCELLID_POSTFIX).removeClass("jstree-clicked");
+				findDataCell(this.dataRow,id).removeClass("jstree-hovered");
 			},this))
 			.on("deselect_all.jstree",$.proxy(function(node,selected,event){
 				// get all of the ids that were unselected
 				var ids = selected.node || [], i;
 				for (i=0;i<ids.length;i++) {
-					this.dataRow.find("."+GRIDCELLID_PREFIX+ids[i]+GRIDCELLID_POSTFIX).removeClass("jstree-clicked");
+					findDataCell(this.dataRow,ids[i]).removeClass("jstree-clicked");
 				}
 			},this))
 			.on("search.jstree", $.proxy(function (e, data) {
@@ -285,7 +288,7 @@
 						data.nodes.add(data.nodes.parentsUntil(".jstree")).filter(".jstree-node").each(function (i,node) {
 							var id = node.id;
 							if (id) {
-								dataRow.find("."+GRIDCELLID_PREFIX+id+GRIDCELLID_POSTFIX).show();
+								findDataCell(dataRow,id).show();
 							}
 						});
 					}
@@ -326,7 +329,7 @@
 		this._clean_grid = function (target,id) {
 			var dataRow = this.dataRow;
 			if (target) {
-				dataRow.find("div."+GRIDCELLID_PREFIX+id+GRIDCELLID_POSTFIX).remove();
+				findDataCell(dataRow,id).remove();
 			} else {
 				// get all of the `div` children in all of the `td` in dataRow except for :first (that is the tree itself) and remove
 				dataRow.children("td:gt(0)").find("div").remove();
@@ -476,7 +479,7 @@
 			var dataRow = this.dataRow, children = node && node.children_d ? node.children_d : [], i;
 			// go through each column, remove all children with the correct ID name
 			for (i=0;i<children.length;i++) {
-				dataRow.find("td div["+NODE_DATA_ATTR+"='"+children[i]+"']").remove();
+				findDataCell(dataRow,children[i]).remove();
 			}
 		};
 		this.holdingCells = {};
@@ -581,7 +584,7 @@
 			classAdd = (tr?"themeroller":"regular"), img, objData = this.get_node(obj),
 			defaultWidth = gs.columnWidth, conf = gs.defaultConf, cellClickHandler = function (tree,node,val,col,t) {
 				return function(e) {
-					node = tree.find("#"+node.attr("id"));
+					//node = tree.find("#"+node.attr("id"));
 					node.children(".jstree-anchor").trigger("click.jstree",e);
 					tree.trigger("select_cell.jstree-grid", [{value: val,column: col.header,node: node,grid:$(this),sourceName: col.value}]);
 				};
@@ -722,12 +725,12 @@
 					//   4- Our previous peer is not drawn, we have no child that is drawn, our next peer is drawn: install right before our next peer
 					//   5- Our previous peer is not drawn, we have no child that is drawn, our next peer is not drawn: install right after parent
 					gridCellPrevId = pos <=0 ? objData.parent : findLastClosedNode(this,peers[pos-1]);
-					gridCellPrev = dataCell.find("div["+NODE_DATA_ATTR+"='"+gridCellPrevId+"']");
+					gridCellPrev = findDataCell(dataCell,gridCellPrevId);
 					gridCellNextId = pos >= peers.length-1 ? "NULL" : peers[pos+1];
-					gridCellNext = dataCell.find("div["+NODE_DATA_ATTR+"='"+gridCellNextId+"']");
+					gridCellNext = findDataCell(dataCell,gridCellNextId);
 					gridCellChildId = objData.children && objData.children.length > 0 ? objData.children[0] : "NULL";
-					gridCellChild = dataCell.find("div["+NODE_DATA_ATTR+"='"+gridCellChildId+"']");
-					gridCellParent = dataCell.find("div["+NODE_DATA_ATTR+"='"+gridCellParentId+"']");
+					gridCellChild = findDataCell(dataCell,gridCellChildId);
+					gridCellParent = findDataCell(dataCell,gridCellParentId);
 
 
 					// if our parent is already drawn, then we put this in the right order under our parent
