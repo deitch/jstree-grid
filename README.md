@@ -1,8 +1,6 @@
-jsTreeGrid
-==========
+# jsTreeGrid
 
-Overview
---------
+## Overview
 Plugin for the jstree www.jstree.com tree component that provides a grid extension to the tree.
 
 Allows any number of columns, and can use any property of the node to display data in the grid
@@ -19,8 +17,8 @@ core: {
 
 In any case, theme autoloading is strongly discouraged in jstree v3.
 
-Usage
------
+## Usage
+
 1. Include jquery (>= 1.4.2) and jstree in your page, as usual; use jstree v3 or later.
 2. Include jstreegrid.js v3 or later
 3. Include grid as a plugin
@@ -51,8 +49,8 @@ As of 3.0.0-beta5, jstree-grid supports AMD, thanks https://github.com/jochenber
 
 As of 3.1.0-beta1, jstree-grid uses a wrapping table, rather than inserted `div`s in the tree. This does a much better job with widths, alignment, editing, etc. etc. 
 
-Structure
----------
+### Structure
+
 The grid is built by adding divs `<div></div>` to each `<li>` entry for a row in the tree. Inside the `<div>` is a `<span></span>` with the data.
 Thus, an entry is likely to look like
 
@@ -62,15 +60,15 @@ Thus, an entry is likely to look like
 
 We use the div to control the entire height and width, and the span to get access to the actual data itself.
 
-Options
--------
+###Options
 
-### The options are as follows:
+#### The options are as follows:
 
-	* `width`: default width for a column for which no width is given. If no width is given, the default is `auto`.
+	* `width`: width for the entire jstree-grid. If no width is given, automatically fills the entire viewport (`width: 100%;`)
+	* `columnWidth`: default width for a column for which no width is given. If no width is given, the default is `auto`.
 	* `columns`: an array of columns to create, on order. Each entry is an object with the following parameters:
 		* `tree`: boolean, whether the jstree should be placed in this column. Only the first `true` is accepted. If no column is set to `tree:true`, then the first column is used.
-		* `width`: width of the column in pixels. If no width is given, the default is `auto` **except for the last column**. In the last column, if not width is given, it is treated as 'auto' and fills the entire rest of the grid to the right.
+		* `width`: width of the column in pixels. If no width is given, the default is `auto` **except for the last column**. In the last column, if no width is given, it is treated as 'auto' and fills the entire rest of the grid to the right.
 		* `header`: string to use as a header for the column.
 		* `headerClass`: a CSS class to add to the header cell in this column
 		* `columnClass`: a CSS class to add to the header cell and the column cell
@@ -227,13 +225,12 @@ node.data.value = 25;
 node.trigger("change_node.jstree");
 ````
 
-HTML
-----
+### HTML
+
 Note that the data in each cell is treated as HTML content for the span, rather than raw text. You can use HTML in any cell, except for the 
 base tree node cell, which follows jstree rules.
 
-Heights
--------
+### Heights
 The height of the entire div in which the tree is rendered is given by you. If you wish the tree to have a max-height of 40px, you need to set it as part of the standard HTML/CSS. 
 
 ````HTML
@@ -248,12 +245,10 @@ div#mytree {
 In the above example, the tree itself, but *not* the headers, will be limited to 40px, not by jstree or jstreegrid, but by straight CSS. However, jstreegrid will structure the tree and header in such a way that if the total tree is greater than 40px in height, then the tree will have a vertical scrollbar, but the header will remain fixed.
 
 
-Themeroller
------------
+### Themeroller
 The themeroller plugin for jstree is supported as of tag 0.9.1 (29 November 2011). Thanks to ChrisRaven for the support.
 
-Events
-------
+### Events
 * `loaded.jstree`: When the tree is done loading, as usual, it fires a "loaded.jstree" event on the div to which you added jstree. jsTreeGrid uses this event to start its own load process. 
 * `loaded_grid.jstree`: When jsTreeGrid is done, it fires a "loaded_grid.jstree" event on the same div. If you need to run some 
 code after the jsTreeGrid is done loading, just listen for that event. An example is in the treegrid.HTML sample page.
@@ -291,8 +286,96 @@ where:
 
 
 
-V3 Changes
-----------
+### Width
+
+The width of the table and its columns can change depending on the selected options. As described above, there are three options that affect the width:
+
+* `width`: in the root of the config, determines the width **for the entire jstree-grid**. If you set this `width` to `200`, the entire jstree-grid will occupy a fixed `200px` of screen width. The default is `100%`, i.e. fill the enclosing element or the viewport.
+* `columnWidth`: in the root of the config, determines the default width of a column for which a width is not provided.
+* `width`: in a particular column, determines the width of that individual column.
+
+A number of combinations and permutations is possible using the above.
+
+#### fixed `width` defined for entire grid
+If a fixed `width` is not defined for the entire grid, the behaviour depends on what happens in each column. In all cases, the entire jstree-grid will be the given fixed width.
+
+* If all columns have a fixed width defined, the columns are given those widths. 
+  * If the sum of all columns is *greater* than the width defined on the entire grid, the second column onwards will be inside a scrolling element.
+  * If the sum of all columns is *less* than the width defined on the entire grid, the gap will be filled by whitespace after the last column.
+* If one or more columns is defined as `auto`, these will automatically be resized to fill to the entire grid.
+* If one or more columns does not have a `width` defined, it will be treated as the root value of `columnWidth`, else as `auto`
+
+Here are examples:
+
+````JavaScript
+// all columns and grid defined widths, will have blank space after 3rd column
+{
+  "width": "500px",
+  "columns": [
+    {"width": "100px"},
+    {"width": "100px"},
+    {"width": "150px"}
+  ]
+}
+
+// all columns and grid defined widths, will scroll 2nd through last column
+{
+  "width": "500px",
+  "columns": [
+    {"width": "200px"},
+    {"width": "200px"},
+    {"width": "400px"}
+  ]
+}
+
+// grid defined width, some columns defined, some "auto", will automatically fill grid, no scrolling or whitespace
+{
+  "width": "500px",
+  "columns": [
+    {"width": "200px"},
+    {"width": "200px"},
+    {"width": "auto"}
+  ]
+}
+
+// grid defined width, some columns defined, some not, columnWidth fixed, will scroll
+// since 200 + 200 + 120 = 520 > 500
+//       col0 + col1 + col2(from default) = 520 > grid width
+{
+  "width": "500px",
+  "columnWidth": "120px",
+  "columns": [
+    {"width": "200px"},
+    {"width": "200px"},
+    {}
+  ]
+}
+
+// grid defined width, some columns defined, some not, columnWidth auto or not defined, will fill
+// since col2 inherits columnWidth = "auto", will default to filling at 100px
+{
+  "width": "500px",
+  "columns": [
+    {"width": "200px"},
+    {"width": "200px"},
+    {}
+  ]
+}
+````
+
+#### fixed `width` not defined for entire grid
+If a fixed `width` is not defined for the entire grid, then the grid fills the entire containing element or viewport, i.e. it is treated as `width:100%;`. In that case, the widths of the columns are as follows:
+
+* If all columns have a fixed width defined, the columns are given those widths. 
+  * If the sum of all columns is *greater* than the calculated width of the entire grid, the second column onwards will be inside a scrolling element.
+  * If the sum of all columns is *less* than the calculated width of the entire grid, the gap will be filled by whitespace after the last column.
+* If one or more columns is defined as `auto`, these will automatically be resized to fill to the entire grid.
+* If one or more columns does not have a `width` defined, it will be treated as the root value of `columnWidth`, else as `auto`
+
+In other words, the behaviour of columns does *not* change based on the `width` definition of the entire grid. It only affects the defined or calculated width of the grid, which in turn affects if the columns scroll (columns > grid), have whitespace (columns < grid), or fill (one or more columns is `auto`)
+
+
+### V3 Changes
 jsTree v3 has created significant non-backwards-compatible changes to jsTree. To make jsTreeGrid compatible with jsTree3, jsTreeGrid v3 has changed as well, and is no longer backwards compatible. However, the changes required to support v3 are minimal.
 
 This section lists significant changes between pre-v3 and v3.
