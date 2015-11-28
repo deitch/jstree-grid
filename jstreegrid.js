@@ -198,6 +198,7 @@
 					$("<div></div>").addClass("jstree-grid-column jstree-grid-column-"+i+" jstree-grid-column-root-"+this.rootid).appendTo(this.midWrapper);
 				}
 				this.midWrapper.children("div:eq("+treecol+")").append(container);
+				container.addClass("jstree-grid-cell");
 				
 				this._initialized = true;
 			}
@@ -431,7 +432,6 @@
 								if (!oldPrevColWidth) {oldPrevColWidth = toResize.innerWidth();}
 								
 								// make sure that diff cannot be beyond the left/right limits
-								//diff = diff < 0 ? Math.max(diff,-oldPrevHeaderInner) : Math.min(diff,oldNextHeaderInner);
 								diff = diff < 0 ? Math.max(diff,-oldPrevHeaderInner) : diff;
 								newPrevColWidth = (oldPrevColWidth+diff)+"px";
 								
@@ -446,12 +446,39 @@
 				this.gridWrapper.on("selectstart", ".jstree-grid-resizable-separator", function () { 
 					return false; 
 				}).on("mousedown", ".jstree-grid-resizable-separator", function (e) {
-						isClickedSep = true;
-						oldMouseX = e.pageX;
-						toResize = $(this).closest("div.jstree-grid-column");
-						// the max rightmost position we will allow is the right-most of the wrapper minus a buffer (10)
-						return false;
+					isClickedSep = true;
+					oldMouseX = e.pageX;
+					toResize = $(this).closest("div.jstree-grid-column");
+					// the max rightmost position we will allow is the right-most of the wrapper minus a buffer (10)
+					return false;
+				})
+				.on("dblclick", ".jstree-grid-resizable-separator", function (e) {
+					var clickedSep = $(this), col = clickedSep.closest("div.jstree-grid-column"),
+					oldPrevColWidth = parseFloat(col.css("width")), newWidth = 0, diff,
+					oldPrevHeaderInner = col.width(), newPrevColWidth;
+					
+			
+					//find largest width
+					col.find(".jstree-grid-cell").each(function() {
+						var item = $(this), width;
+						item.css("position", "absolute");
+						item.css("width", "auto");
+						width = item.outerWidth();
+						item.css("position", "relative");
+					
+						if (width>newWidth) {
+							newWidth = width;
+						}
 					});
+				
+					diff = newWidth-oldPrevColWidth;
+				
+					// make sure that diff cannot be beyond the left limits
+					diff = diff < 0 ? Math.max(diff,-oldPrevHeaderInner) : diff;
+					newPrevColWidth = (oldPrevColWidth+diff)+"px";
+				
+					col.width(newPrevColWidth);
+				});
 			}
 		};
 		/*
