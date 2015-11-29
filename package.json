@@ -16,6 +16,10 @@
 		{
 			"name": "Brabus",
 			"url": "https://github.com/side-by-side"
+		},
+		{
+			"name": "Adam Jimenez",
+			"url": "https://github.com/adamjimenez"
 		}
 	],
 	"dependencies": {
