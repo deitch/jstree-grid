@@ -33,9 +33,9 @@
 						grid: {
 							width: 400,
 							columns: [
-								{width: 110, header: "Nodes",title:"_DATA_"},
+								{width: 150, header: "Nodes",title:"_DATA_"},
 								{width: 100, cellClass: "col1", value: "price", header: "<i>Price</i>", title:"price", valueClass:"spanclass"},
-								{width: 90, cellClass: "col2", value: "size", header: "Qty", title:"size",valueClass:"spanclass"}
+								{width: 75, cellClass: "col2", value: "size", header: "Qty", title:"size",valueClass:"spanclass"}
 							],
 							resizable:true,
 							contextmenu:true
@@ -224,6 +224,39 @@
 							resizable:true,
 							contextmenu:true
 						}
+					},
+					{
+						htmlheader: 'Fixed Width, Columns Percentages',
+						plugins: ["themes","json","grid"],
+						core: {
+							data: data
+						},
+						grid: {
+							width: 400,
+							columns: [
+								{width: '35%', header: "Nodes",title:"_DATA_"},
+								{width: '45%', cellClass: "col1", value: "price", header: "<i>Price</i>", title:"price", valueClass:"spanclass"},
+								{width: '20%', cellClass: "col2", value: "size", header: "Qty", title:"size",valueClass:"spanclass"}
+							],
+							resizable:true,
+							contextmenu:true
+						}
+					},
+					{
+						htmlheader: 'Undefined Width, Columns Percentages',
+						plugins: ["themes","json","grid"],
+						core: {
+							data: data
+						},
+						grid: {
+							columns: [
+								{width: '35%', header: "Nodes",title:"_DATA_"},
+								{width: '45%', cellClass: "col1", value: "price", header: "<i>Price</i>", title:"price", valueClass:"spanclass"},
+								{width: '20%', cellClass: "col2", value: "size", header: "Qty", title:"size",valueClass:"spanclass"}
+							],
+							resizable:true,
+							contextmenu:true
+						}
 					}
 				];
 				
@@ -235,7 +268,7 @@
 						var wrapper = $(this).closest("div.jstree-grid-wrapper"),
 						midw = wrapper.children("div.jstree-grid-midwrapper"),
 						section = wrapper.closest("div.treesection"),
-						actuals = "Actuals "+wrapper.outerWidth()+": "+[midw.children("div:eq(0)").outerWidth(),midw.find("div:eq(1)").outerWidth(),midw.find("div:eq(2)").outerWidth()].join(' ');
+						actuals = "Actuals "+wrapper.outerWidth()+": "+[midw.find("div.jstree-grid-column:eq(0)").outerWidth(),midw.find("div.jstree-grid-column:eq(1)").outerWidth(),midw.find("div.jstree-grid-column:eq(2)").outerWidth()].join(' ');
 						
 						section.find(".actuals").text(actuals);
 					});

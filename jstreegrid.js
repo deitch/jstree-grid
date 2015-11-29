@@ -174,13 +174,10 @@
 						'.jstree-grid-resizable-separator {cursor: col-resize; width: 2px;}',
 						'.jstree-grid-separator-regular {border-color: #d0d0d0; border-style: solid;}',
 						'.jstree-grid-cell-themeroller {border: none !important; background: transparent !important;}',
-						'.jstree-grid-table {table-layout: fixed;}',
 						'.jstree-grid-wrapper {width: 100%; overflow: scroll;}',
-						'.jstree-grid-midwrapper {width: 10000px; overflow: visible;}',
-						'.jstree-grid-midwrapper:after {display: table;clear: both;}',
+						'.jstree-grid-midwrapper {display: table-row; overflow: visible;}',
 						'.jstree-grid-width-auto {width:auto;display:block;}',
-						'.jstree-grid-column {float: left; overflow: hidden;}',
-						'.jstree-grid-column-last {clear: both;}',
+						'.jstree-grid-column {display: table-cell; overflow: hidden;}',
 						'.jstree-grid-col-0 {width: 100%;}'
 					];
 
@@ -363,21 +360,22 @@
 				val = cols[i].header || "";
 				if (val) {hasHeaders = true;}
 				width = cols[i].width || defaultWidth;
+
+				// we only deal with borders if width is not auto and not percentages
 				borPadWidth = tr ? 1+6 : 2+8; // account for the borders and padding
-				if (width !== 'auto') {
+				if (width !== 'auto' && typeof(width) !== "string") {
 					width -= borPadWidth;
 				}
 				margin = i === 0 ? 3 : 0;
-				//col.css({width:width});
 				col = this.midWrapper.children("div.jstree-grid-column-"+i);
 				last = $("<div></div>").css(conf).css({"margin-left": margin}).addClass("jstree-grid-div-"+this.uniq+"-"+i+" "+(tr?"ui-widget-header ":"")+" jstree-grid-header jstree-grid-header-cell jstree-grid-header-"+classAdd+" "+cl+" "+ccl).html(val);
 				last.addClass((tr?"ui-widget-header ":"")+"jstree-grid-header jstree-grid-header-"+classAdd);
 				last.prependTo(col);
-				
-				//last = $("<th></th>").css(conf).css({"margin-left": margin}).addClass((tr?"ui-widget-header ":"")+"jstree-grid-header jstree-grid-header-cell jstree-grid-header-"+classAdd+" "+cl+" "+ccl).append(val).appendTo(header);
 				totalWidth += last.outerWidth();
 				puller = $("<div class='jstree-grid-separator jstree-grid-separator-"+classAdd+(tr ? " ui-widget-header" : "")+(resizable? " jstree-grid-resizable-separator":"")+"'>&nbsp;</div>").appendTo(last);
-				col.width(totalWidth);
+				col.width(width);
+				col.css("min-width",width);
+				col.css("max-width",width);
 			}
 
 			last.addClass((tr?"ui-widget-header ":"")+"jstree-grid-header jstree-grid-header-last jstree-grid-header-"+classAdd);
@@ -438,6 +436,8 @@
 								// only do this if we are not shrinking past 0 on left - and limit it to that amount
 								if (diff > 0 || oldPrevHeaderInner > 0) {
 									toResize.width(newPrevColWidth);
+									toResize.css("min-width",newPrevColWidth);
+									toResize.css("max-width",newPrevColWidth);
 									oldMouseX = newMouseX;
 								}
 							}
@@ -478,6 +478,8 @@
 					newPrevColWidth = (oldPrevColWidth+diff)+"px";
 				
 					col.width(newPrevColWidth);
+					col.css("min-width",newPrevColWidth);
+					col.css("max-width",newPrevColWidth);
 				});
 			}
 		};
