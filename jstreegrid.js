@@ -8,8 +8,8 @@
  * 
  * Works only with jstree version >= 3.0.0
  *
- * $Date: 2015-06-016 $
- * $Revision:  3.2.3 $
+ * $Date: 2015-11-29 $
+ * $Revision:  3.4.2 $
  */
 
 /*jslint nomen:true */
