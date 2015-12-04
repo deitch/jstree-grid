@@ -33,6 +33,7 @@
 			return (id||"").replace(IDREGEX,'\\$&');
 		}, NODE_DATA_ATTR = "data-jstreegrid",
 	SPECIAL_TITLE = "_DATA_", LEVELINDENT = 24, styled = false, GRIDCELLID_PREFIX = "jsgrid_",GRIDCELLID_POSTFIX = "_col",
+		MINCOLWIDTH = 10,
 		findDataCell = function (from,id) {
 			return from.find("div["+NODE_DATA_ATTR+"='"+id+"']");
 		},
@@ -167,10 +168,10 @@
 					styles = [
 						'.jstree-grid-cell {vertical-align: top; overflow:hidden;margin-left:0;position:relative;width: 100%;padding-left:7px;white-space: nowrap;}',
 						'.jstree-grid-cell span {margin-right:0px;margin-right:0px;*display:inline;*+display:inline;white-space: nowrap;}',
-						'.jstree-grid-separator {position:relative; height:24px; float:right;margin-left: -2px; border-width: 0 2px 0 0; *display:inline; *+display:inline; margin-right:0px;width:0px;}',
-	          '.jstree-grid-header-cell {overflow: hidden; white-space: nowrap;padding: 1px 3px 2px 5px;}',
+						'.jstree-grid-separator {position:absolute; top:0; right:0; height:24px; margin-left: -2px; border-width: 0 2px 0 0; *display:inline; *+display:inline; margin-right:0px;width:0px;}',
+            '.jstree-grid-header-cell {overflow: hidden; white-space: nowrap;padding: 1px 3px 2px 5px;}',
 						'.jstree-grid-header-themeroller {border: 0; padding: 1px 3px;}',
-						'.jstree-grid-header-regular {background-color: #EBF3FD;}',
+						'.jstree-grid-header-regular {position:relative; background-color: #EBF3FD;}',
 						'.jstree-grid-resizable-separator {cursor: col-resize; width: 2px;}',
 						'.jstree-grid-separator-regular {border-color: #d0d0d0; border-style: solid;}',
 						'.jstree-grid-cell-themeroller {border: none !important; background: transparent !important;}',
@@ -431,13 +432,13 @@
 								
 								// make sure that diff cannot be beyond the left/right limits
 								diff = diff < 0 ? Math.max(diff,-oldPrevHeaderInner) : diff;
-								newPrevColWidth = (oldPrevColWidth+diff)+"px";
+								newPrevColWidth = oldPrevColWidth+diff;
 								
 								// only do this if we are not shrinking past 0 on left - and limit it to that amount
-								if (diff > 0 || oldPrevHeaderInner > 0) {
-									toResize.width(newPrevColWidth);
-									toResize.css("min-width",newPrevColWidth);
-									toResize.css("max-width",newPrevColWidth);
+								if ((diff > 0 || oldPrevHeaderInner > 0) && newPrevColWidth > MINCOLWIDTH) {
+									toResize.width(newPrevColWidth+"px");
+									toResize.css("min-width",newPrevColWidth+"px");
+									toResize.css("max-width",newPrevColWidth+"px");
 									oldMouseX = newMouseX;
 								}
 							}
