@@ -718,7 +718,7 @@
 						width = tmpWidth || (width - paddingleft);
 					}
 					
-					last = dataCell.children("div#"+gridCellName+i);
+					last = findDataCell(dataCell, lid);
 					if (!last || last.length < 1) {
 						last = $("<div></div>");
 						$("<span></span>").appendTo(last);
