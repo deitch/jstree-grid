@@ -288,7 +288,7 @@
 				if(this._data.search.som) {
 					if(data.nodes.length) {
 						// hide all of the grid cells
-						grid.find('div.jstree-grid-cell').hide();
+						grid.find('div.jstree-grid-cell:not(:first)').hide();
 						// show only those that match
 						data.nodes.add(data.nodes.parentsUntil(".jstree")).filter(".jstree-node").each(function (i,node) {
 							var id = node.id;
@@ -337,7 +337,7 @@
 				findDataCell(grid,id).remove();
 			} else {
 				// get all of the `div` children in all of the `td` in dataRow except for :first (that is the tree itself) and remove
-				grid.find("div.jstree-grid-cell").remove();
+				grid.find("div.jstree-grid-cell:not(:first)").remove();
 			}
 		};
 		// prepare the headers
