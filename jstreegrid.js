@@ -500,6 +500,34 @@
 			this._clean_grid();
 			return parent.refresh.apply(this,arguments);
 		};
+		/*
+		 * Override set_id to update cell attributes
+		 */
+		this.set_id = function (obj, id) {
+			var old;
+			if(obj) {
+				old = obj.id;
+			}
+			var result = parent.set_id.apply(this,arguments);
+			if(result) {
+				if (old !== undefined) {
+					var grid = this.gridWrapper, oldNodes = [old], i;
+					// get children
+					if (obj && obj.children_d) {
+						oldNodes = oldNodes.concat(obj.children_d);
+					}
+					// update id in children
+					for (i=0;i<oldNodes.length;i++) {
+						findDataCell(grid,oldNodes[i])
+						.attr(NODE_DATA_ATTR, obj.id)
+						.attr('id', GRIDCELLID_PREFIX+obj.id+GRIDCELLID_POSTFIX+(i+1))
+						.removeClass(GRIDCELLID_PREFIX+old+GRIDCELLID_POSTFIX)
+						.addClass(GRIDCELLID_PREFIX+obj.id+GRIDCELLID_POSTFIX);
+					}
+				}
+			}
+			return result;
+		};
 		this._hide_grid = function (node) {
 			var children = node && node.children_d ? node.children_d : [], i;
 			// go through each column, remove all children with the correct ID name
