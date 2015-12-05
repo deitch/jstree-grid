@@ -274,7 +274,7 @@
 			},this))
 			.on("deselect_node.jstree",$.proxy(function(node,selected,event){
 				var id = selected.node.id;
-				findDataCell(this.gridWrapper,id).removeClass("jstree-hovered");
+				findDataCell(this.gridWrapper,id).removeClass("jstree-clicked");
 			},this))
 			.on("deselect_all.jstree",$.proxy(function(node,selected,event){
 				// get all of the ids that were unselected
