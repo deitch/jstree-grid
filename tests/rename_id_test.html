@@ -1,0 +1,52 @@
+<html>
+	<head>
+		<title>jstree treegrid 3.2.0 plugin demo</title>
+		<link rel="stylesheet" href="../lib/themes-3/default/style.min.css" />
+		<script type='text/javascript' src='http://code.jquery.com/jquery-2.1.0.js'></script>
+		<script type="text/javascript" src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
+		<link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css">
+		<script type="text/javascript" src="../lib/jstree-3.2.1.js"></script>
+		<script type="text/javascript" src="../jstreegrid.js"></script>
+		<script type="text/javascript">
+			$(document).ready(function(){
+				var data = [{ "id" : "Root", "parent" : "#", "text" : "Root", "state": {"opened":true}},
+				{ "id" : "child1", "parent" : "Root", "text" : "child1", "data" : { "open" : "2/5/2015 2:18:00 PM", "close" : "2/6/2015 10:16:00 AM", "status" : "Closed"}},
+				{ "id" : "child2", "parent" : "Root", "text" : "child2", "data" : { "open" : "2/5/2015 2:18:00 PM", "close" : "2/6/2015 10:16:00 AM", "status" : "Closed"}},
+				{ "id" : "child3", "parent" : "Root", "text" : "child3", "data" : { "open" : "2/5/2015 2:18:00 PM", "close" : "2/6/2015 10:16:00 AM", "status" : "Closed"}},
+				{ "id" : "Root2", "parent" : "#", "text" : "child1", "data" : { "open" : "2/5/2015 2:18:00 PM", "close" : "2/6/2015 10:16:00 AM", "status" : "Closed"}},
+				{ "id" : "Root3", "parent" : "#", "text" : "child2", "data" : { "open" : "2/5/2015 2:18:00 PM", "close" : "2/6/2015 10:16:00 AM", "status" : "Closed"}}];
+
+
+				$('#jstree').jstree({
+					"core" : { "data" : data, "check_callback" : true },
+					"plugins" : [ "checkbox", "search", "grid" ],
+					"search" : { "show_only_matches" : false},
+					"grid" : { columns: [
+									{width: 190, header: "name"},
+									{width: 140, header: "open", value: "open"},
+									{width: 140, header: "close", value: "close"},
+									{width: 130, header: "status", value: "status"}
+							    ]
+							 }
+				});
+				$("#btn").click(function () {
+					var tree = $("#jstree").jstree(true), node = tree.get_node("child1");
+					tree.set_id(node,"abc");
+					tree.rename_node(node,"abc");
+				});
+    
+			});
+		</script>
+	</head>
+	<body>
+		<h2>Rename Issue</h2>
+		<p>To reproduce the issue:</p>
+		<ol>
+			<li>See the tree below</li>
+			<li>Click the button</li>
+			<li>See that the node is renamed (and given a new id) of "abc"</li>
+			<li>See that a row of the grid is duplicated</li>
+		</ol>
+		<button id="btn">Click to rename</button>
+<div id="jstree"></div>	</body>
+</html>
