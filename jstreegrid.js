@@ -347,7 +347,7 @@
 			cl, ccl, val, margin, last, tr = gs.isThemeroller, classAdd = (tr?"themeroller":"regular"), puller,
 			hasHeaders = false, gridparent = this.gridparent,
 			conf = gs.defaultConf,
-			colNum = 0, borPadWidth = 0, totalWidth = 0;
+			borPadWidth = 0, totalWidth = 0;
 			// save the original parent so we can reparent on destroy
 			this.parent = gridparent;
 			
@@ -397,23 +397,19 @@
 			if (!this.bound && resizable) {
 				this.bound = true;
 				$(document).mouseup(function () {
-					var  i, ref, cols, widths, headers, w, currentTree;
+					var ref, cols, width, headers, currentTree, colNum;
 					if (isClickedSep) {
+						colNum = toResize.prevAll(".jstree-grid-column").length;
 						currentTree = toResize.closest(".jstree-grid-wrapper").find(".jstree");
 						ref = $.jstree.reference(currentTree);
 						cols = ref.settings.grid.columns;
 						headers = toResize.parent().children("div.jstree-grid-column");
-						widths = [];
 						if (isNaN(colNum) || colNum < 0) { ref._gridSettings.treeWidthDiff = currentTree.find("ins:eq(0)").width() + currentTree.find("a:eq(0)").width() - ref._gridSettings.columns[0].width; }
+						width = ref._gridSettings.columns[colNum].width = parseFloat(toResize.css("width"));
 						isClickedSep = false;
 						toResize = null;
-						for (i=0;i<cols.length;i++) {
-							w = parseFloat(headers[i].style.width);
-							widths[i] = {w: w, r: i===colNum };
-							ref._gridSettings.columns[i].width = w;
-						}
 						
-						currentTree.trigger("resize_column.jstree-grid", widths);
+						currentTree.trigger("resize_column.jstree-grid", [colNum,width]);
 					}
 				}).mousemove(function (e) {
 						if (isClickedSep) {
@@ -456,6 +452,7 @@
 				.on("dblclick", ".jstree-grid-resizable-separator", function (e) {
 					var clickedSep = $(this), col = clickedSep.closest("div.jstree-grid-column"),
 					oldPrevColWidth = parseFloat(col.css("width")), newWidth = 0, diff,
+					colNum = col.prevAll(".jstree-grid-column").length,
 					oldPrevHeaderInner = col.width(), newPrevColWidth;
 					
 			
@@ -481,6 +478,8 @@
 					col.width(newPrevColWidth);
 					col.css("min-width",newPrevColWidth);
 					col.css("max-width",newPrevColWidth);
+
+					$(this).closest(".jstree-grid-wrapper").find(".jstree").trigger("resize_column.jstree-grid",[colNum,newPrevColWidth]);
 				});
 			}
 		};

@@ -254,6 +254,7 @@ The themeroller plugin for jstree is supported as of tag 0.9.1 (29 November 2011
 code after the jsTreeGrid is done loading, just listen for that event. An example is in the treegrid.HTML sample page.
 * `select_cell.jstree-grid`: If you click in any individual cell, the jstreegrid will fire a "select_cell.jstree_grid" event on the jstree. 
 * `update_cell.jstree-grid`: If you right-click a cell and edit it, when the edit is complete, and if the value has changed, the jstreegrid will fire a `update_cell.jstree-grid` event on the jstree.
+* `resize_column.jstree-grid`: When a column is resized, whether from dragging the resizer or double-clicking it, this event will be fired. 
 
 The signature for the select_cell.jstree-grid handler is:
 
@@ -283,6 +284,18 @@ where:
 * col: name of the column, e.g. "price"
 * value: new value for the cell
 * old: the original value before it was changed
+
+
+The signature for the resize_column.jstree-grid handler is:
+
+````JavaScript
+function(event,columnNumber,newWidth)
+````
+
+where:
+
+* columnNumber: the number of the column being resized, with the first column being 0
+* newWidth: the new width of the column in pixels
 
 
 
