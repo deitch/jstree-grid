@@ -137,6 +137,7 @@
 					isThemeroller : !!this._data.themeroller,
 					treeWidthDiff : 0,
 					resizable : s.resizable,
+					stateful: s.stateful,
 					indent: 0
 				}, cols = gs.columns, treecol = 0;
 				// find which column our tree shuld go in
@@ -322,6 +323,13 @@
 						data.rslt.obj.children("a").nextAll("div").removeClass("ui-state-hover");
 					},this));
 			}
+			
+			if (this._gridSettings.stateful) {
+				this.element
+					.on("resize_column.jstree-grid",$.proxy(function(e,col,width){
+						localStorage['jstree-root-'+this.rootid+'-column-'+col] = width;
+					},this));
+			}
 		};
 		// tear down the tree entirely
 		this.teardown = function() {
@@ -345,7 +353,7 @@
 		this._prepare_headers = function() {
 			var header, i, col, gs = this._gridSettings,cols = gs.columns || [], width, defaultWidth = gs.columnWidth, resizable = gs.resizable || false,
 			cl, ccl, val, margin, last, tr = gs.isThemeroller, classAdd = (tr?"themeroller":"regular"), puller,
-			hasHeaders = false, gridparent = this.gridparent,
+			hasHeaders = false, gridparent = this.gridparent, rootid = this.rootid,
 			conf = gs.defaultConf,
 			borPadWidth = 0, totalWidth = 0;
 			// save the original parent so we can reparent on destroy
@@ -360,7 +368,10 @@
 				ccl = cols[i].columnClass || "";
 				val = cols[i].header || "";
 				if (val) {hasHeaders = true;}
-				width = cols[i].width || defaultWidth;
+				if(gs.stateful && localStorage['jstree-root-'+rootid+'-column-'+i])
+					width = localStorage['jstree-root-'+rootid+'-column-'+i];
+				else
+					width = cols[i].width || defaultWidth;
 
 				// we only deal with borders if width is not auto and not percentages
 				borPadWidth = tr ? 1+6 : 2+8; // account for the borders and padding
