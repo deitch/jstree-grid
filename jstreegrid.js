@@ -240,7 +240,7 @@
 			.on("ready.jstree",$.proxy(function (e,data) {
 				// find the line-height of the first known node
 				var anchorHeight = this.element.find("li a:first").outerHeight();
-				$('<style type="text/css">div.jstree-grid-cell-root-'+this.rootid+' {line-height: '+anchorHeight+'px}</style>').appendTo("head");
+				$('<style type="text/css">div.jstree-grid-cell-root-'+this.rootid+' {line-height: '+anchorHeight+'px; height: '+anchorHeight+'px;}</style>').appendTo("head");
 
 				// add container classes to the wrapper
 				this.gridWrapper.addClass(this.element.attr("class"));
