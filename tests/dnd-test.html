@@ -1,0 +1,184 @@
+<html>
+	<head>
+		<title>jstree treegrid 3.2.0 plugin demo</title>
+		<link rel="stylesheet" href="../lib/themes-3/default/style.min.css" />
+		<script type='text/javascript' src='http://code.jquery.com/jquery-2.1.0.js'></script>
+		<script type="text/javascript" src="../lib/jstree-3.0.8.js"></script>
+		<script type="text/javascript" src="../jstreegrid.js"></script>
+		<style type="text/css">
+			@import url('http://getbootstrap.com/dist/css/bootstrap.css');
+		</style>
+		<script type="text/javascript">
+		$(document).ready(function(){
+			$("#js1").jstree({
+			  plugins: ["grid", "dnd", "types", "checkbox", "wholerow", "contextmenu"],
+			  "checkbox": {
+			    "three_state": false,
+			    "cascade": "down",
+			    "tie_selection": false,
+			    "whole_node": false
+			  },
+			  'grid': {
+			    'columns': [{
+			      'header': 'Column 1'
+			    }, {
+			      'header': 'Column 2',
+			      'value': 'col2'
+			    }, {
+			      'header': 'Column 3',
+			      'value': 'col3'
+			    }],
+			    'resizable': true,
+			    'contextmenu': true
+			  },
+			  'core': {
+			    "check_callback": true,
+			    'data': [{
+			      "text": "This 1 column is ok.",
+			      "state": {
+			        "selected": true,
+			        "opened": true,
+			        "checked": false
+			      },
+			      "parent": "#",
+			      "id": "0011100001CaxJLAA2",
+			      "data": {
+			        "col2": "I will be lost 1!",
+			        "col3": "Me too 1!"
+			      }
+			    }, {
+			      "text": "This 1 column is ok too!",
+			      "state": {
+			        "selected": true,
+			        "opened": true,
+			        "checked": true
+			      },
+			      "parent": "0011100001CaxJLAA2",
+			      "id": "0011600001lNOsfAA1",
+			      "data": {
+			        "col2": "I will be lost again 1!",
+			        "col3": "Me too! No 1!!"
+			      }
+			    }]
+			  },
+			  "types": {
+			    "#": {
+			      "max_children": 1,
+			      "valid_children": ["default", "hidden", "root", "visible"]
+			    },
+			    "default": {
+			      "valid_children": ["default", "hidden", "root", "visible"]
+			    }
+			  },
+			  'contextmenu': {
+			    'items': {}
+			  }
+			});
+			$("#js2").jstree({
+			  plugins: ["grid", "dnd", "types", "checkbox", "wholerow", "contextmenu"],
+			  "checkbox": {
+			    //"three_state" : false,
+			    "cascade": "up",
+			    "tie_selection": false,
+			    "whole_node": false
+			  },
+			  'grid': {
+			    'columns': [{
+			      'header': 'Column 1'
+			    }, {
+			      'header': 'Column 2',
+			      'value': 'col2'
+			    }, {
+			      'header': 'Column 3',
+			      'value': 'col3'
+			    }],
+			    'resizable': true,
+			    'contextmenu': true
+			  },
+			  'core': {
+			    "check_callback": true,
+			    'data': [{
+			      "text": "This column is ok.",
+			      "state": {
+			        "selected": true,
+			        "opened": true,
+			        "checked": false
+			      },
+			      "parent": "#",
+			      "id": "0011100001CaxJLAAZ",
+			      "data": {
+			        "col2": "I will be lost!",
+			        "col3": "Me too!"
+			      }
+			    }, {
+			      "text": "This column is ok too!",
+			      "state": {
+			        "selected": true,
+			        "opened": true,
+			        "checked": true
+			      },
+			      "parent": "0011100001CaxJLAAZ",
+			      "id": "0011600001lNOsfAAG",
+			      "data": {
+			        "col2": "I will be lost again!",
+			        "col3": "Me too! No!!"
+			      }
+			    }]
+			  },
+			  'dnd': {
+			    "copy": false
+			  },
+			  "types": {
+			    "#": {
+			      "max_children": 1
+			    },
+			    "default": {
+			      "valid_children": ["default", "hidden", "root", "visible"]
+			    }
+			  },
+			  'contextmenu': {
+			    'items': {}
+			  }
+			});
+			$('#basb').click(function() {
+			  var v = $("#js1").jstree(true).get_json('#', {
+			    flat: true,
+			    no_state: false
+			  });
+			  var x = JSON.stringify(v);
+			  $("#tester").text(x);
+			  return;
+			});
+
+			});
+
+
+		</script>
+			
+			
+			
+
+
+
+
+
+			
+	</head>
+	<body>
+
+		<h2>Tree Grid Widths Test</h2>
+
+			<div class="container-fluid">
+			  <p id="tester">Tree hierarchy</p>
+			  <button type="button" id="basb" class="btn btn-danger btn-lg">BASB</button>
+			  <div class="row">
+			    <div class="col-md-6">
+			      <div id="js1"></div>
+			    </div>
+			    <div class="col-md-6">
+			      <div id="js2"></div>
+			    </div>
+			  </div>
+			</div>
+	</body>
+</html>

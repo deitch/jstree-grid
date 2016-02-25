@@ -14,7 +14,7 @@
 
 /*jslint nomen:true */
 /*jshint unused:vars */
-/*global navigator, document, jQuery, define */
+/*global navigator, document, jQuery, define, localStorage */
 
 /* AMD support added by jochenberger per https://github.com/deitch/jstree-grid/pull/49
  *
@@ -28,7 +28,7 @@
         factory(jQuery);
     }
 }(function ($) {
-	var renderAWidth, renderATitle, getIndent, htmlstripre, findLastClosedNode, BLANKRE = /^\s*$/g,
+	var renderAWidth, renderATitle, getIndent, copyData, htmlstripre, findLastClosedNode, BLANKRE = /^\s*$/g,
 		IDREGEX = /[\\:&!^|()\[\]<>@*'+~#";,= \/${}%]/g, escapeId = function (id) {
 			return (id||"").replace(IDREGEX,'\\$&');
 		}, NODE_DATA_ATTR = "data-jstreegrid",
@@ -78,6 +78,16 @@
 		
 		return(width);
 		
+	};
+	
+	copyData = function (tree,from,to,recurse) {
+		var i, j;
+	  to.data = $.extend(true, {}, from.data);
+		if (recurse) {
+			for(i = 0, j = from.children_d.length; i < j; i++) {
+			   copyData(tree,tree.get_node(to.children_d[i]),tree.get_node(from.children_d[i]),recurse);
+			}
+		}
 	};
 	
 	findLastClosedNode = function (tree,id) {
@@ -307,6 +317,12 @@
 				this.gridWrapper.find('div.jstree-grid-cell').show();
 				return true;
 			}, this))
+			.on("copy_node.jstree", function (e, data) {
+				var tree = data.instance, obj = tree.get_node(data.node,true);
+				copyData(this,data.original,data.node,true);
+				tree._prepare_grid(obj);
+				return true;
+			})
 			;
 			if (this._gridSettings.isThemeroller) {
 				this.element
