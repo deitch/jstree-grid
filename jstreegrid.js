@@ -83,9 +83,9 @@
 	copyData = function (tree,from,to,recurse) {
 		var i, j;
 	  to.data = $.extend(true, {}, from.data);
-		if (recurse) {
+		if (from && from.children_d && recurse) {
 			for(i = 0, j = from.children_d.length; i < j; i++) {
-			   copyData(tree,tree.get_node(to.children_d[i]),tree.get_node(from.children_d[i]),recurse);
+			   copyData(tree,tree.get_node(from.children_d[i]),tree.get_node(to.children_d[i]),recurse);
 			}
 		}
 	};
@@ -186,7 +186,7 @@
 						'.jstree-grid-resizable-separator {cursor: col-resize; width: 2px;}',
 						'.jstree-grid-separator-regular {border-color: #d0d0d0; border-style: solid;}',
 						'.jstree-grid-cell-themeroller {border: none !important; background: transparent !important;}',
-						'.jstree-grid-wrapper {width: 100%; overflow-x: auto;}',
+						'.jstree-grid-wrapper {display: table; table-layout: fixed; width: 100%; overflow-x: auto;}',
 						'.jstree-grid-midwrapper {display: table-row; overflow: visible;}',
 						'.jstree-grid-width-auto {width:auto;display:block;}',
 						'.jstree-grid-column {display: table-cell; overflow: hidden;}',
@@ -195,7 +195,7 @@
 
 					$('<style type="text/css">'+styles.join("\n")+'</style>').appendTo("head");
 				}
-				this.gridWrapper = $("<div></div>").addClass("jstree-grid-wrapper").appendTo(gridparent);
+				this.gridWrapper = $("<div></div>").addClass("jstree-grid-wrapper").insertAfter(container);
 				this.midWrapper = $("<div></div>").addClass("jstree-grid-midwrapper").appendTo(this.gridWrapper);
 				// set the wrapper width
 				if (s.width) {
@@ -319,7 +319,7 @@
 			}, this))
 			.on("copy_node.jstree", function (e, data) {
 				var tree = data.instance, obj = tree.get_node(data.node,true);
-				copyData(this,data.original,data.node,true);
+				copyData(tree,data.original,data.node,true);
 				tree._prepare_grid(obj);
 				return true;
 			})

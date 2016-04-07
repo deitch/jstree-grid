@@ -3,7 +3,7 @@
 		<title>jstree treegrid 3.2.0 plugin demo</title>
 		<link rel="stylesheet" href="../lib/themes-3/default/style.min.css" />
 		<script type='text/javascript' src='http://code.jquery.com/jquery-2.1.0.js'></script>
-		<script type="text/javascript" src="../lib/jstree-3.0.8.js"></script>
+		<script type="text/javascript" src="../lib/jstree-3.2.1.js"></script>
 		<script type="text/javascript" src="../jstreegrid.js"></script>
 		<style type="text/css">
 			@import url('http://getbootstrap.com/dist/css/bootstrap.css');
@@ -140,13 +140,24 @@
 			    'items': {}
 			  }
 			});
-			$('#basb').click(function() {
+
+			$('#basbl').click(function() {
 			  var v = $("#js1").jstree(true).get_json('#', {
 			    flat: true,
 			    no_state: false
 			  });
 			  var x = JSON.stringify(v);
-			  $("#tester").text(x);
+			  $("#testerl").text(x);
+			  return;
+			});
+
+			$('#basbr').click(function() {
+			  var v = $("#js2").jstree(true).get_json('#', {
+			    flat: true,
+			    no_state: false
+			  });
+			  var x = JSON.stringify(v);
+			  $("#testerr").text(x);
 			  return;
 			});
 
@@ -166,17 +177,19 @@
 	</head>
 	<body>
 
-		<h2>Tree Grid Widths Test</h2>
+		<h2>Tree Grid DND Test</h2>
 
 			<div class="container-fluid">
-			  <p id="tester">Tree hierarchy</p>
-			  <button type="button" id="basb" class="btn btn-danger btn-lg">BASB</button>
 			  <div class="row">
 			    <div class="col-md-6">
+						<button type="button" id="basbl" class="btn btn-danger btn-lg">BASB Left</button>
 			      <div id="js1"></div>
+						<p id="testerl">Tree hierarchy</p>
 			    </div>
 			    <div class="col-md-6">
+						<button type="button" id="basbr" class="btn btn-danger btn-lg">BASB Right</button>
 			      <div id="js2"></div>
+						<p id="testerr">Tree hierarchy</p>
 			    </div>
 			  </div>
 			</div>
