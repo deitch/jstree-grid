@@ -80,12 +80,12 @@
 		
 	};
 	
-	copyData = function (tree,from,to,recurse) {
+	copyData = function (fromtree,from,totree,to,recurse) {
 		var i, j;
 	  to.data = $.extend(true, {}, from.data);
 		if (from && from.children_d && recurse) {
 			for(i = 0, j = from.children_d.length; i < j; i++) {
-			   copyData(tree,tree.get_node(from.children_d[i]),tree.get_node(to.children_d[i]),recurse);
+			   copyData(fromtree,fromtree.get_node(from.children_d[i]),totree,totree.get_node(to.children_d[i]),recurse);
 			}
 		}
 	};
@@ -318,9 +318,9 @@
 				return true;
 			}, this))
 			.on("copy_node.jstree", function (e, data) {
-				var tree = data.instance, obj = tree.get_node(data.node,true);
-				copyData(tree,data.original,data.node,true);
-				tree._prepare_grid(obj);
+				var newtree = data.new_instance, oldtree = data.old_instance, obj = newtree.get_node(data.node,true);
+				copyData(oldtree,data.original,newtree,data.node,true);
+				newtree._prepare_grid(obj);
 				return true;
 			})
 			;
