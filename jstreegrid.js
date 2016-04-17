@@ -249,11 +249,16 @@
 				}, this))
 			.on("ready.jstree",$.proxy(function (e,data) {
 				// find the line-height of the first known node
-				var anchorHeight = this.element.find("li a:first").outerHeight();
+				var anchorHeight = this.element.find("li a:first").outerHeight(),
+				cls = this.element.attr("class") || "";
 				$('<style type="text/css">div.jstree-grid-cell-root-'+this.rootid+' {line-height: '+anchorHeight+'px; height: '+anchorHeight+'px;}</style>').appendTo("head");
 
-				// add container classes to the wrapper
-				this.gridWrapper.addClass(this.element.attr("class"));
+				// add container classes to the wrapper - EXCEPT those that are added by jstree, i.e. "jstree" and "jstree-*"
+				q = cls.split(/\s+/).map(function(i){
+				  var match = i.match(/^jstree(-|$)/);
+				  return (match ? "" : i);
+				})
+				this.gridWrapper.addClass(q.join(" "));
 								
 			},this))
 			.on("move_node.jstree",$.proxy(function(e,data){
