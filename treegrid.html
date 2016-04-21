@@ -16,8 +16,8 @@
 					text: "Root 1",
 					data: {price: "$5.00", size: "4",spanclass:"root"},
 					children: [
-						{text: "Really long named child whose name gets cut off", data: {price: "<b>$4.00</b>", size: "3",spanclass:"first"}},
-						{text: "Child 2", data: {price: "<i>$3.00</i>", size: "2",spanclass:"second"}, children:[
+						{text: "Really long named child whose name gets cut off", data: {price: "$4.00", size: "3",spanclass:"first"}},
+						{text: "Child 2", data: {price: "$8.00", size: "2",spanclass:"second"}, children:[
 							{text:"Grandchild",data:{price: "EXPENSIVE!",size:"10",spanclass:"third"}}
 						]}
 					]
@@ -33,7 +33,7 @@
 				
 				
 				$("div#jstree").jstree({
-					plugins: ["themes","json","grid","dnd","contextmenu","search"],
+					plugins: ["themes","json","grid","dnd","contextmenu","search","sort"],
 					core: {
 						data: data
 					},
