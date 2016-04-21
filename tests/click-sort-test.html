@@ -1,0 +1,105 @@
+<html>
+	<head>
+		<title>jstree treegrid sort test</title>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css" />
+		<script type='text/javascript' src='http://code.jquery.com/jquery-2.1.0.js'></script>
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
+		<script type="text/javascript" src="../jstreegrid.js"></script>
+		<style type="text/css">
+			@import url('http://getbootstrap.com/dist/css/bootstrap.css');
+		</style>
+		<script type="text/javascript">
+			$(document).ready(function(){
+				var data;
+				
+				data = [{
+					text: "Root 1",
+					data: {price: "$5.00", size: "4",spanclass:"root"},
+					children: [
+						{text: "Really long named child whose name gets cut off", data: {price: "$4.00", size: "3",spanclass:"first"}},
+						{text: "Child 2", data: {price: "$8.00", size: "2",spanclass:"second"}, children:[
+							{text:"Grandchild",data:{price: "EXPENSIVE!",size:"10",spanclass:"third"}}
+						]}
+					]
+				}];
+				
+				$("div#jstree").bind("loaded_grid.jstree",function(){
+					$("span#status").text("loaded");
+				}).on("select_cell.jstree-grid",function (e,data) {
+					$("span#clicked").html("clicked "+data.column+" of value "+data.value);
+				}).on('update_cell.jstree-grid',function (e,data) {
+					$("span#changed").html("changed "+data.col+" from "+data.old+" to "+data.value);
+				});
+				
+				
+				$("div#jstree").jstree({
+					plugins: ["themes","json","grid","dnd","contextmenu","search","sort"],
+					core: {
+						data: data
+					},
+					grid: {
+						columns: [
+							{width: 110, header: "Nodes",title:"_DATA_"},
+							{cellClass: "col1", value: "price", header: "<i>Price</i>", title:"price", valueClass:"spanclass"},
+							{cellClass: "col2", value: "size", header: "Qty", title:"size",valueClass:"spanclass"}
+						],
+						resizable:true,
+						contextmenu:true
+					},
+					dnd: {
+            drop_finish : function () { 
+            }, 
+            drag_finish : function () { 
+            }, 
+            drag_check : function (data) { 
+                return { 
+                    after : true, 
+                    before : true, 
+                    inside : true 
+                }; 
+            } 
+					}
+				});
+				$("a#change").click(function(){
+					var tree = $("div#jstree").jstree(), 
+					nodename = tree.get_node("#").children[0], node = tree.get_node(nodename),
+					val = parseInt(node.data.size);
+					
+					node.data.size = node.data.size*2;
+					tree.trigger("change_node.jstree",nodename);
+					
+					return(false);
+				});
+
+				$("a#refresh").click(function(){
+					var tree = $("div#jstree").jstree();
+					var data = [{
+						text: "Root 1",
+						data: {price: "$5.00", size: "4"}
+					}];
+					tree.settings.core.data = data;
+					tree.refresh();
+					return(false);
+				});
+				$("input#search").keyup(function (e) {
+					var tree = $("div#jstree").jstree();
+					tree.search($(this).val());
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<h2>Tree Grid Click Sort Test</h2>
+		<div id="jstree1">
+			<h4>First Tree</h4>
+			<div id="jstree"></div>
+			<div>Tree grid is <span id="status">loading</span>.</div>
+			<div><a href="#" id="change">Click here to double the root Qty</a></div>
+			<div><a href="#" id="refresh">Click here to refresh the tree</a></div>
+			<div>Search <input type="text" id="search"></input></div>
+			<div>Click a cell to see results: <span id="clicked"></span></div>
+			<div>Right-click a cell and edit to see results: <span id="changed"></span></div>
+		</div>
+		
+	</body>
+</html>
