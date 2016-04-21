@@ -1,7 +1,7 @@
 { 
 	"name": "jstreegrid", 
 	"description": "grid plugin for jstree",
-	"version": "3.5.14",
+	"version": "3.5.15",
 	"url": "https://github.com/deitch/jstree-grid",
 	"author": {"name":"Avi Deitcher","url":"https://github.com/deitch"},
 	"contributors": [
