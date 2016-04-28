@@ -64,24 +64,24 @@ We use the div to control the entire height and width, and the span to get acces
 
 #### The options are as follows:
 
-	* `width`: width for the entire jstree-grid. If no width is given, automatically fills the entire viewport (`width: 100%;`)
-	* `columnWidth`: default width for a column for which no width is given. If no width is given, the default is `auto`.
-	* `columns`: an array of columns to create, on order. Each entry is an object with the following parameters:
-		* `tree`: boolean, whether the jstree should be placed in this column. Only the first `true` is accepted. If no column is set to `tree:true`, then the first column is used.
-		* `width`: width of the column in pixels. If no width is given, the default is `auto` **except for the last column**. In the last column, if no width is given, it is treated as 'auto' and fills the entire rest of the grid to the right.
-		* `header`: string to use as a header for the column.
-		* `headerClass`: a CSS class to add to the header cell in this column
-		* `columnClass`: a CSS class to add to the header cell and the column cell
-		* `cellClass`: a CSS class to add to each cell in this column (except for the header) - added to the <span>
-		* `wideCellClass`: a CSS class to add to each cell in this column (except for the header) - added to the <div>
-		* `value`: the attribute on the node to use as the value for this cell - entered as the <span> text. Can be a string or a function.
-		* `valueClass`: the attribute on the node to use as a class on this cell - added to the <span>
-		* `valueClassPrefix`: a prefix to add to the valueClass to use as a class on this cell
-		* `wideValueClass`: the attribute on the node to use as a class on this cell - added to the <div>
-		* `wideValueClassPrefix`: a prefix to add to the wideValueClass to use as a class on this cell
-	* resizable: true/false if the columns should be resizable. Defaults to false.
-	* stateful: true/false. If true, then whenever a column width is resized, it will store it in html5 localStorage, if available. Defaults to false.
-	* contextmenu: true/false whether or not a context menu for editing the cells should be shown on right-click. Defaults to false.
+* `width`: width for the entire jstree-grid. If no width is given, automatically fills the entire viewport (`width: 100%;`)
+* `columnWidth`: default width for a column for which no width is given. If no width is given, the default is `auto`.
+* `columns`: an array of columns to create, on order. Each entry is an object with the following parameters:
+	* `tree`: boolean, whether the jstree should be placed in this column. Only the first `true` is accepted. If no column is set to `tree:true`, then the first column is used.
+	* `width`: width of the column in pixels. If no width is given, the default is `auto` **except for the last column**. In the last column, if no width is given, it is treated as 'auto' and fills the entire rest of the grid to the right.
+	* `header`: string to use as a header for the column.
+	* `headerClass`: a CSS class to add to the header cell in this column
+	* `columnClass`: a CSS class to add to the header cell and the column cell
+	* `cellClass`: a CSS class to add to each cell in this column (except for the header) - added to the <span>
+	* `wideCellClass`: a CSS class to add to each cell in this column (except for the header) - added to the <div>
+	* `value`: the attribute on the node to use as the value for this cell - entered as the <span> text. Can be a string or a function.
+	* `valueClass`: the attribute on the node to use as a class on this cell - added to the <span>
+	* `valueClassPrefix`: a prefix to add to the valueClass to use as a class on this cell
+	* `wideValueClass`: the attribute on the node to use as a class on this cell - added to the <div>
+	* `wideValueClassPrefix`: a prefix to add to the wideValueClass to use as a class on this cell
+* resizable: true/false if the columns should be resizable. Defaults to false.
+* stateful: true/false. If true, then whenever a column width is resized, it will store it in html5 localStorage, if available. Defaults to false.
+* contextmenu: true/false whether or not a context menu for editing the cells should be shown on right-click. Defaults to false.
 
 The reason for both `valueClass` and `wideValueClass` is to give you the ability to control both the narrow part of the text,  and the entire width of the cell. For example, if the cell is 56px wide, but the text in it is "OK" and thus only 20px wide.
 Suppose you have a class "important" which backgrounds in red, and a class "clickable" which changes the cursor to a pointer.
