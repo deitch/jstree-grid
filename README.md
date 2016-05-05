@@ -249,6 +249,14 @@ In the above example, the tree itself, but *not* the headers, will be limited to
 ### Themeroller
 The themeroller plugin for jstree is supported as of tag 0.9.1 (29 November 2011). Thanks to ChrisRaven for the support.
 
+
+### API
+The following methods can be called on the jstree:
+
+* `grid_hide_column(column)`: Hide column number `column`. Column numbers begin with `0`. If the column already is hidden, has no effect.
+* `grid_show_column(column)`: Show column number `column`. Column numbers begin with `0`. If the column already is shown, has no effect.
+
+
 ### Events
 * `loaded.jstree`: When the tree is done loading, as usual, it fires a "loaded.jstree" event on the div to which you added jstree. jsTreeGrid uses this event to start its own load process. 
 * `loaded_grid.jstree`: When jsTreeGrid is done, it fires a "loaded_grid.jstree" event on the same div. If you need to run some 

@@ -715,6 +715,14 @@
 			element.parent().append(h2);
 			h2.css(fn).width(Math.min(h1.text("pW" + h2[0].value).width(),w))[0].select();
 		};
+		
+		this.grid_hide_column = function (col) {
+			this.midWrapper.find(".jstree-grid-column-"+col).hide();
+		};
+		this.grid_show_column = function (col) {
+			this.midWrapper.find(".jstree-grid-column-"+col).show();
+		};
+		
 		this._prepare_grid = function (obj) {
 			var gs = this._gridSettings, c = gs.treeClass, _this = this, t, cols = gs.columns || [], width, tr = gs.isThemeroller, 
 			tree = this.element, rootid = this.rootid,
