@@ -41,26 +41,32 @@
 					grid: {
 						columns: [
 							{width: 110, header: "Nodes",title:"_DATA_"},
-							{cellClass: "col1", value: "price", header: "<i>Price</i>", title:"price", valueClass:"spanclass"},
-							{cellClass: "col2", value: "size", header: "Qty", title:"size",valueClass:"spanclass"}
+							{width: 110, cellClass: "col1", value: "price", header: "<i>Price</i>", title:"price", valueClass:"spanclass"},
+							{width: 110, cellClass: "col2", value: "size", header: "Qty", title:"size",valueClass:"spanclass"}
 						],
 						resizable:true,
 						draggable:true,
-						contextmenu:true
+						contextmenu:true,
+						contextmenu:true,
+						width: 306,
+						height: 100
 					},
 					dnd: {
-            drop_finish : function () { 
-            }, 
-            drag_finish : function () { 
-            }, 
-            drag_check : function (data) { 
-                return { 
-                    after : true, 
-                    before : true, 
-                    inside : true 
-                }; 
-            } 
+						drop_finish : function () { 
+						}, 
+						drag_finish : function () { 
+						}, 
+						drag_check : function (data) { 
+						return { 
+							after : true, 
+							before : true, 
+							inside : true 
+						}; 
+						} 
 					}
+				})
+				.on('loaded.jstree', function() {
+					$("div#jstree").jstree('open_all');
 				});
 				$("a#change").click(function(){
 					var tree = $("div#jstree").jstree(), 

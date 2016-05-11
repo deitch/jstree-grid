@@ -72,6 +72,8 @@ We use the div to control the entire height and width, and the span to get acces
 #### The options are as follows:
 
 * `width`: width for the entire jstree-grid. If no width is given, automatically fills the entire viewport (`width: 100%;`)
+* `height`: height for the entire jstree-grid. If no height is given, height will reflect the amount of content.
+* `fixedHeader`: true/false. If true, then when the tree is scrolled the column headers will remain visible. Defaults to true.
 * `columnWidth`: default width for a column for which no width is given. If no width is given, the default is `auto`.
 * `columns`: an array of columns to create, on order. Each entry is an object with the following parameters:
 	* `tree`: boolean, whether the jstree should be placed in this column. Only the first `true` is accepted. If no column is set to `tree:true`, then the first column is used.
