@@ -1,11 +1,11 @@
 <html>
 	<head>
 		<title>jstree treegrid 3.0.0 plugin demo</title>
-		<link rel="stylesheet" href="lib/themes-3/default/style.min.css" />
+		<link rel="stylesheet" href="../lib/themes-3/default/style.min.css" />
 		<script type='text/javascript' src='http://code.jquery.com/jquery-2.1.0.js'></script>
 		<style type="text/css" href="https://www.dropbox.com/s/7u7zirpulyj6vvr/jquery-ui.css?dl=0"></style>
-		<script type="text/javascript" src="lib/jstree-3.0.8.js"></script>
-		<script type="text/javascript" src="jstreegrid.js"></script>
+		<script type="text/javascript" src="../lib/jstree-3.3.0-patched.js"></script>
+		<script type="text/javascript" src="../jstreegrid.js"></script>
 		<script type="text/javascript">
 			$(document).ready(function(){
 				
@@ -133,29 +133,40 @@
 				    },
 				        "grid": {
 				        "columns": [{
-				            width: 40,
+				            width: 350,
 				            header: "Items",
 				            headerClass: "jtreeHeader",
 				            wideCellClass: "jtreeCell",
 				            title: "_DATA_"
 				        },  {
-				            width: 20,
+				            width: 120,
 				            header: "Shop1 Price",
 				            headerClass: "jtreeHeader",
 				            wideCellClass: "jtreeCell",
 				            title: "Price from Shop1",
 				            value: function (node) {
-				                if (node.data_needed == 'Y') {
-				                    return ('<input type="text" class="stopclick" id="shop1TreeTxt_' + node.item_id + '" maxlength="15" value="' + ((node.shop1_price === null) ? ' ' : node.shop1_price) + '"></input>');
+				                if (node.data.data_needed == 'Y') {
+				                    return ('<input type="text" class="stopclick" id="shop1TreeTxt_' + node.data.item_id + '" maxlength="15" value="' + ((node.data.shop1_price === null) ? ' ' : node.data.shop1_price) + '"></input>');
 				                }
 				            }
 				        }, {
-			            width: 20,
+			            width: 120,
 			            header: "Shop2 Price",
 			            headerClass: "jtreeHeader",
 			            wideCellClass: "jtreeCell",
 			            title: "Price from Shop2",
 			            value: "ABC"
+				        },  {
+				            width: 120,
+				            header: "Shop1 Price",
+				            headerClass: "jtreeHeader",
+				            wideCellClass: "jtreeCell",
+				            title: "Price from Shop1",
+				            value: function (node) {
+				                if (node.data.data_needed == 'Y') {
+				                    return ('<input type="text" class="stopclick" id="shop1TreeTxt_' + node.data.item_id + '" maxlength="15" value="' + ((node.data.shop1_price === null) ? ' ' : node.data.shop1_price) + '"></input>');
+				                }
+				            }
 				        }],
 
 				            "contextmenu": true,
