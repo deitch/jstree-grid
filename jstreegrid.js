@@ -422,7 +422,7 @@
 			var header, i, col, _this = this, gs = this._gridSettings,cols = gs.columns || [], width, defaultWidth = gs.columnWidth, resizable = gs.resizable || false,
 			cl, ccl, val, name, margin, last, tr = gs.isThemeroller, classAdd = (tr?"themeroller":"regular"), puller,
 			hasHeaders = false, gridparent = this.gridparent, rootid = this.rootid,
-			conf = gs.defaultConf,
+			conf = gs.defaultConf, coluuid,
 			borPadWidth = 0, totalWidth = 0;
 
 			// save the original parent so we can reparent on destroy
@@ -439,8 +439,11 @@
 				cl = cols[i].headerClass || "";
 				ccl = cols[i].columnClass || "";
 				val = cols[i].header || "";
+				do {
+					coluuid = String(Math.floor(Math.random()*10000));
+				} while(this.colrefs[coluuid] !== undefined);
 				// create a unique name for this column
-				name = cols[i].value ? String(Math.floor(Math.random()*10000)) : "text";
+				name = cols[i].value ? coluuid : "text";
 				this.colrefs[name] = cols[i];
 
 				if (val) {hasHeaders = true;}
