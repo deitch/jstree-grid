@@ -41,7 +41,8 @@
 						columns: [
 							{width: 110, header: "Nodes",title:"_DATA_"},
 							{cellClass: "col1", value: "price", header: "<i>Price</i>", title:"price", valueClass:"spanclass"},
-							{cellClass: "col2", value: "size", header: "Qty", title:"size",valueClass:"spanclass"}
+							{cellClass: "col2", value: "size", header: "Qty", title:"size",valueClass:"spanclass"},
+							{cellClass: "col2", value: function(node){return node.data.size;}, header: "Qty Fn", title:"size",valueClass:"spanclass"}
 						],
 						resizable:true,
 						contextmenu:true

@@ -216,14 +216,16 @@
 
 				// override sort function
 				this.settings.sort = function (a, b) {
-					var bigger;
+					var bigger, colrefs = this.colrefs;
 
 					if (gs.sortOrder==='text') {
 						bigger = (defaultSort(a, b) === 1);
 					} else {
 						var nodeA = this.get_node(a);
 						var nodeB = this.get_node(b);
-						bigger = nodeA.data[gs.sortOrder] > nodeB.data[gs.sortOrder];
+						// gs.sortOrder just refers to the unique random name for this column
+						// we need to get the correct value
+						bigger = nodeA.data[colrefs[gs.sortOrder].value] > nodeB.data[colrefs[gs.sortOrder].value];
 					}
 
 					if (gs.sortAsc===false)
@@ -422,8 +424,12 @@
 			hasHeaders = false, gridparent = this.gridparent, rootid = this.rootid,
 			conf = gs.defaultConf,
 			borPadWidth = 0, totalWidth = 0;
+
 			// save the original parent so we can reparent on destroy
 			this.parent = gridparent;
+
+			// save the references to columns by unique ID
+			this.colrefs = {};
 			
 			
 			// create the headers
@@ -433,7 +439,10 @@
 				cl = cols[i].headerClass || "";
 				ccl = cols[i].columnClass || "";
 				val = cols[i].header || "";
-				name = cols[i].value || "text";
+				// create a unique name for this column
+				name = cols[i].value ? String(Math.floor(Math.random()*10000)) : "text";
+				this.colrefs[name] = cols[i];
+
 				if (val) {hasHeaders = true;}
 				if(gs.stateful && localStorage['jstree-root-'+rootid+'-column-'+i])
 					width = localStorage['jstree-root-'+rootid+'-column-'+i];
