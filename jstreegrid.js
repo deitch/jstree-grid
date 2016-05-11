@@ -429,6 +429,11 @@
 				last.addClass((tr?"ui-widget-header ":"")+"jstree-grid-header jstree-grid-header-"+classAdd);
 				last.prependTo(col);
 				last.attr(COL_DATA_ATTR, name);
+				last.hover(function () {
+					$(this).addClass("jstree-hovered jstree-grid-header-hovered");
+				}, function () {
+					$(this).removeClass("jstree-hovered jstree-grid-header-hovered");
+				});
 				totalWidth += last.outerWidth();
 				puller = $("<div class='jstree-grid-separator jstree-grid-separator-"+classAdd+(tr ? " ui-widget-header" : "")+(resizable? " jstree-grid-resizable-separator":"")+"'>&nbsp;</div>").appendTo(last);
 				col.width(width);
