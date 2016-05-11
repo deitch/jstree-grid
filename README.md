@@ -80,6 +80,7 @@ We use the div to control the entire height and width, and the span to get acces
 	* `wideValueClass`: the attribute on the node to use as a class on this cell - added to the <div>
 	* `wideValueClassPrefix`: a prefix to add to the wideValueClass to use as a class on this cell
 * `resizable`: true/false if the columns should be resizable. Defaults to false.
+* `draggable`: true/false if the columns should be draggable (requires jQuery UI with sortable plugin). Defaults to false.
 * `stateful`: true/false. If true, then whenever a column width is resized, it will store it in html5 localStorage, if available. Defaults to false.
 * `contextmenu`: true/false whether or not a context menu for editing the cells should be shown on right-click. Defaults to false.
 

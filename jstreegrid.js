@@ -147,6 +147,7 @@
 					isThemeroller : !!this._data.themeroller,
 					treeWidthDiff : 0,
 					resizable : s.resizable,
+					draggable : s.draggable,
 					stateful: s.stateful,
 					indent: 0,
 					sortOrder: 'text',
@@ -163,7 +164,6 @@
 				}
 				// set a unique ID for this table
 				this.uniq = Math.ceil(Math.random()*1000);
-				this.treecol = treecol;
 				this.rootid = container.attr("id");
 			
 				var msie = /msie/.test(navigator.userAgent.toLowerCase());
@@ -188,7 +188,7 @@
 						'.jstree-grid-resizable-separator {cursor: col-resize; width: 2px;}',
 						'.jstree-grid-separator-regular {border-color: #d0d0d0; border-style: solid;}',
 						'.jstree-grid-cell-themeroller {border: none !important; background: transparent !important;}',
-						'.jstree-grid-wrapper {display: table; table-layout: fixed; width: 100%; overflow-x: auto;}',
+						'.jstree-grid-wrapper {/*display: table;*/ table-layout: fixed; width: 100%; overflow-x: auto;}',
 						'.jstree-grid-midwrapper {display: table-row; overflow: visible;}',
 						'.jstree-grid-width-auto {width:auto;display:block;}',
 						'.jstree-grid-column {display: table-cell; overflow: hidden;}',
@@ -231,6 +231,28 @@
 
 					return bigger ? 1 : -1;
 				};
+				
+				// sortable columns when jQuery UI is available
+				if (gs.draggable) {
+					if (!$.ui || !$.ui.sortable) {
+						console.warn('[jstree-grid] draggable option requires jQuery UI');
+					} else {
+						var from, to;
+						
+						$(this.midWrapper).sortable({
+							axis: "x",
+							handle: ".jstree-grid-header",
+							cancel: ".jstree-grid-separator",
+							start: function (event, ui) {
+								from = ui.item.index();
+							},
+							stop: function (event, ui) {
+								to = ui.item.index();
+								gs.columns.splice(to, 0, gs.columns.splice(from, 1)[0]);
+							}
+						});
+					}
+				}
 				
 				this._initialized = true;
 			}
@@ -777,8 +799,19 @@
 				//renderAWidth(a,_this);
 				renderATitle(a,t,_this);
 				last = a;
+				// find which column our tree shuld go in
+				var s = this.settings.grid;
+				var treecol = 0;
+				for (i=0;i<s.columns.length;i++) {
+					if (s.columns[i].tree) {
+						// save which column it was
+						treecol = i;
+						// do not check any others
+						break;
+					}
+				}
 				for (i=0;i<cols.length;i++) {
-					if (this.treecol === i) {
+					if (treecol === i) {
 						continue;
 					}
 					col = cols[i];
