@@ -751,10 +751,18 @@
 				};
 			},
 			hoverInHandler = function (node, jsTreeInstance) {
-				return function() { jsTreeInstance.hover_node(node); };
+				return function() {
+					// highlight the header cell
+					$(this).closest(".jstree-grid-column").find(".jstree-grid-header").addClass("jstree-hovered jstree-grid-header-hovered");
+					jsTreeInstance.hover_node(node);
+				};
 			},
 			hoverOutHandler = function (node, jsTreeInstance) {
-				return function() { jsTreeInstance.dehover_node(node); };
+				return function() {
+					// dehighlight the header cell
+					$(this).closest(".jstree-grid-column").find(".jstree-grid-header").removeClass("jstree-hovered jstree-grid-header-hovered");
+					jsTreeInstance.dehover_node(node);
+				};
 			},
 			i, val, cl, wcl, ccl, a, last, valClass, wideValClass, span, paddingleft, title, gridCellName, gridCellParentId, gridCellParent,
 			gridCellPrev, gridCellPrevId, gridCellNext, gridCellNextId, gridCellChild, gridCellChildId, 
