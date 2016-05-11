@@ -17,6 +17,13 @@ core: {
 
 In any case, theme autoloading is strongly discouraged in jstree v3.
 
+## License and Support
+jstree-grid is released under the very permissive MIT License, albeit with no warranty or guarantee. See the [MIT License](./LICENSE) for full details. Use it as you will, and use it well.
+
+If you need commercial support, general assistance or have any questions, please contact [info@atomicinc.com](mailto:info@atomicinc.com).
+
+
+
 ## Usage
 
 1. Include jquery (>= 1.4.2) and jstree in your page, as usual; use jstree v3 or later.
