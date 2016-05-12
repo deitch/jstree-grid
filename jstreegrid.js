@@ -14,7 +14,7 @@
 
 /*jslint nomen:true */
 /*jshint unused:vars */
-/*global navigator, document, jQuery, define, localStorage */
+/*global console, navigator, document, jQuery, define, localStorage */
 
 /* AMD support added by jochenberger per https://github.com/deitch/jstree-grid/pull/49
  *
@@ -137,7 +137,7 @@
 	$.jstree.plugins.grid = function(options,parent) {
 		this._initialize = function () {
 			if (!this._initialized) {
-				var s = this.settings.grid || {}, styles,	container = this.element, gridparent = container.parent(), i,
+				var s = this.settings.grid || {}, styles,	container = this.element, i,
 				gs = this._gridSettings = {
 					columns : s.columns || [],
 					treeClass : "jstree-grid-col-0",
@@ -229,14 +229,18 @@
 
 				// override sort function
 				this.settings.sort = function (a, b) {
-					var bigger;
+					var bigger, colrefs = this.colrefs;
 
 					if (gs.sortOrder==='text') {
 						bigger = (defaultSort(a, b) === 1);
 					} else {
-						var nodeA = this.get_node(a);
-						var nodeB = this.get_node(b);
-						bigger = nodeA.data[gs.sortOrder] > nodeB.data[gs.sortOrder];
+						// gs.sortOrder just refers to the unique random name for this column
+						// we need to get the correct value
+						var nodeA = this.get_node(a), nodeB = this.get_node(b),
+						value = colrefs[gs.sortOrder].value,
+						valueA = typeof(value) === 'function' ? value(nodeA) : nodeA.data[value],
+						valueB = typeof(value) === 'function' ? value(nodeB) : nodeB.data[value];
+						bigger = valueA > valueB;
 					}
 
 					if (gs.sortAsc===false)
@@ -307,7 +311,7 @@
 				}, this))
 			.on("ready.jstree",$.proxy(function (e,data) {
 				// find the line-height of the first known node
-				var anchorHeight = this.element.find("li a:first").outerHeight(),
+				var anchorHeight = this.element.find("li a:first").outerHeight(), q,
 				cls = this.element.attr("class") || "";
 				$('<style type="text/css">div.jstree-grid-cell-root-'+this.rootid+' {line-height: '+anchorHeight+'px; height: '+anchorHeight+'px;}</style>').appendTo("head");
 
@@ -315,7 +319,7 @@
 				q = cls.split(/\s+/).map(function(i){
 				  var match = i.match(/^jstree(-|$)/);
 				  return (match ? "" : i);
-				})
+				});
 				this.gridWrapper.addClass(q.join(" "));
 								
 			},this))
@@ -433,10 +437,14 @@
 			var header, i, col, _this = this, gs = this._gridSettings,cols = gs.columns || [], width, defaultWidth = gs.columnWidth, resizable = gs.resizable || false,
 			cl, ccl, val, name, margin, last, tr = gs.isThemeroller, classAdd = (tr?"themeroller":"regular"), puller,
 			hasHeaders = false, gridparent = this.gridparent, rootid = this.rootid,
-			conf = gs.defaultConf,
+			conf = gs.defaultConf, coluuid,
 			borPadWidth = 0, totalWidth = 0;
+
 			// save the original parent so we can reparent on destroy
 			this.parent = gridparent;
+
+			// save the references to columns by unique ID
+			this.colrefs = {};
 			
 			
 			// create the headers
@@ -446,7 +454,13 @@
 				cl = cols[i].headerClass || "";
 				ccl = cols[i].columnClass || "";
 				val = cols[i].header || "";
-				name = cols[i].value || "text";
+				do {
+					coluuid = String(Math.floor(Math.random()*10000));
+				} while(this.colrefs[coluuid] !== undefined);
+				// create a unique name for this column
+				name = cols[i].value ? coluuid : "text";
+				this.colrefs[name] = cols[i];
+
 				if (val) {hasHeaders = true;}
 				if(gs.stateful && localStorage['jstree-root-'+rootid+'-column-'+i])
 					width = localStorage['jstree-root-'+rootid+'-column-'+i];
