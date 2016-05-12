@@ -14,7 +14,7 @@
 
 /*jslint nomen:true */
 /*jshint unused:vars */
-/*global navigator, document, jQuery, define, localStorage */
+/*global console, navigator, document, jQuery, define, localStorage */
 
 /* AMD support added by jochenberger per https://github.com/deitch/jstree-grid/pull/49
  *
@@ -137,7 +137,7 @@
 	$.jstree.plugins.grid = function(options,parent) {
 		this._initialize = function () {
 			if (!this._initialized) {
-				var s = this.settings.grid || {}, styles,	container = this.element, gridparent = container.parent(), i,
+				var s = this.settings.grid || {}, styles,	container = this.element, i,
 				gs = this._gridSettings = {
 					columns : s.columns || [],
 					treeClass : "jstree-grid-col-0",
@@ -221,11 +221,13 @@
 					if (gs.sortOrder==='text') {
 						bigger = (defaultSort(a, b) === 1);
 					} else {
-						var nodeA = this.get_node(a);
-						var nodeB = this.get_node(b);
 						// gs.sortOrder just refers to the unique random name for this column
 						// we need to get the correct value
-						bigger = nodeA.data[colrefs[gs.sortOrder].value] > nodeB.data[colrefs[gs.sortOrder].value];
+						var nodeA = this.get_node(a), nodeB = this.get_node(b),
+						value = colrefs[gs.sortOrder].value,
+						valueA = typeof(value) === 'function' ? value(nodeA) : nodeA.data[value],
+						valueB = typeof(value) === 'function' ? value(nodeB) : nodeB.data[value];
+						bigger = valueA > valueB;
 					}
 
 					if (gs.sortAsc===false)
@@ -296,7 +298,7 @@
 				}, this))
 			.on("ready.jstree",$.proxy(function (e,data) {
 				// find the line-height of the first known node
-				var anchorHeight = this.element.find("li a:first").outerHeight(),
+				var anchorHeight = this.element.find("li a:first").outerHeight(), q,
 				cls = this.element.attr("class") || "";
 				$('<style type="text/css">div.jstree-grid-cell-root-'+this.rootid+' {line-height: '+anchorHeight+'px; height: '+anchorHeight+'px;}</style>').appendTo("head");
 
@@ -304,7 +306,7 @@
 				q = cls.split(/\s+/).map(function(i){
 				  var match = i.match(/^jstree(-|$)/);
 				  return (match ? "" : i);
-				})
+				});
 				this.gridWrapper.addClass(q.join(" "));
 								
 			},this))
