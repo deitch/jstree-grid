@@ -22,6 +22,8 @@ jstree-grid is released under the very permissive MIT License, albeit with no wa
 
 If you need commercial support, general assistance or have any questions, please contact [info@atomicinc.com](mailto:info@atomicinc.com).
 
+jstree-grid can be made a native component for Angular, Angular2, Polymer, Aurelia, and other frameworks. If you have commercial need of a tree grid those or any other framework, please contact [info@atomicinc.com](mailto:info@atomicinc.com).
+
 
 
 ## Usage
