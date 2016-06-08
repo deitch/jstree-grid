@@ -809,7 +809,7 @@
 			col, content, tmpWidth, mw = this.midWrapper, dataCell, lid = objData.id,
 			peers = this.get_node(objData.parent).children,
 			// find my position in the list of peers. "peers" is the list of everyone at my level under my parent, in order
-			pos = jQuery.inArray(lid,peers),
+			pos = $.inArray(lid,peers),
 			hc = this.holdingCells, rendered = false, closed;
 			// get our column definition
 			t = $(obj);
