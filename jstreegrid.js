@@ -624,10 +624,11 @@
 		 * Override redraw_node to correctly insert the grid
 		 */
 		this.redraw_node = function(obj, deep, is_callback, force_render) {
+			var search = this._data.search;
 			// first allow the parent to redraw the node
 			obj = parent.redraw_node.call(this, obj, deep, is_callback, force_render);
-			// next prepare the grid
-			if(obj) {
+			// next prepare the grid - but only if we are not in a search, or search response includes this node
+			if(obj && search.str === "" || search.str === undefined || search.str === null || $.inArray(obj.id, search.res) !== -1) {
 				this._prepare_grid(obj);
 			}
 			return obj;
