@@ -627,8 +627,11 @@
 			var search = this._data.search;
 			// first allow the parent to redraw the node
 			obj = parent.redraw_node.call(this, obj, deep, is_callback, force_render);
-			// next prepare the grid - but only if we are not in a search, or search response includes this node
-			if(obj && search.str === "" || search.str === undefined || search.str === null || $.inArray(obj.id, search.res) !== -1) {
+			// next prepare the grid - but only if:
+			// - search plugin is not defined; OR
+			// - search is empty; OR
+			// - search response includes this node
+			if(obj && (!search || search.str === "" || search.str === undefined || search.str === null || $.inArray(obj.id, search.res) !== -1)) {
 				this._prepare_grid(obj);
 			}
 			return obj;
