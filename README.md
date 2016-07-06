@@ -229,13 +229,13 @@ grid: {
 }
 ````
 
-Finally, you can change a node contents on the fly using "change_node.jstree". You change the attribute of the node, then trigger the event,
+Finally, you can change a node contents on the fly using "change_node.jstree". You change the `data` attribute of the node, then trigger the event,
 for example:
 
 ````JavaScript
-var node = $("#jstree").jstree(true).get_node("my_node");
+var tree = $("#jstree").jstree(true), node = tree.get_node("my_node");
 node.data.value = 25;
-node.trigger("change_node.jstree");
+tree.trigger("change_node.jstree",node);
 ````
 
 ### HTML
