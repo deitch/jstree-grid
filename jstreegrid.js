@@ -405,6 +405,7 @@
 			.on("search.jstree", $.proxy(function (e, data) {
 				// search sometimes filters, so we need to hide all of the appropriate grid cells as well, and show only the matches
 				var grid = this.gridWrapper, that = this;
+				this.holdingCells = {};
 				if(this._data.search.som) {
 					if(data.nodes.length) {
 						// hide all of the grid cells
