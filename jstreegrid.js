@@ -28,7 +28,7 @@
 		factory(jQuery);
 	}
 }(function ($) {
-	var renderAWidth, renderATitle, getIndent, copyData, htmlstripre, findLastClosedNode, BLANKRE = /^\s*$/g,
+	var BLANKRE = /^\s*$/g,
 		IDREGEX = /[\\:&!^|()\[\]<>@*'+~#";,= \/${}%]/g, escapeId = function (id) {
 			return (id||"").replace(IDREGEX,'\\$&');
 		}, NODE_DATA_ATTR = "data-jstreegrid", COL_DATA_ATTR = "data-jstreegrid-column",
@@ -37,10 +37,10 @@
 		findDataCell = function (from,id) {
 			return from.find("div["+NODE_DATA_ATTR+"='"+id+"']");
 		},
-		isClickedSep = false, toResize = null, oldMouseX = 0, newMouseX = 0;
+		isClickedSep = false, toResize = null, oldMouseX = 0, newMouseX = 0,
 	
 	/*jslint regexp:true */
-	htmlstripre = /<\/?[^>]+>/gi;
+	htmlstripre = /<\/?[^>]+>/gi,
 	/*jslint regexp:false */
 	
 	getIndent = function(node,tree) {
@@ -78,7 +78,7 @@
 		
 		return(width);
 		
-	};
+	},
 	
 	copyData = function (fromtree,from,totree,to,recurse) {
 		var i, j;
@@ -88,7 +88,7 @@
 			   copyData(fromtree,fromtree.get_node(from.children_d[i]),totree,totree.get_node(to.children_d[i]),recurse);
 			}
 		}
-	};
+	},
 	
 	findLastClosedNode = function (tree,id) {
 		// first get our node
@@ -100,7 +100,7 @@
 			ret = findLastClosedNode(tree,children[children.length-1]);
 		}
 		return(ret);
-	};
+	},
 
 	renderAWidth = function(node,tree) {
 		var depth, width,
@@ -111,7 +111,7 @@
 		// the following line is no longer needed, since we are doing this inside a <td>
 		//a.css({"vertical-align": "top", "overflow":"hidden"});
 		return(fullWidth);
-	};
+	},
 	renderATitle = function(node,t,tree) {
 		var a = node.get(0).tagName.toLowerCase() === "a" ? node : node.children("a"), title, col = tree.settings.grid.columns[0];
 		// get the title
@@ -128,6 +128,22 @@
 		if (title) {
 			a.attr("title",title);
 		}
+	},
+	getCellData = function (value,data) {
+		var val;
+		// get the contents of the cell - value could be a string or a function
+		if (value !== undefined && value !== null) {
+			if (typeof(value) === "function") {
+				val = value(data);
+			} else if (data.data !== null && data.data !== undefined && data.data[value] !== undefined) {
+				val = data.data[value];
+			} else {
+				val = "";
+			}
+		} else {
+			val = "";
+		}
+		return val;
 	};
 
 	$.jstree.defaults.grid = {
@@ -270,7 +286,32 @@
 						});
 					}
 				}
-				
+
+				// if there was no overridden search_callback, we will provide it
+				// it will use the default per-node search algorithm, augmented by searching our data nodes
+				var searchSettings = this.settings.search;
+				if (!searchSettings.search_callback) {
+					searchSettings.search_callback = function (str,node) {
+						var i, f = new $.vakata.search(str, true, { caseSensitive : searchSettings.case_sensitive, fuzzy : searchSettings.fuzzy }),
+						matched = f.search(node.text).isMatch,
+						cols = s.columns, col;
+
+						// only bother looking in each cell if it was not yet matched
+						if (!matched) {
+							for (i=0;i<cols.length;i++) {
+								if (treecol === i) {
+									continue;
+								}
+								col = cols[i];
+								matched = f.search(getCellData(col.value,node)).isMatch;
+								if (matched) {
+									break;
+								}
+							}
+						}
+						return matched;
+					};
+				}
 				this._initialized = true;
 			}
 		};
@@ -414,6 +455,7 @@
 					},this));
 			}
 		};
+		
 		// tear down the tree entirely
 		this.teardown = function() {
 			var gw = this.gridWrapper, container = this.element, gridparent = gw.parent();
@@ -435,7 +477,7 @@
 		// prepare the headers
 		this._prepare_headers = function() {
 			var header, i, col, _this = this, gs = this._gridSettings,cols = gs.columns || [], width, defaultWidth = gs.columnWidth, resizable = gs.resizable || false,
-			cl, ccl, val, name, margin, last, tr = gs.isThemeroller, classAdd = (tr?"themeroller":"regular"), puller,
+			cl, ccl, val, name, last, tr = gs.isThemeroller, classAdd = (tr?"themeroller":"regular"), puller,
 			hasHeaders = false, gridparent = this.gridparent, rootid = this.rootid,
 			conf = gs.defaultConf, coluuid,
 			borPadWidth = 0, totalWidth = 0;
@@ -856,17 +898,7 @@
 
 
 					// get the contents of the cell - value could be a string or a function
-					if (col.value !== undefined && col.value !== null) {
-						if (typeof(col.value) === "function") {
-							val = col.value(objData);
-						} else if (objData.data !== null && objData.data !== undefined && objData.data[col.value] !== undefined) {
-							val = objData.data[col.value];
-						} else {
-							val = "";
-						}
-					} else {
-						val = "";
-					}
+					val = getCellData(col.value,objData);
 					
 					if (typeof(col.format) === "function") {
 						val = col.format(val);
