@@ -11,11 +11,11 @@
 		<script type="text/javascript">
 			$(document).ready(function(){
 				var data = [{ "id" : "Root", "parent" : "#", "text" : "Root"},
-				{ "id" : "child1", "parent" : "Root", "text" : "child1", "data" : { "open" : "2/5/2015 2:18:00 PM", "close" : "2/6/2015 10:16:00 AM", "status" : "Closed"}},
-				            { "id" : "child1-1", "parent" : "child1", "text" : "child1-1", "data" : { "open" : "3/5/2015 2:18:00 PM", "close" : "3/6/2015 10:16:00 AM", "status" : "Closed"}},
-				            { "id" : "child2-2", "parent" : "child1", "text" : "child2-2", "data" : { "open" : "4/5/2015 2:18:00 PM", "close" : "4/6/2015 10:16:00 AM", "status" : "Closed"}},
-				{ "id" : "child2", "parent" : "Root", "text" : "child2", "data" : { "open" : "5/5/2015 2:18:00 PM", "close" : "5/6/2015 10:16:00 AM", "status" : "Closed"}},
-				{ "id" : "child3", "parent" : "Root", "text" : "child3", "data" : { "open" : "6/5/2015 2:18:00 PM", "close" : "6/6/2015 10:16:00 AM", "status" : "Closed"}}]
+				{ "id" : "child1", "parent" : "Root", "text" : "child1", "data" : { "open" : "2/5/2015 2:18:00 PM", "close" : "2/6/2015 10:16:00 AM", "status" : "Up"}},
+				            { "id" : "child1-1", "parent" : "child1", "text" : "child1-1", "data" : { "open" : "3/5/2015 2:18:00 PM", "close" : "3/6/2015 10:16:00 AM", "status" : "Down"}},
+				            { "id" : "child2-2", "parent" : "child1", "text" : "child2-2", "data" : { "open" : "4/5/2015 2:18:00 PM", "close" : "4/6/2015 10:16:00 AM", "status" : "Strange"}},
+				{ "id" : "child2", "parent" : "Root", "text" : "child2", "data" : { "open" : "5/5/2015 2:18:00 PM", "close" : "5/6/2015 10:16:00 AM", "status" : "Charmed"}},
+				{ "id" : "child3", "parent" : "Root", "text" : "child3", "data" : { "open" : "6/5/2015 2:18:00 PM", "close" : "6/6/2015 10:16:00 AM", "status" : "Top"}}]
 
 
 				$('#jstree').jstree({
