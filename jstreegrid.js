@@ -633,36 +633,37 @@
 				.on("click", ".jstree-grid-separator", function (e) {
 					// don't sort after resize
 					e.stopPropagation();
-				})
-				.on("click", ".jstree-grid-header-cell", function (e) {
-					if (!_this.sort) {
-						return;
-					}
-
-					// get column
-					var name = $(this).attr(COL_DATA_ATTR);
-
-					// sort order
-					var symbol;
-					if (gs.sortOrder === name && gs.sortAsc === true) {
-						gs.sortAsc = false;
-						symbol = "&darr;";
-					} else {
-						gs.sortOrder = name;
-						gs.sortAsc = true;
-						symbol = "&uarr;";
-					}
-
-					// add sort arrow
-					$(this.closest('.jstree-grid-wrapper')).find(".jstree-grid-sort-icon").remove();
-					$("<span></span>").addClass("jstree-grid-sort-icon").appendTo($(this)).html(symbol);
-
-					// sort by column
-					var rootNode = _this.get_node('#');
-					_this.sort(rootNode, true);
-					_this.redraw_node(rootNode, true);
 				});
 			}
+			this.gridWrapper.on("click", ".jstree-grid-header-cell", function (e) {
+				if (!_this.sort) {
+					return;
+				}
+
+				// get column
+				var name = $(this).attr(COL_DATA_ATTR);
+
+				// sort order
+				var symbol;
+				if (gs.sortOrder === name && gs.sortAsc === true) {
+					gs.sortAsc = false;
+					symbol = "&darr;";
+				} else {
+					gs.sortOrder = name;
+					gs.sortAsc = true;
+					symbol = "&uarr;";
+				}
+
+				// add sort arrow
+				$(this.closest('.jstree-grid-wrapper')).find(".jstree-grid-sort-icon").remove();
+				$("<span></span>").addClass("jstree-grid-sort-icon").appendTo($(this)).html(symbol);
+
+				// sort by column
+				var rootNode = _this.get_node('#');
+				_this.sort(rootNode, true);
+				_this.redraw_node(rootNode, true);
+			});
+			
 		};
 		/*
 		 * Override redraw_node to correctly insert the grid

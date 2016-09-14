@@ -1,0 +1,111 @@
+<html>
+	<head>
+		<title>jstree treegrid sort test</title>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css" />
+		<script type='text/javascript' src='http://code.jquery.com/jquery-2.1.0.js'></script>
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
+		<script type="text/javascript" src="../jstreegrid.js"></script>
+		<style type="text/css">
+			@import url('http://getbootstrap.com/dist/css/bootstrap.css');
+		</style>
+		<script type="text/javascript">
+			$(document).ready(function(){
+				var data;
+				
+				data = [{
+					text: "Root 1",
+					data: {price: "$5.00", size: "4",spanclass:"root"},
+					children: [
+						{text: "Really long named child whose name gets cut off", data: {price: "$4.00", size: "3",spanclass:"first"}},
+						{text: "Child 2", data: {price: "$8.00", size: "2",spanclass:"second"}, children:[
+							{text:"Grandchild",data:{price: "EXPENSIVE!",size:"10",spanclass:"third"}}
+						]}
+					]
+				}];
+				
+				$("div#jstree").bind("loaded_grid.jstree",function(){
+					$("span#status").text("loaded");
+				});
+				$("div#jstreex").bind("loaded_grid.jstree",function(){
+					$("span#status").text("loaded");
+				});
+				
+				
+				$("div#jstree").jstree({
+					plugins: ["themes","json","grid","dnd","contextmenu","search","sort"],
+					core: {
+						data: data
+					},
+					grid: {
+						columns: [
+							{width: 110, header: "Nodes",title:"_DATA_"},
+							{cellClass: "col1", value: "price", header: "<i>Price</i>", title:"price", valueClass:"spanclass"},
+							{cellClass: "col2", value: "size", header: "Qty", title:"size",valueClass:"spanclass"},
+							{cellClass: "col2", value: function(node){return node.data.size;}, header: "Qty Fn", title:"size",valueClass:"spanclass"}
+						],
+						resizable:true,
+						contextmenu:true
+					},
+					dnd: {
+            drop_finish : function () { 
+            }, 
+            drag_finish : function () { 
+            }, 
+            drag_check : function (data) { 
+                return { 
+                    after : true, 
+                    before : true, 
+                    inside : true 
+                }; 
+            } 
+					}
+				});
+
+				$("div#jstreex").jstree({
+					plugins: ["themes","json","grid","dnd","contextmenu","search","sort"],
+					core: {
+						data: data
+					},
+					grid: {
+						columns: [
+							{width: 110, header: "Nodes",title:"_DATA_"},
+							{cellClass: "col1", value: "price", header: "<i>Price</i>", title:"price", valueClass:"spanclass"},
+							{cellClass: "col2", value: "size", header: "Qty", title:"size",valueClass:"spanclass"},
+							{cellClass: "col2", value: function(node){return node.data.size;}, header: "Qty Fn", title:"size",valueClass:"spanclass"}
+						],
+						contextmenu:true
+					},
+					dnd: {
+            drop_finish : function () { 
+            }, 
+            drag_finish : function () { 
+            }, 
+            drag_check : function (data) { 
+                return { 
+                    after : true, 
+                    before : true, 
+                    inside : true 
+                }; 
+            } 
+					}
+				});
+				
+			});
+		</script>
+	</head>
+	<body>
+		<h2>Tree Grid Click Sort Test</h2>
+		<div id="jstree1">
+			<h4>First Tree</h4>
+			<div id="jstree"></div>
+			<div>Tree grid is <span id="status">loading</span>.</div>
+		</div>
+		<hr/>
+		<div id="jstree2">
+			<h4>Second Tree</h4>
+			<div id="jstreex"></div>
+			<div>Tree grid is <span id="statusx">loading</span>.</div>
+		</div>
+
+	</body>
+</html>
