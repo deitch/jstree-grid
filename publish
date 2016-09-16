@@ -1,0 +1,13 @@
+#!/bin/bash
+
+######
+# Simple script to run npm publish
+######
+
+# what version number are we in git tag and in package.json
+NPMVERSION=$(awk '/\Wversion\W/ {print $2}' package.json | sed 's/[\"\,]//g')
+GITTAG=$(g describe --abbrev=0)
+
+# we *should* be checking if this last one changed, and then publish, but later
+npm publish
+
