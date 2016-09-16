@@ -1,0 +1,30 @@
+{
+  "name": "jstreegrid",
+  "description": "grid plugin for jstree",
+  "main": "jstreegrid.js",
+  "authors": [
+    {
+      "name": "Avi Deitcher",
+      "url": "https://github.com/deitch"
+    }
+  ],
+  "license": "MIT",
+  "keywords": [
+    "jquery",
+    "jstree",
+    "grid",
+    "javascript"
+  ],
+  "homepage": "https://github.com/deitch/jstree-grid",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jstree": "^3.3.1",
+    "jquery": "^1.12.4"
+  }
+}
