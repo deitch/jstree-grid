@@ -170,7 +170,19 @@
 					sortAsc: true,
 					fixedHeader: s.fixedHeader || true,
 					width: s.width,
-					height: s.height
+					height: s.height,
+					contextitems: s.contextitems || function (grid,tree,node,val,col,t,target)
+					{
+						return {
+							"edit": {
+								label: "Edit",
+								"action": function (data) {
+									var obj = t.get_node(node);
+									grid._edit(obj,col,target);
+								}
+							}
+						}
+					}
 				}, cols = gs.columns, treecol = 0;
 				// find which column our tree shuld go in
 				for (i=0;i<s.columns.length;i++) {
@@ -838,12 +850,7 @@
 				return function (e) {
 					if (gs.context) {
 						e.preventDefault();
-						$.vakata.context.show(this,{ 'x' : e.pageX, 'y' : e.pageY },{
-							"edit":{label:"Edit","action": function (data) {
-								var obj = t.get_node(node);
-								_this._edit(obj,col,e.target);
-							}}
-						});
+						$.vakata.context.show(this,{ 'x' : e.pageX, 'y' : e.pageY }, gs.contextitems(_this,tree,node,val,col,t,e.target));
 					}
 				};
 			},

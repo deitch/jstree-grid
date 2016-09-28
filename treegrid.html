@@ -47,7 +47,19 @@
 						resizable:true,
 						draggable:true,
 						contextmenu:true,
-						contextmenu:true,
+						contextitems: function (grid,tree,node,val,col,t,target)
+						{
+							return {
+								"edit": {
+									label: "Change value",
+									icon: "glyphicon glyphicon-pencil",
+									"action": function (data) {
+										var obj = t.get_node(node);
+										grid._edit(obj,col,target);
+									}
+								}
+							}
+						},
 						width: 306,
 						height: 100
 					},
