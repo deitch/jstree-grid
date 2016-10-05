@@ -168,7 +168,7 @@
 					indent: 0,
 					sortOrder: 'text',
 					sortAsc: true,
-					fixedHeader: (s.fixedHeader === false ? false : true),
+					fixedHeader: s.fixedHeader !== false,
 					width: s.width,
 					height: s.height
 				}, cols = gs.columns, treecol = 0;
@@ -742,7 +742,7 @@
 		 */
 		this._edit = function (obj, col, element) {
 			if(!obj) { return false; }
-			if (!obj.data) {obj.data = {}};
+			if (!obj.data) {obj.data = {};}
 			if (element) {
 				element = $(element);
 				if (element.prop("tagName").toLowerCase() === "div") {
