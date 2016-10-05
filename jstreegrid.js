@@ -168,7 +168,7 @@
 					indent: 0,
 					sortOrder: 'text',
 					sortAsc: true,
-					fixedHeader: s.fixedHeader || true,
+					fixedHeader: (s.fixedHeader === false ? false : true),
 					width: s.width,
 					height: s.height
 				}, cols = gs.columns, treecol = 0;
