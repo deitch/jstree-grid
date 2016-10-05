@@ -742,6 +742,7 @@
 		 */
 		this._edit = function (obj, col, element) {
 			if(!obj) { return false; }
+			if (!obj.data) {obj.data = {}};
 			if (element) {
 				element = $(element);
 				if (element.prop("tagName").toLowerCase() === "div") {

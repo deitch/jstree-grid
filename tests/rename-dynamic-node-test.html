@@ -1,0 +1,137 @@
+<html>
+	<head>
+		<title>jstree treegrid 3.2.0 plugin demo</title>
+		<link rel="stylesheet" href="../lib/themes-3/default/style.min.css" />
+		<script type='text/javascript' src='http://code.jquery.com/jquery-2.1.0.js'></script>
+		<script type="text/javascript" src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
+		<link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css">
+		<script type="text/javascript" src="../lib/jstree-3.2.1.js"></script>
+		<script type="text/javascript" src="../jstreegrid.js"></script>
+		<script type="text/javascript">
+			$(document).ready(function(){
+				function node_create() {
+				        var ref = $('#jstree').jstree(true),
+				            sel = ref.get_selected();
+				        if(!sel.length) { return false; }
+				        sel = sel[0];
+				        sel = ref.create_node(sel, {"type":"folder"});
+				        if(sel) {
+				            ref.edit(sel);
+				        }
+				    };
+				    function node_rename() {
+				        var ref = $('#jstree').jstree(true),
+				            sel = ref.get_selected();
+				        if(!sel.length) { return false; }
+				        sel = sel[0];
+				        ref.edit(sel);
+				    };
+				    function node_delete() {
+       
+				        var ref = $('#jstree').jstree(true),
+				            sel = ref.get_selected();
+				        if(!sel.length) { return false; }
+				        ref.delete_node(sel);
+				    };
+    
+    
+				  $(function () {
+        
+				    var data = [{ "id" : "root", "parent" : "#", "text" : "Main page"},
+								{ "id" : "child1", "parent" : "root", "text" : "child1", "data" : { "cid" : "promo-01"}},
+								{ "id" : "child1-1", "parent" : "child1", "text" : "Section", "data" : { "cid" : "promo-02"}},
+								{ "id" : "child2-2", "parent" : "child1", "text" : "child2-2", "data" : { "cid" : "promo-03"}},
+								{ "id" : "child2", "parent" : "root", "text" : "child2", "data" : { "cid" : "promo-04"}},
+								{ "id" : "child3", "parent" : "root", "text" : "child3", "data" : { "cid" : "promo-05"}}]
+   
+    
+                    
+    
+				    $("#nodeCreate").click(function(){
+				        node_create();
+				    });
+				     $("#nodeRename").click(function(){
+				        node_rename();
+				    });
+				     $("#nodeDelete").click(function(){
+				        node_delete();
+				    });
+    
+    
+				    $('#jstree').jstree({
+				        "plugins" : [
+				        "contextmenu",
+				        "dnd",
+				        "state",
+				        "wholerow",
+				        "grid"],
+        
+				        "core" : {
+				            "animation" : 0,
+				            "data": data,
+				            "multiple" : true,
+				            "check_callback" : function (op, node, par, pos, more) { 
+				                              if(op === "delete_node") {
+				                                  if (node.parent === '#') {
+				                                      alert('Cannot delete root node of association list!');
+				                                      return false;
+				                                  }
+				                              }
+                              
+				                          },
+				            "themes" : { "stripes" : false, "icons" : false }
+				        },
+				        "grid": {
+				            "columns": [
+				                {width: 350, header: "NAME"},
+				                {width: 250, header: "URL", value: "cid"}
+				            ],
+				            "contextmenu" : true,
+				            "draggable": true,
+				            "resizable": true
+				        }
+				    });
+    
+
+				    $('#jstree').on("changed.jstree", function (e, data) {
+				      console.log(data.selected);
+				    });
+    
+				    $('#jstree').bind("dblclick.jstree", function (e,data) {
+				        var node = $(e.target).closest("li");
+				           node_rename(node,data);
+				    });
+    
+    
+
+				  });
+			});
+		</script>
+	</head>
+	<body>
+		<h2>Rename Dynamic Node</h2>
+		<p>To test:</p>
+		<ol>
+			<li>See the tree below</li>
+			<li>Select a node</li>
+			<li>Click "create" to create a new node</li>
+			<li>Select a grid cell (not the first one, i.e. not the original tree)</li>
+			<li>Try to rename it using right-click or the "Rename" button</li>
+		</ol>
+
+  <!-- 3 setup a container element -->
+    <div class="col-md-4 col-sm-8 col-xs-8">
+        <button type="button" class="btn btn-success btn-sm" id="nodeCreate"><i class="glyphicon glyphicon-asterisk"></i> Create</button>
+        <button type="button" class="btn btn-warning btn-sm" id="nodeRename"><i class="glyphicon glyphicon-pencil"></i> Rename</button>
+        <button type="button" class="btn btn-danger btn-sm" id="nodeDelete"><i class="glyphicon glyphicon-remove"></i> Delete</button>
+    </div>
+    
+    <div id="jstree"></div>
+    
+   
+
+
+
+
+	</body>
+</html>
