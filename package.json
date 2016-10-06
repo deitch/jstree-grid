@@ -20,7 +20,11 @@
 		{
 			"name": "Adam Jimenez",
 			"url": "https://github.com/adamjimenez"
-		}
+		},
+		{
+			"name": "QueroBartk",
+			"url": "https://github.com/QueroBartK"
+		},
 	],
 	"dependencies": {
     "jstree":">=3.0.0"
