@@ -404,14 +404,20 @@
 			},this))
 			.on("search.jstree", $.proxy(function (e, data) {
 				// search sometimes filters, so we need to hide all of the appropriate grid cells as well, and show only the matches
-				var grid = this.gridWrapper, that = this;
+				var grid = this.gridWrapper, that = this, nodesToShow;
 				this.holdingCells = {};
 				if(this._data.search.som) {
 					if(data.nodes.length) {
+						// create the list of nodes we want to look at
+						if(this._data.search.smc) {
+							nodesToShow = data.nodes.add(data.nodes.find('.jstree-node'));
+						}
+						nodesToShow = (nodesToShow || data.nodes).add(data.nodes.parentsUntil(".jstree"));
+						
 						// hide all of the grid cells
 						grid.find('div.jstree-grid-cell-regular').hide();
 						// show only those that match
-						data.nodes.add(data.nodes.parentsUntil(".jstree")).filter(".jstree-node").each(function (i,node) {
+						nodesToShow.filter(".jstree-node").each(function (i,node) {
 							var id = node.id;
 							if (id) {
 								that._prepare_grid(node);
