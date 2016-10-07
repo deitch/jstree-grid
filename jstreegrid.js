@@ -418,10 +418,16 @@
 						grid.find('div.jstree-grid-cell-regular').hide();
 						// show only those that match
 						nodesToShow.filter(".jstree-node").each(function (i,node) {
-							var id = node.id;
+							var id = node.id, cells, searchClass = "jstree-search";
 							if (id) {
 								that._prepare_grid(node);
-								findDataCell(grid,id).show();
+								cells = findDataCell(grid,id);
+								if ($(node).children("a").hasClass(searchClass)) {
+									cells.addClass(searchClass);
+								} else {
+									cells.removeClass(searchClass);
+								}
+								cells.show();
 							}
 						});
 					}
