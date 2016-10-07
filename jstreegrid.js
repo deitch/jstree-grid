@@ -410,12 +410,18 @@
 					if(data.nodes.length) {
 						// hide all of the grid cells
 						grid.find('div.jstree-grid-cell-regular').hide();
-						// show only those that match
+						// show only those that are to be shown
 						data.nodes.add(data.nodes.parentsUntil(".jstree")).filter(".jstree-node").each(function (i,node) {
-							var id = node.id;
+							var id = node.id, cells, searchClass = "jstree-search";
 							if (id) {
 								that._prepare_grid(node);
-								findDataCell(grid,id).show();
+								cells = findDataCell(grid,id);
+								if ($(node).children("a").hasClass(searchClass)) {
+									cells.addClass(searchClass);
+								} else {
+									cells.removeClass(searchClass);
+								}
+								cells.show();
 							}
 						});
 					}
