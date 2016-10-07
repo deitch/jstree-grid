@@ -406,8 +406,8 @@
 				// search sometimes filters, so we need to hide all of the appropriate grid cells as well, and show only the matches
 				var grid = this.gridWrapper, that = this, nodesToShow;
 				this.holdingCells = {};
-				if(this._data.search.som) {
-					if(data.nodes.length) {
+				if(data.nodes.length) {
+					if(this._data.search.som) {
 						// create the list of nodes we want to look at
 						if(this._data.search.smc) {
 							nodesToShow = data.nodes.add(data.nodes.find('.jstree-node'));
@@ -418,19 +418,17 @@
 						grid.find('div.jstree-grid-cell-regular').hide();
 						// show only those that match
 						nodesToShow.filter(".jstree-node").each(function (i,node) {
-							var id = node.id, cells, searchClass = "jstree-search";
+							var id = node.id;
 							if (id) {
 								that._prepare_grid(node);
-								cells = findDataCell(grid,id);
-								if ($(node).children("a").hasClass(searchClass)) {
-									cells.addClass(searchClass);
-								} else {
-									cells.removeClass(searchClass);
-								}
-								cells.show();
+								findDataCell(grid,id).show();
 							}
 						});
 					}
+				
+					data.nodes.filter(".jstree-node").each(function (i,node) {
+						findDataCell(grid,node.id).addClass("jstree-search");
+					});
 				}
 				return true;
 			}, this))
@@ -688,7 +686,7 @@
 			// - search plugin is not defined; OR
 			// - search is empty; OR
 			// - search response includes this node
-			if(obj && (!search || search.str === "" || search.str === undefined || search.str === null || $.inArray(obj.id, search.res) !== -1)) {
+			if(obj && (!search || ! this._data.search.som || search.str === "" || search.str === undefined || search.str === null || $.inArray(obj.id, search.res) !== -1)) {
 				this._prepare_grid(obj);
 			}
 			return obj;
