@@ -94,6 +94,7 @@ We use the div to control the entire height and width, and the span to get acces
 * `draggable`: true/false if the columns should be draggable (requires jQuery UI with sortable plugin). Defaults to false.
 * `stateful`: true/false. If true, then whenever a column width is resized, it will store it in html5 localStorage, if available. Defaults to false.
 * `contextmenu`: true/false whether or not a context menu for editing the cells should be shown on right-click. Defaults to false.
+* `gridcontextmenu`: function to create context menu items (see context menu of jstree).
 
 The reason for both `valueClass` and `wideValueClass` is to give you the ability to control both the narrow part of the text,  and the entire width of the cell. For example, if the cell is 56px wide, but the text in it is "OK" and thus only 20px wide.
 Suppose you have a class "important" which backgrounds in red, and a class "clickable" which changes the cursor to a pointer.

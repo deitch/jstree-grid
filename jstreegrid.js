@@ -171,7 +171,7 @@
 					fixedHeader: s.fixedHeader || true,
 					width: s.width,
 					height: s.height,
-					contextitems: s.contextitems || function (grid,tree,node,val,col,t,target)
+					gridcontextmenu : s.gridcontextmenu || function (grid,tree,node,val,col,t,target)
 					{
 						return {
 							"edit": {
@@ -850,7 +850,7 @@
 				return function (e) {
 					if (gs.context) {
 						e.preventDefault();
-						$.vakata.context.show(this,{ 'x' : e.pageX, 'y' : e.pageY }, gs.contextitems(_this,tree,node,val,col,t,e.target));
+						$.vakata.context.show(this,{ 'x' : e.pageX, 'y' : e.pageY }, gs.gridcontextmenu(_this,tree,node,val,col,t,e.target));
 					}
 				};
 			},
