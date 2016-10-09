@@ -32,6 +32,7 @@
 		IDREGEX = /[\\:&!^|()\[\]<>@*'+~#";,= \/${}%]/g, escapeId = function (id) {
 			return (id||"").replace(IDREGEX,'\\$&');
 		}, NODE_DATA_ATTR = "data-jstreegrid", COL_DATA_ATTR = "data-jstreegrid-column",
+		SEARCHCLASS = "jstree-search",
 	SPECIAL_TITLE = "_DATA_", LEVELINDENT = 24, styled = false, GRIDCELLID_PREFIX = "jsgrid_",GRIDCELLID_POSTFIX = "_col",
 		MINCOLWIDTH = 10,
 		findDataCell = function (from,id) {
@@ -427,14 +428,18 @@
 					}
 				
 					data.nodes.filter(".jstree-node").each(function (i,node) {
-						findDataCell(grid,node.id).addClass("jstree-search");
+						findDataCell(grid,node.id).addClass(SEARCHCLASS);
 					});
 				}
 				return true;
 			}, this))
 			.on("clear_search.jstree", $.proxy(function (e, data) {
 				// search has been cleared, so we need to show all rows
-				this.gridWrapper.find('div.jstree-grid-cell').show();
+				var grid = this.gridWrapper;
+				grid.find('div.jstree-grid-cell').show();
+				data.nodes.filter(".jstree-node").each(function (i,node) {
+					findDataCell(grid,node.id).removeClass(SEARCHCLASS);
+				});
 				return true;
 			}, this))
 			.on("copy_node.jstree", function (e, data) {
@@ -679,14 +684,10 @@
 		 * Override redraw_node to correctly insert the grid
 		 */
 		this.redraw_node = function(obj, deep, is_callback, force_render) {
-			var search = this._data.search;
 			// first allow the parent to redraw the node
 			obj = parent.redraw_node.call(this, obj, deep, is_callback, force_render);
-			// next prepare the grid - but only if:
-			// - search plugin is not defined; OR
-			// - search is empty; OR
-			// - search response includes this node
-			if(obj && (!search || ! this._data.search.som || search.str === "" || search.str === undefined || search.str === null || $.inArray(obj.id, search.res) !== -1)) {
+			// next prepare the grid for a redrawn node - but only if ths node is not hidden (search does that)
+			if (obj && !this.is_hidden(obj)) {
 				this._prepare_grid(obj);
 			}
 			return obj;
@@ -867,6 +868,7 @@
 			i, val, cl, wcl, ccl, a, last, valClass, wideValClass, span, paddingleft, title, gridCellName, gridCellParentId, gridCellParent,
 			gridCellPrev, gridCellPrevId, gridCellNext, gridCellNextId, gridCellChild, gridCellChildId, 
 			col, content, tmpWidth, mw = this.midWrapper, dataCell, lid = objData.id,
+			highlightSearch,
 			peers = this.get_node(objData.parent).children,
 			// find my position in the list of peers. "peers" is the list of everyone at my level under my parent, in order
 			pos = $.inArray(lid,peers),
@@ -876,6 +878,7 @@
 			
 			// find the a children
 			a = t.children("a");
+			highlightSearch = a.hasClass(SEARCHCLASS);
 			
 			if (a.length === 1) {
 				closed = !objData.state.opened;
@@ -958,6 +961,11 @@
 						last.attr("id",gridCellName+i);
 						last.addClass(gridCellName);
 						last.attr(NODE_DATA_ATTR,lid);
+						if (highlightSearch) {
+							last.addClass(SEARCHCLASS);
+						} else {
+							last.removeClass(SEARCHCLASS);
+						}
 
 					}
 					// we need to put it in the dataCell - after the parent, but the position matters
