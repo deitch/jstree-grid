@@ -13,6 +13,7 @@
 				var data = [{ "id" : "Root", "parent" : "#", "text" : "Root"},
 				{ "id" : "child1", "parent" : "Root", "text" : "child1", "data" : { "open" : "2/5/2015 2:18:00 PM", "close" : "2/6/2015 10:16:00 AM", "status" : "Up"}},
 				            { "id" : "child1-1", "parent" : "child1", "text" : "child1-1", "data" : { "open" : "3/5/2015 2:18:00 PM", "close" : "3/6/2015 10:16:00 AM", "status" : "Down"}},
+				            { "id" : "grandchild", "parent" : "child1", "text" : "grandchild", "data" : { "open" : "10/5/2015 2:18:00 PM", "close" : "10/6/2015 10:16:00 AM", "status" : "Down"}},
 				            { "id" : "child2-2", "parent" : "child1", "text" : "child2-2", "data" : { "open" : "4/5/2015 2:18:00 PM", "close" : "4/6/2015 10:16:00 AM", "status" : "Strange"}},
 				{ "id" : "child2", "parent" : "Root", "text" : "child2", "data" : { "open" : "5/5/2015 2:18:00 PM", "close" : "5/6/2015 10:16:00 AM", "status" : "Charmed"}},
 				{ "id" : "child3", "parent" : "Root", "text" : "child3", "data" : { "open" : "6/5/2015 2:18:00 PM", "close" : "6/6/2015 10:16:00 AM", "status" : "Top"}}]
@@ -21,7 +22,31 @@
 				$('#jstree').jstree({
 					"core" : { "data" : data },
 					"plugins" : [ "checkbox", "search", "grid" ],
-					"search" : { "show_only_matches" : true},
+					"search" : { "show_only_matches" : false},
+					"grid" : { columns: [
+									{width: 190, header: "name"},
+									{width: 140, header: "open", value: "open"},
+									{width: 140, header: "close", value: "close"},
+									{width: 130, header: "status", value: "status"}
+							    ]
+							 }
+				});
+				$('#jstree2').jstree({
+					"core" : { "data" : data },
+					"plugins" : [ "checkbox", "search", "grid" ],
+					"search" : { "show_only_matches" : true, "show_only_matches_children": false},
+					"grid" : { columns: [
+									{width: 190, header: "name"},
+									{width: 140, header: "open", value: "open"},
+									{width: 140, header: "close", value: "close"},
+									{width: 130, header: "status", value: "status"}
+							    ]
+							 }
+				});
+				$('#jstree3').jstree({
+					"core" : { "data" : data },
+					"plugins" : [ "checkbox", "search", "grid" ],
+					"search" : { "show_only_matches" : true, "show_only_matches_children": true},
 					"grid" : { columns: [
 									{width: 190, header: "name"},
 									{width: 140, header: "open", value: "open"},
@@ -37,36 +62,35 @@
 					to = setTimeout(function () {
 						var v = $('#treeSearch').val();
 						$('#jstree').jstree(true).search(v);
+						$('#jstree2').jstree(true).search(v);
+						$('#jstree3').jstree(true).search(v);
 					}, 250);
 				});
-				/*
-				$('#treeSearch').keyup(function () {
-				            if(to) { clearTimeout(to); }
-				            to = setTimeout(function () {
-				                var v = $('#treeSearch').val();
-				                $('#jstree').jstree(true).search(v);
-
-				                //hide/show grid values for nodes affected by searching
-				                var hidden = $('ul li:hidden');
-				                var visible = $('ul li:visible');
-
-				                $.each(hidden, function(i){
-				                    $('div[id*=' + hidden[i].id + ']').hide();
-				                });
-
-				                $.each(visible, function(i){
-				                    $('div[id*=' + visible[i].id + ']').show();
-				                });
-
-				            }, 500);
-				        });
-				*/
 			});
 		</script>
 	</head>
 	<body>
 		<h2>Search issue</h2>
+		<div>
+			The single search box will search all three trees simultaneously. Each tree is configured slightly differently in terms of search parameters.
+		</div>
 <input type="text" id="treeSearch" value="" class="input" style="margin:0em auto 1em auto; display:block; padding:4px; border-radius:4px; border:1px solid silver;" />
 
+<hr/>
+<div>
+	<code>show_only_matches=false</code>
+</div>
 <div id="jstree"></div>	</body>
+<hr/>
+<div>
+	<code>show_only_matches=true</code>
+	<code>show_only_matches_children=false</code>
+</div>
+<div id="jstree2"></div>	</body>
+<hr/>
+<div>
+	<code>show_only_matches=true</code>
+	<code>show_only_matches_children=true</code>
+</div>
+<div id="jstree3"></div>	</body>
 </html>
