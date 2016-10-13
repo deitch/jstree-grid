@@ -83,12 +83,12 @@ We use the div to control the entire height and width, and the span to get acces
 	* `header`: string to use as a header for the column.
 	* `headerClass`: a CSS class to add to the header cell in this column
 	* `columnClass`: a CSS class to add to the header cell and the column cell
-	* `cellClass`: a CSS class to add to each cell in this column (except for the header) - added to the <span>
-	* `wideCellClass`: a CSS class to add to each cell in this column (except for the header) - added to the <div>
-	* `value`: the attribute on the node to use as the value for this cell - entered as the <span> text. Can be a string or a function.
-	* `valueClass`: the attribute on the node to use as a class on this cell - added to the <span>
+	* `cellClass`: a CSS class to add to each cell in this column (except for the header) - added to the `<span>`
+	* `wideCellClass`: a CSS class to add to each cell in this column (except for the header) - added to the `<div>`
+	* `value`: the attribute on the node to use as the value for this cell - entered as the `<span>` text. Can be a string or a function.
+	* `valueClass`: the attribute on the node to use as a class on this cell - added to the `<span>`
 	* `valueClassPrefix`: a prefix to add to the valueClass to use as a class on this cell
-	* `wideValueClass`: the attribute on the node to use as a class on this cell - added to the <div>
+	* `wideValueClass`: the attribute on the node to use as a class on this cell - added to the `<div>`
 	* `wideValueClassPrefix`: a prefix to add to the wideValueClass to use as a class on this cell
 * `resizable`: true/false if the columns should be resizable. Defaults to false.
 * `draggable`: true/false if the columns should be draggable (requires jQuery UI with sortable plugin). Defaults to false.
