@@ -171,8 +171,10 @@
 					fixedHeader: s.fixedHeader || true,
 					width: s.width,
 					height: s.height,
-					gridcontextmenu : s.gridcontextmenu || function (grid,tree,node,val,col,t,target)
-					{
+					gridcontextmenu : s.gridcontextmenu
+				}, cols = gs.columns, treecol = 0;
+				if(gs.gridcontextmenu === true) {
+					gs.gridcontextmenu = function (grid,tree,node,val,col,t,target) {
 						return {
 							"edit": {
 								label: "Edit",
@@ -183,7 +185,9 @@
 							}
 						}
 					}
-				}, cols = gs.columns, treecol = 0;
+				} else if (gs.gridcontextmenu === false) {
+					gs.gridcontextmenu = false;
+				} 
 				// find which column our tree shuld go in
 				for (i=0;i<s.columns.length;i++) {
 					if (s.columns[i].tree) {
@@ -848,7 +852,7 @@
 				};
 			}, cellRightClickHandler = function (tree,node,val,col,t) {
 				return function (e) {
-					if (gs.context) {
+					if (gs.gridcontextmenu) {
 						e.preventDefault();
 						$.vakata.context.show(this,{ 'x' : e.pageX, 'y' : e.pageY }, gs.gridcontextmenu(_this,tree,node,val,col,t,e.target));
 					}
