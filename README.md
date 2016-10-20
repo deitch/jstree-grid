@@ -28,14 +28,15 @@ jstree-grid can be made a native component for Angular, Angular2, Polymer, Aurel
 
 ## Usage
 
-1. Include jquery (>= 1.4.2) and jstree in your page, as usual; use jstree v3 or later.
-2. Include jstreegrid.js v3 or later
-3. Include grid as a plugin
-4. Include relevant parameters. 
+1. Include jquery (>= 1.4.2) and jstree in your page, as usual
+2. Inclue jstree **>= 3.3.0**
+3. Include jstreegrid.js v3 or later
+4. Include grid as a plugin
+5. Include relevant parameters.
 
 ````HTML
 <!-- include jstreegrid -->
-<script src="/path/to/jstreegrid.js"></script> 
+<script src="/path/to/jstreegrid.js"></script>
 ````
 
 
@@ -56,7 +57,7 @@ $("div#id").jstree({
 
 As of 3.0.0-beta5, jstree-grid supports AMD, thanks https://github.com/jochenberger
 
-As of 3.1.0-beta1, jstree-grid uses a wrapping table, rather than inserted `div`s in the tree. This does a much better job with widths, alignment, editing, etc. etc. 
+As of 3.1.0-beta1, jstree-grid uses a wrapping table, rather than inserted `div`s in the tree. This does a much better job with widths, alignment, editing, etc. etc.
 
 ### Structure
 
@@ -97,12 +98,12 @@ We use the div to control the entire height and width, and the span to get acces
 
 The reason for both `valueClass` and `wideValueClass` is to give you the ability to control both the narrow part of the text,  and the entire width of the cell. For example, if the cell is 56px wide, but the text in it is "OK" and thus only 20px wide.
 Suppose you have a class "important" which backgrounds in red, and a class "clickable" which changes the cursor to a pointer.
-You want the entire width of the cell to be red, but just the word "OK" to be clickable. 
+You want the entire width of the cell to be red, but just the word "OK" to be clickable.
 You would ensure that "clickable" is applied to the span, but important to the div.
 
 Value is one of:
 
-* the name of the property of the node data whose content will be used; you can choose which once for the entire grid. 
+* the name of the property of the node data whose content will be used; you can choose which once for the entire grid.
 * a function, which will be passed the node's data given by `tree.get_node(node)` for the individual tree item. If you want your custom data, access it via `node.data`
 
 Thus, if you have a node whose data is given by:
@@ -240,11 +241,11 @@ tree.trigger("change_node.jstree",node);
 
 ### HTML
 
-Note that the data in each cell is treated as HTML content for the span, rather than raw text. You can use HTML in any cell, except for the 
+Note that the data in each cell is treated as HTML content for the span, rather than raw text. You can use HTML in any cell, except for the
 base tree node cell, which follows jstree rules.
 
 ### Heights
-The height of the entire div in which the tree is rendered is given by you. If you wish the tree to have a max-height of 40px, you need to set it as part of the standard HTML/CSS. 
+The height of the entire div in which the tree is rendered is given by you. If you wish the tree to have a max-height of 40px, you need to set it as part of the standard HTML/CSS.
 
 ````HTML
 <style>
@@ -270,12 +271,12 @@ The following methods can be called on the jstree:
 
 
 ### Events
-* `loaded.jstree`: When the tree is done loading, as usual, it fires a "loaded.jstree" event on the div to which you added jstree. jsTreeGrid uses this event to start its own load process. 
-* `loaded_grid.jstree`: When jsTreeGrid is done, it fires a "loaded_grid.jstree" event on the same div. If you need to run some 
+* `loaded.jstree`: When the tree is done loading, as usual, it fires a "loaded.jstree" event on the div to which you added jstree. jsTreeGrid uses this event to start its own load process.
+* `loaded_grid.jstree`: When jsTreeGrid is done, it fires a "loaded_grid.jstree" event on the same div. If you need to run some
 code after the jsTreeGrid is done loading, just listen for that event. An example is in the treegrid.HTML sample page.
-* `select_cell.jstree-grid`: If you click in any individual cell, the jstreegrid will fire a "select_cell.jstree_grid" event on the jstree. 
+* `select_cell.jstree-grid`: If you click in any individual cell, the jstreegrid will fire a "select_cell.jstree_grid" event on the jstree.
 * `update_cell.jstree-grid`: If you right-click a cell and edit it, when the edit is complete, and if the value has changed, the jstreegrid will fire a `update_cell.jstree-grid` event on the jstree.
-* `resize_column.jstree-grid`: When a column is resized, whether from dragging the resizer or double-clicking it, this event will be fired. 
+* `resize_column.jstree-grid`: When a column is resized, whether from dragging the resizer or double-clicking it, this event will be fired.
 
 The signature for the select_cell.jstree-grid handler is:
 
@@ -333,7 +334,7 @@ A number of combinations and permutations is possible using the above.
 #### fixed `width` defined for entire grid
 If a fixed `width` is not defined for the entire grid, the behaviour depends on what happens in each column. In all cases, the entire jstree-grid will be the given fixed width.
 
-* If all columns have a fixed width defined, the columns are given those widths. 
+* If all columns have a fixed width defined, the columns are given those widths.
   * If the sum of all columns is *greater* than the width defined on the entire grid, the second column onwards will be inside a scrolling element.
   * If the sum of all columns is *less* than the width defined on the entire grid, the gap will be filled by whitespace after the last column.
 * If one or more columns is defined as `auto`, these will automatically be resized to fill to the entire grid.
@@ -400,7 +401,7 @@ Here are examples:
 #### fixed `width` not defined for entire grid
 If a fixed `width` is not defined for the entire grid, then the grid fills the entire containing element or viewport, i.e. it is treated as `width:100%;`. In that case, the widths of the columns are as follows:
 
-* If all columns have a fixed width defined, the columns are given those widths. 
+* If all columns have a fixed width defined, the columns are given those widths.
   * If the sum of all columns is *greater* than the calculated width of the entire grid, the second column onwards will be inside a scrolling element.
   * If the sum of all columns is *less* than the calculated width of the entire grid, the gap will be filled by whitespace after the last column.
 * If one or more columns is defined as `auto`, these will automatically be resized to fill to the entire grid.
@@ -416,6 +417,3 @@ This section lists significant changes between pre-v3 and v3.
 
 * jstree v3 no longer stores its data in the DOM, rather inside JS. As such, jsTreeGrid no longer stores any data in the DOM. For example, in pre-v3 jstree, `attr` on a node's source data would store the actual data on the DOM as attributes using `jQuery.attr()`. This is no longer true in v3. jsTreeGrid similarly no longer looks for its source data on the DOM. All data to be passed to the grid should be stored in the `data` property of the node's JSON source.
 * `metadata` is no longer an option, since it is no longer necessary to use it to avoid storing data on the DOM.
-
-
-

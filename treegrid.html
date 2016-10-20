@@ -4,7 +4,7 @@
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css" />
 		<script type='text/javascript' src='http://code.jquery.com/jquery-2.1.0.js'></script>
 		<script type='text/javascript' src="https://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.2/jstree.min.js"></script>
 		<script type="text/javascript" src="jstreegrid.js"></script>
 		<style type="text/css">
 			@import url('http://getbootstrap.com/dist/css/bootstrap.css');
@@ -12,7 +12,7 @@
 		<script type="text/javascript">
 			$(document).ready(function(){
 				var data;
-				
+
 				data = [{
 					text: "Root 1",
 					data: {price: "$5.00", size: "4",spanclass:"root"},
@@ -23,7 +23,7 @@
 						]}
 					]
 				}];
-				
+
 				$("div#jstree").bind("loaded_grid.jstree",function(){
 					$("span#status").text("loaded");
 				}).on("select_cell.jstree-grid",function (e,data) {
@@ -31,8 +31,8 @@
 				}).on('update_cell.jstree-grid',function (e,data) {
 					$("span#changed").html("changed "+data.col+" from "+data.old+" to "+data.value);
 				});
-				
-				
+
+
 				$("div#jstree").jstree({
 					plugins: ["themes","json","grid","dnd","contextmenu","search","sort"],
 					core: {
@@ -52,30 +52,30 @@
 						height: 100
 					},
 					dnd: {
-						drop_finish : function () { 
-						}, 
-						drag_finish : function () { 
-						}, 
-						drag_check : function (data) { 
-						return { 
-							after : true, 
-							before : true, 
-							inside : true 
-						}; 
-						} 
+						drop_finish : function () {
+						},
+						drag_finish : function () {
+						},
+						drag_check : function (data) {
+						return {
+							after : true,
+							before : true,
+							inside : true
+						};
+						}
 					}
 				})
 				.on('loaded.jstree', function() {
 					$("div#jstree").jstree('open_all');
 				});
 				$("a#change").click(function(){
-					var tree = $("div#jstree").jstree(), 
+					var tree = $("div#jstree").jstree(),
 					nodename = tree.get_node("#").children[0], node = tree.get_node(nodename),
 					val = parseInt(node.data.size);
-					
+
 					node.data.size = node.data.size*2;
 					tree.trigger("change_node.jstree",nodename);
-					
+
 					return(false);
 				});
 
@@ -93,7 +93,7 @@
 					var tree = $("div#jstree").jstree();
 					tree.search($(this).val());
 				});
-				
+
 				// Do the second tree
 				$("div#jstreex").bind("loaded_grid.jstree",function(){
 					$("span#xstatus").text("loaded");
@@ -111,20 +111,20 @@
 						]
 					},
 					dnd: {
-		                drop_finish : function () { 
-		                }, 
-		                drag_finish : function () { 
-		                }, 
-		                drag_check : function (data) { 
-		                    return { 
-		                        after : true, 
-		                        before : true, 
-		                        inside : true 
-		                    }; 
-		                } 
+		                drop_finish : function () {
+		                },
+		                drag_finish : function () {
+		                },
+		                drag_check : function (data) {
+		                    return {
+		                        after : true,
+		                        before : true,
+		                        inside : true
+		                    };
+		                }
 					}
 				});
-				
+
 				$("div#jstreec").bind("loaded_grid.jstree",function () {
 					$("span#cstatus").text("loaded")
 				});
@@ -178,17 +178,17 @@
 						resizable:true
 					},
 					dnd: {
-            drop_finish : function () { 
-            }, 
-            drag_finish : function () { 
-            }, 
-            drag_check : function (data) { 
-                return { 
-                    after : true, 
-                    before : true, 
-                    inside : true 
-                }; 
-            } 
+            drop_finish : function () {
+            },
+            drag_finish : function () {
+            },
+            drag_check : function (data) {
+                return {
+                    after : true,
+                    before : true,
+                    inside : true
+                };
+            }
 					}
 				});
 				$("div#jstree5div").jstree({
@@ -206,17 +206,17 @@
 						contextmenu:true
 					},
 					dnd: {
-            drop_finish : function () { 
-            }, 
-            drag_finish : function () { 
-            }, 
-            drag_check : function (data) { 
-                return { 
-                    after : true, 
-                    before : true, 
-                    inside : true 
-                }; 
-            } 
+            drop_finish : function () {
+            },
+            drag_finish : function () {
+            },
+            drag_check : function (data) {
+                return {
+                    after : true,
+                    before : true,
+                    inside : true
+                };
+            }
 					}
 				});
 			});
@@ -267,6 +267,6 @@
 			<div id="jstree5div" style="max-height: 30px;"></div>
 			<div>Tree grid is <span id="fivestatus">loading</span>.</div>
 		</div>
-		
+
 	</body>
 </html>
