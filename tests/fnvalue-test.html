@@ -4,14 +4,14 @@
 		<link rel="stylesheet" href="../lib/themes-3/default/style.min.css" />
 		<script type='text/javascript' src='http://code.jquery.com/jquery-2.1.0.js'></script>
 		<style type="text/css" href="https://www.dropbox.com/s/7u7zirpulyj6vvr/jquery-ui.css?dl=0"></style>
-		<script type="text/javascript" src="../lib/jstree-3.3.0-patched.js"></script>
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.2/jstree.min.js"></script>
 		<script type="text/javascript" src="../jstreegrid.js"></script>
 		<script type="text/javascript">
 			$(document).ready(function(){
-				
+
 				//$( ".stopclick" ).on('click',function( event ) {
 				$( "#wrapper" ).on('click','.stopclick',function( event ) {
-    
+
 				    if (event.preventDefault) {
 				        event.preventDefault();
 				    }
@@ -21,7 +21,7 @@
 				    if (event.stopImmediatePropagation) {
 				        event.stopImmediatePropagation();
 				    }
-				});				
+				});
 				var jsonData = [{
 				    "id": 1,
 				        "text": "Materials and varieties",
@@ -183,6 +183,6 @@
 		<div id="wrapper">
 			<div id="treeViewDiv"></div>
 		</div>
-		
+
 	</body>
 </html>

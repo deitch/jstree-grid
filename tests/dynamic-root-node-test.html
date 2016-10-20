@@ -4,7 +4,7 @@
 		<link rel="stylesheet" href="../lib/themes-3/default/style.min.css" />
 		<script type='text/javascript' src='http://code.jquery.com/jquery-2.1.0.js'></script>
 		<script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
-		<script type="text/javascript" src="../lib/jstree-3.3.0-patched.js"></script>
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.2/jstree.min.js"></script>
 		<script type="text/javascript" src="../jstreegrid.js"></script>
 		<style type="text/css">
 			@import url('http://getbootstrap.com/dist/css/bootstrap.css');
@@ -15,7 +15,7 @@
 
 		    // Will work fine with following added
 		    //var data = [{id:"ded",text:"Works fine",type:"default"}];
-    
+
 		    // This will cause a bug when
 		    var data = [{text:"abc"}],
 		        types = {
@@ -35,7 +35,7 @@
 		                "icon": "glyphicon glyphicon-file",
 		                "valid_children": []
 		            },
-           
+
 		        },
 		        grid = {
 		            columns: [
@@ -94,15 +94,15 @@
 
 		});
 		</script>
-			
-			
-			
 
 
 
 
 
-			
+
+
+
+
 	</head>
 	<body>
 
@@ -131,7 +131,7 @@
 						    </div>
 						    <div>Tree with no nodes (fails)</div>
 						    <div class="mytree" id="tree_bad"></div>
-						</div>  
+						</div>
 
 						<hr/>
 
@@ -142,7 +142,7 @@
 						    </div>
 						    <div>Tree without grid (works)</div>
 						    <div class="mytree" id="tree_only"></div>
-						</div>  
+						</div>
 						</div>
 
 			  </div>

@@ -5,7 +5,7 @@
 		<script type='text/javascript' src='http://code.jquery.com/jquery-2.1.0.js'></script>
 		<script type="text/javascript" src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
 		<link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css">
-		<script type="text/javascript" src="../lib/jstree-3.2.1.js"></script>
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.2/jstree.min.js"></script>
 		<script type="text/javascript" src="../jstreegrid.js"></script>
 		<script type="text/javascript">
 			$(document).ready(function(){
@@ -27,26 +27,26 @@
 				        ref.edit(sel);
 				    };
 				    function node_delete() {
-       
+
 				        var ref = $('#jstree').jstree(true),
 				            sel = ref.get_selected();
 				        if(!sel.length) { return false; }
 				        ref.delete_node(sel);
 				    };
-    
-    
+
+
 				  $(function () {
-        
+
 				    var data = [{ "id" : "root", "parent" : "#", "text" : "Main page"},
 								{ "id" : "child1", "parent" : "root", "text" : "child1", "data" : { "cid" : "promo-01"}},
 								{ "id" : "child1-1", "parent" : "child1", "text" : "Section", "data" : { "cid" : "promo-02"}},
 								{ "id" : "child2-2", "parent" : "child1", "text" : "child2-2", "data" : { "cid" : "promo-03"}},
 								{ "id" : "child2", "parent" : "root", "text" : "child2", "data" : { "cid" : "promo-04"}},
 								{ "id" : "child3", "parent" : "root", "text" : "child3", "data" : { "cid" : "promo-05"}}]
-   
-    
-                    
-    
+
+
+
+
 				    $("#nodeCreate").click(function(){
 				        node_create();
 				    });
@@ -56,8 +56,8 @@
 				     $("#nodeDelete").click(function(){
 				        node_delete();
 				    });
-    
-    
+
+
 				    $('#jstree').jstree({
 				        "plugins" : [
 				        "contextmenu",
@@ -65,19 +65,19 @@
 				        "state",
 				        "wholerow",
 				        "grid"],
-        
+
 				        "core" : {
 				            "animation" : 0,
 				            "data": data,
 				            "multiple" : true,
-				            "check_callback" : function (op, node, par, pos, more) { 
+				            "check_callback" : function (op, node, par, pos, more) {
 				                              if(op === "delete_node") {
 				                                  if (node.parent === '#') {
 				                                      alert('Cannot delete root node of association list!');
 				                                      return false;
 				                                  }
 				                              }
-                              
+
 				                          },
 				            "themes" : { "stripes" : false, "icons" : false }
 				        },
@@ -91,18 +91,18 @@
 				            "resizable": true
 				        }
 				    });
-    
+
 
 				    $('#jstree').on("changed.jstree", function (e, data) {
 				      console.log(data.selected);
 				    });
-    
+
 				    $('#jstree').bind("dblclick.jstree", function (e,data) {
 				        var node = $(e.target).closest("li");
 				           node_rename(node,data);
 				    });
-    
-    
+
+
 
 				  });
 			});
@@ -125,10 +125,10 @@
         <button type="button" class="btn btn-warning btn-sm" id="nodeRename"><i class="glyphicon glyphicon-pencil"></i> Rename</button>
         <button type="button" class="btn btn-danger btn-sm" id="nodeDelete"><i class="glyphicon glyphicon-remove"></i> Delete</button>
     </div>
-    
+
     <div id="jstree"></div>
-    
-   
+
+
 
 
 
