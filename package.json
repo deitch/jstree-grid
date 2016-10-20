@@ -1,5 +1,5 @@
-{ 
-	"name": "jstreegrid", 
+{
+	"name": "jstreegrid",
 	"description": "grid plugin for jstree",
 	"version": "3.5.26",
 	"url": "https://github.com/deitch/jstree-grid",
@@ -24,7 +24,7 @@
 		{
 			"name": "QueroBartk",
 			"url": "https://github.com/QueroBartK"
-		},
+		}
 	],
 	"dependencies": {
     "jstree":">=3.0.0"
