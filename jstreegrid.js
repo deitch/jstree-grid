@@ -212,14 +212,9 @@
 						'.jstree-grid-midwrapper {display: table-row;}',
 						'.jstree-grid-width-auto {width:auto;display:block;}',
 						'.jstree-grid-column {display: table-cell; overflow: hidden;}',
+						'.jstree-grid-ellipsis {text-overflow: ellipsis;}',
 						'.jstree-grid-col-0 {width: 100%;}'
 					];
-					for (i=0;i<s.columns.length;i++) {
-						// TODO this does not work for the tree column yet
-						if (i !== treecol && s.columns[i].ellipsis !== false) {
-							styles.push('.jstree-grid-col-' + i + ' {text-overflow: ellipsis;}');
-						}
-					}
 					$('<style type="text/css">'+styles.join("\n")+'</style>').appendTo("head");
 				}
 				this.gridWrapper = $("<div></div>").addClass("jstree-grid-wrapper").insertAfter(container);
@@ -539,6 +534,9 @@
 				col = this.midWrapper.children("div.jstree-grid-column-"+i);
 				last = $("<div></div>").css(conf).addClass("jstree-grid-div-"+this.uniq+"-"+i+" "+(tr?"ui-widget-header ":"")+" jstree-grid-header jstree-grid-header-cell jstree-grid-header-"+classAdd+" "+cl+" "+ccl).html(val);
 				last.addClass((tr?"ui-widget-header ":"")+"jstree-grid-header jstree-grid-header-"+classAdd);
+				if (col.ellipsis !== false){
+				  last.addClass('jstree-grid-ellipsis');
+				}
 				last.prependTo(col);
 				last.attr(COL_DATA_ATTR, name);
 				totalWidth += last.outerWidth();
@@ -970,6 +968,10 @@
 							last.addClass(SEARCHCLASS);
 						} else {
 							last.removeClass(SEARCHCLASS);
+						}
+						// TODO this does not work for the tree column yet
+						if (i !== treecol && col.ellipsis !== false) {
+							last.addClass('jstree-grid-ellipsis');
 						}
 
 					}
