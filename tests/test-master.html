@@ -1,0 +1,40 @@
+<html>
+	<head>
+		<title>jstree treegrid Tests</title>
+		<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.1/themes/default/style.min.css" />
+		<script type='text/javascript' src='http://code.jquery.com/jquery-2.1.0.js'></script>
+		<script type="text/javascript" src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
+		<link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css">
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.2/jstree.min.js"></script>
+
+		<script type="text/javascript" src="../jstreegrid.js"></script>
+		<style type="text/css">
+			@import url('http://getbootstrap.com/dist/css/bootstrap.css');
+		</style>
+		<script type="text/javascript">
+			$(document).ready(function(){
+				$.getJSON('./test-list.json',function (data) {
+					$.each(data,function (index,item) {
+						var a = $('<a></a>').attr("id",item).attr('href','#').html(item);
+						$("div#test-list").append(a).append('<br/>');
+					});
+				});
+				$("div#test-list").on('click','a',function (e) {
+					e.preventDefault();
+					item = $(this).attr("id");
+					$("div#tests").load('components/'+item);
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<h2>Test Runner</h2>
+		<div>
+			This is a single file to run tests. You can pick which tests you want to run, and they will load and show towards the bottom of this page.
+			<div id="test-list">
+			</div>
+		</div>
+		<div id="tests">
+		</div>
+	</body>
+</html>

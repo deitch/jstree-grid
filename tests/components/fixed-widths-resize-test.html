@@ -1,13 +1,3 @@
-<html>
-	<head>
-		<title>jstree treegrid 3.2.0 plugin demo</title>
-		<link rel="stylesheet" href="../lib/themes-3/default/style.min.css" />
-		<script type='text/javascript' src='http://code.jquery.com/jquery-2.1.0.js'></script>
-		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.2/jstree.min.js"></script>
-		<script type="text/javascript" src="../jstreegrid.js"></script>
-		<style type="text/css">
-			@import url('http://getbootstrap.com/dist/css/bootstrap.css');
-		</style>
 		<script type="text/javascript">
 		$(document).ready(function(){
 				var data;
@@ -16,7 +6,7 @@
 					text: "Root 1",
 					data: {price: "$5.00", size: "4",spanclass:"root"},
 					children: [
-						{id: "root 1/really long named child", text: "Really long named child whose name gets cut off", data: {price: "<b>$4.00</b>", size: "3",spanclass:"first"}},
+						{text: "Really long named child whose name gets cut off", data: {price: "<b>$4.00</b>", size: "3",spanclass:"first"}},
 						{text: "Child 2", data: {price: "<i>$3.00</i>", size: "2",spanclass:"second"}, children:[
 							{text:"Grandchild",data:{price: "EXPENSIVE!",size:"10",spanclass:"third"}}
 						]}
@@ -40,8 +30,8 @@
 					grid: {
 						columns: [
 							{width: 110, header: "Nodes",title:"_DATA_"},
-							{cellClass: "col1", value: "price", header: "<i>Price</i>", title:"price", valueClass:"spanclass"},
-							{cellClass: "col2", value: "size", header: "Qty", title:"size",valueClass:"spanclass"}
+							{width: 110, cellClass: "col1", value: "price", header: "<i>Price</i>", title:"price", valueClass:"spanclass"},
+							{width: 110, cellClass: "col2", value: "size", header: "Qty", title:"size",valueClass:"spanclass"}
 						],
 						resizable:true,
 						contextmenu:true
@@ -51,9 +41,6 @@
 
 			});
 		</script>
-	</head>
-	<body>
-
 		<h2>Tree Grid 3.2.0 Demo</h2>
 
 		<div id="jstree1">
@@ -61,5 +48,3 @@
 			<div id="jstree"></div>
 			<div>Tree grid is <span id="status">loading</span>.</div>
 		</div>
-	</body>
-</html>

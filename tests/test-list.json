@@ -1,0 +1,18 @@
+[
+	"api-select-test.html",
+	"chrome-header-test.html",
+	"click-sort-test.html",
+	"dnd-test.html",
+	"dynamic-root-node-test.html",
+	"fixed-widths-resize-test.html",
+	"fnvalue-test.html",
+	"grid-api-test.html",
+	"odd-named-id-test.html",
+	"renamed_id_test.html",
+	"rename-dynamic-node-test.html",
+	"resize-event-test.html",
+	"search-test.html",
+	"select-child-test.html",
+	"sort-without-resizable-test.html",
+	"widths-test.html"
+]
