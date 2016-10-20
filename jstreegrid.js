@@ -214,7 +214,12 @@
 						'.jstree-grid-column {display: table-cell; overflow: hidden;}',
 						'.jstree-grid-col-0 {width: 100%;}'
 					];
-
+					for (i=0;i<s.columns.length;i++) {
+						// TODO this does not work for the tree column yet
+						if (i !== treecol && s.columns[i].ellipsis !== false) {
+							styles.push('.jstree-grid-col-' + i + ' {text-overflow: ellipsis;}');
+						}
+					}
 					$('<style type="text/css">'+styles.join("\n")+'</style>').appendTo("head");
 				}
 				this.gridWrapper = $("<div></div>").addClass("jstree-grid-wrapper").insertAfter(container);
