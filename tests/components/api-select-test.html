@@ -1,0 +1,65 @@
+		<script type="text/javascript">
+		$(document).ready(function(){
+
+		  var loaded;
+		  selectionChanged = function(event, data) {
+				console.log("html: selectionChanged "+data.node.id);
+		    var tree = data.instance;
+		    var selectedNodes = tree.get_selected(false);
+		    if (selectedNodes.length != 1 || selectedNodes[0] != 'j1_1'){
+		      tree.deselect_all(true);
+		      tree.select_node('j1_1', true);
+		    }
+		  };
+
+		  $('#tree').on('select_node.jstree', selectionChanged).jstree({
+		    theme: 'default',
+		    plugins: ['grid', 'types'],
+		    core: {
+		      data: [
+		        {
+		          text: "Root",
+		          type: "default",
+		          state: {
+		            opened: true
+		          },
+		          data: {
+		            column1: 'foo'
+		          },
+		          children: [
+		            {
+		              text: 'Level1',
+		              type: "default",
+		              data: {
+		                column1: 'bar'
+		              }
+		            }
+		          ]
+		        }
+		      ]
+		    },
+		    grid: {
+		      columns: [
+		        {
+		          header: 'Name',
+		          width: 200
+		        }, {
+		          header: 'Column1',
+		          width: 200,
+		          value: 'column1'
+		        }
+		      ]
+		    },
+		    types: {
+		      "default": {
+		        icon: "glyphicon glyphicon-folder-open"
+		      }
+		    }
+		  });
+		});
+
+
+		</script>
+		<h2>API Select Test</h2>
+
+			<div id="tree" />

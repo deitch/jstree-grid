@@ -1,0 +1,31 @@
+		<script type="text/javascript">
+			$(document).ready(function(){
+			  $('#jstree_demo_div').jstree({
+			    plugins: ['dnd', 'checkbox', 'grid'],
+			    core: {
+			      check_callback: true
+			    },
+			    checkbox: {
+			      keep_selected_style: true
+			    },
+			    grid: {
+			      columns: [
+			        { width: 500, header: "Nodes" },
+			        { width: 100, header: "Price", value: "price" }
+			      ]
+			    }
+			  });
+
+			});
+		</script>
+		<h2>Tree Grid Click Child Test</h2>
+		<div id="jstree_demo_div">
+		  <ul>
+		    <li>Root node 1
+		      <ul>
+		        <li>Child node 1</li>
+		        <li><a href="#">Child node 2</a></li>
+		      </ul>
+		    </li>
+		  </ul>
+		</div>
