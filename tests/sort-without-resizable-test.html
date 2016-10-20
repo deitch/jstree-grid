@@ -3,7 +3,7 @@
 		<title>jstree treegrid sort test</title>
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css" />
 		<script type='text/javascript' src='http://code.jquery.com/jquery-2.1.0.js'></script>
-		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.2/jstree.min.js"></script>
 		<script type="text/javascript" src="../jstreegrid.js"></script>
 		<style type="text/css">
 			@import url('http://getbootstrap.com/dist/css/bootstrap.css');
@@ -11,7 +11,7 @@
 		<script type="text/javascript">
 			$(document).ready(function(){
 				var data;
-				
+
 				data = [{
 					text: "Root 1",
 					data: {price: "$5.00", size: "4",spanclass:"root"},
@@ -22,15 +22,15 @@
 						]}
 					]
 				}];
-				
+
 				$("div#jstree").bind("loaded_grid.jstree",function(){
 					$("span#status").text("loaded");
 				});
 				$("div#jstreex").bind("loaded_grid.jstree",function(){
 					$("span#status").text("loaded");
 				});
-				
-				
+
+
 				$("div#jstree").jstree({
 					plugins: ["themes","json","grid","dnd","contextmenu","search","sort"],
 					core: {
@@ -47,17 +47,17 @@
 						contextmenu:true
 					},
 					dnd: {
-            drop_finish : function () { 
-            }, 
-            drag_finish : function () { 
-            }, 
-            drag_check : function (data) { 
-                return { 
-                    after : true, 
-                    before : true, 
-                    inside : true 
-                }; 
-            } 
+            drop_finish : function () {
+            },
+            drag_finish : function () {
+            },
+            drag_check : function (data) {
+                return {
+                    after : true,
+                    before : true,
+                    inside : true
+                };
+            }
 					}
 				});
 
@@ -76,20 +76,20 @@
 						contextmenu:true
 					},
 					dnd: {
-            drop_finish : function () { 
-            }, 
-            drag_finish : function () { 
-            }, 
-            drag_check : function (data) { 
-                return { 
-                    after : true, 
-                    before : true, 
-                    inside : true 
-                }; 
-            } 
+            drop_finish : function () {
+            },
+            drag_finish : function () {
+            },
+            drag_check : function (data) {
+                return {
+                    after : true,
+                    before : true,
+                    inside : true
+                };
+            }
 					}
 				});
-				
+
 			});
 		</script>
 	</head>
