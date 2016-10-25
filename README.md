@@ -91,6 +91,7 @@ We use the div to control the entire height and width, and the span to get acces
 	* `valueClassPrefix`: a prefix to add to the valueClass to use as a class on this cell
 	* `wideValueClass`: the attribute on the node to use as a class on this cell - added to the `<div>`
 	* `wideValueClassPrefix`: a prefix to add to the wideValueClass to use as a class on this cell
+	* `search_callback`: sets the search callback function used when using the `searchColumn` function. The function is passed with four arguments: the search string, the column value, the jstree node corresponding to the column and the column. returns true for a match and false if it doesn't match. If not set a default string search function is used (this is similar to [https://www.jstree.com/api/#/?q=search&f=$.jstree.defaults.search.search_callback](https://www.jstree.com/api/#/?q=search&f=$.jstree.defaults.search.search_callback))
 * `resizable`: true/false if the columns should be resizable. Defaults to false.
 * `draggable`: true/false if the columns should be draggable (requires jQuery UI with sortable plugin). Defaults to false.
 * `stateful`: true/false. If true, then whenever a column width is resized, it will store it in html5 localStorage, if available. Defaults to false.
@@ -268,6 +269,9 @@ The following methods can be called on the jstree:
 
 * `grid_hide_column(column)`: Hide column number `column`. Column numbers begin with `0`. If the column already is hidden, has no effect.
 * `grid_show_column(column)`: Show column number `column`. Column numbers begin with `0`. If the column already is shown, has no effect.
+* `search(str)`: the [jstree search](https://www.jstree.com/api/#/?q=search) has been extended to search the entire grid. to search a specific column use `searchColumn`.
+* `searchColumn(SearchObject)`:`SearchObject` is an object with the column number as key and the searchString as value. Column numbers begin with `0`. The different defined columns in the `SearchObject` will be joined by logical AND. This will use the jstree search settings for hiding and showing nodes
+	* examples: `searchColumn({0:'My Node'})` to search the first column (default the tree column) for 'My Node'. `searchColumn({0:'My Node', 1:'$10'})` to search a row where the first column contains 'My Node' and the second contains '$10'
 
 
 ### Events
