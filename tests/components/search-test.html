@@ -14,10 +14,10 @@
 					"plugins" : [ "checkbox", "search", "grid" ],
 					"search" : { "show_only_matches" : false},
 					"grid" : { columns: [
-									{width: 190, header: "name"},
-									{width: 140, header: "open", value: "open"},
-									{width: 140, header: "close", value: "close"},
-									{width: 130, header: "status", value: "status"}
+									{width: 200, header: "name"},
+									{width: 200, header: "open", value: "open"},
+									{width: 200, header: "close", value: "close"},
+									{width: 200, header: "status", value: "status"}
 							    ]
 							 }
 				});
@@ -26,10 +26,10 @@
 					"plugins" : [ "checkbox", "search", "grid" ],
 					"search" : { "show_only_matches" : true, "show_only_matches_children": false},
 					"grid" : { columns: [
-									{width: 190, header: "name"},
-									{width: 140, header: "open", value: "open"},
-									{width: 140, header: "close", value: "close"},
-									{width: 130, header: "status", value: "status"}
+									{width: 200, header: "name"},
+									{width: 200, header: "open", value: "open"},
+									{width: 200, header: "close", value: "close"},
+									{width: 200, header: "status", value: "status"}
 							    ]
 							 }
 				});
@@ -38,10 +38,10 @@
 					"plugins" : [ "checkbox", "search", "grid" ],
 					"search" : { "show_only_matches" : true, "show_only_matches_children": true},
 					"grid" : { columns: [
-									{width: 190, header: "name"},
-									{width: 140, header: "open", value: "open"},
-									{width: 140, header: "close", value: "close"},
-									{width: 130, header: "status", value: "status"}
+									{width: 200, header: "name"},
+									{width: 200, header: "open", value: "open"},
+									{width: 200, header: "close", value: "close"},
+									{width: 200, header: "status", value: "status"}
 							    ]
 							 }
 				});
@@ -56,14 +56,72 @@
 						$('#jstree3').jstree(true).search(v);
 					}, 250);
 				});
+				
+				//add search functionality to the input fields
+				$('#searchFieldsLogicalAnd input').keyup(function (e) {
+					//get all input fields
+					var inputFields = $('#searchFieldsLogicalAnd input');
+					searchValues = {};
+				  //create for each input a key value pair with the key in the name attribute of the input (also being the index of the column)
+				  inputFields.each(function(){
+					var field = $(this);
+					searchValues[field.attr('name')] = field.val();
+				  });
+				  //use the new searchColumn method
+				  $('#jstree').jstree(true).searchColumn(searchValues);
+				  $('#jstree2').jstree(true).searchColumn(searchValues);
+				  $('#jstree3').jstree(true).searchColumn(searchValues);
+				});
+				
+				//add search functionality to the input fields
+				$('#searchFields input').keyup(function (e) {
+					//get all input fields
+					var field = $(this);
+					searchValues = {};
+				  //create input a key value pair with the key in the name attribute of the input (also being the index of the column)
+					var field = $(this);
+					searchValues[field.attr('name')] = field.val();
+				  //use the new searchColumn method
+				  $('#jstree').jstree(true).searchColumn(searchValues);
+				  $('#jstree2').jstree(true).searchColumn(searchValues);
+				  $('#jstree3').jstree(true).searchColumn(searchValues);
+				});
 			});
 		</script>
+		<style>
+			.columnSearchFields input {
+			  /*
+			  * some magic numbers. not important for this example. 
+			  * they make sure the search boxes in this example are located underneath their respective column
+			  */
+			  width: 175px;
+			  margin: 0 3px;
+			}
+		</style>
 		<h2>Search issue</h2>
+		<div>only one search can be active at any time!</div>
 		<div>
 			The single search box will search all three trees simultaneously. Each tree is configured slightly differently in terms of search parameters.
 		</div>
 <input type="text" id="treeSearch" value="" class="input" style="margin:0em auto 1em auto; display:block; padding:4px; border-radius:4px; border:1px solid silver;" />
-
+		<div>
+			The following search boxes will search in their respective column. This will use a logical AND
+		</div>
+		<div id="searchFieldsLogicalAnd" class="columnSearchFields">
+			<input type="text" name="0" value="">
+			<input type="text" name="1" value="">
+			<input type="text" name="2" value="">
+			<input type="text" name="3" value="">
+		</div>
+		<div>
+			The following search boxes will search in their respective column. Each input will start a new search independent of the others
+		</div>
+		<div id="searchFields" class="columnSearchFields">
+			<input type="text" name="0" value="">
+			<input type="text" name="1" value="">
+			<input type="text" name="2" value="">
+			<input type="text" name="3" value="">
+		</div>
 <hr/>
 <div>
 	<code>show_only_matches=false</code>
