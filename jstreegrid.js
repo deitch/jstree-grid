@@ -172,7 +172,7 @@
 					fixedHeader: s.fixedHeader !== false,
 					width: s.width,
 					height: s.height
-				}, cols = gs.columns, treecol = 0;
+				}, cols = gs.columns, treecol = 0, columnSearch = false;
 				// find which column our tree shuld go in
 				for (i=0;i<s.columns.length;i++) {
 					if (s.columns[i].tree) {
@@ -287,32 +287,107 @@
 						});
 					}
 				}
+				
+//public function. validate searchObject keys, set columnSearch flag, calls jstree search and reset columnSearch flag
+				this.searchColumn = function (searchObj) {
+					var validatedSearchObj = {};
+					
+					if(typeof searchObj == 'object') {
+						for(var columnIndex in searchObj) {
+							if(searchObj.hasOwnProperty(columnIndex)) {
+								// keys should be the index of a column. This means the following:
+								// only integers and smaller than the number of columns and bigger or equal to 0
+								// (possilbe idea for in the future: ability to set key as a more human readable term like the column header and then map it here to an index)
+								if (columnIndex % 1 === 0 && columnIndex < cols.length && columnIndex >= 0) {
+									validatedSearchObj[columnIndex] = searchObj[columnIndex];
+								}		
+							}							
+						}
+					}
+					columnSearch = validatedSearchObj;
+					
+					if(Object.keys(validatedSearchObj).length !== 0){
+						//the search string doesn't matter. we'll use the search string in the columnSearch object!
+						this.search('someValue'); 
+					} else { // nothing to search so reset jstree's search by passing an empty string
+						this.search('');
+					}
+					columnSearch = false;
+				}
+				
+				
+				// set default search for each column with no user defined search function (used when doing a columnSearch)
+				for(i=0; i<cols.length; i++) {
+					var column = cols[i];
+					if (typeof(column.search_callback) !== "function") {
+						// no search callback so set default function
+						column.search_callback = function (str, columnValue, node, column) {
+							var f = new $.vakata.search(str, true, { caseSensitive : searchSettings.case_sensitive, fuzzy : searchSettings.fuzzy });
+	
+							return f.search(columnValue).isMatch;
 
+						};
+					}
+				}
+				
 				// if there was no overridden search_callback, we will provide it
 				// it will use the default per-node search algorithm, augmented by searching our data nodes
 				var searchSettings = this.settings.search;
-				if (!searchSettings.search_callback) {
-					searchSettings.search_callback = function (str,node) {
-						var i, f = new $.vakata.search(str, true, { caseSensitive : searchSettings.case_sensitive, fuzzy : searchSettings.fuzzy }),
-						matched = f.search(node.text).isMatch,
-						cols = s.columns, col;
+				var omniSearchCallback = searchSettings.search_callback;
+				
+				if(!omniSearchCallback){
+					omniSearchCallback = function (str,node) {
+							var i, f = new $.vakata.search(str, true, { caseSensitive : searchSettings.case_sensitive, fuzzy : searchSettings.fuzzy }),
+							matched = f.search(node.text).isMatch,
+							col;
 
-						// only bother looking in each cell if it was not yet matched
-						if (!matched) {
-							for (i=0;i<cols.length;i++) {
-								if (treecol === i) {
+							// only bother looking in each cell if it was not yet matched
+							if (!matched) {
+								for (i=0;i<cols.length;i++) {
+									if (treecol === i) {
+										continue;
+									}
+									col = cols[i];
+									matched = f.search(getCellData(col.value,node)).isMatch;
+									if (matched) {
+										break;
+									}
+								}
+							}
+							return matched;
+					}
+				}
+
+				searchSettings.search_callback = function (str,node) {
+					var matched = false;
+					if(columnSearch){
+						//using logical AND for column searches (more options in the future)
+						for(var columnIndex in columnSearch) {
+							if(columnSearch.hasOwnProperty(columnIndex)) {
+								var searchValue = columnSearch[columnIndex];
+								if(searchValue == ''){
 									continue;
 								}
-								col = cols[i];
-								matched = f.search(getCellData(col.value,node)).isMatch;
-								if (matched) {
-									break;
+								var col = cols[columnIndex];
+								if(treecol == columnIndex){
+									matched = col.search_callback(searchValue, node.text, node, col)
+								} else {
+									matched = col.search_callback(searchValue, getCellData(col.value,node), node, col)
+								}
+			  
+								if(!matched){
+									break; //found one that didn't match
 								}
 							}
 						}
-						return matched;
-					};
-				}
+						
+						container.trigger("columnSearch_grid.jstree");
+					} else {
+						matched =  omniSearchCallback(str, node);
+						container.trigger("omniSearch_grid.jstree");
+					}
+					return matched;
+				};
 				this._initialized = true;
 			}
 		};
