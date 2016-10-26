@@ -270,9 +270,9 @@ The following methods can be called on the jstree:
 * `grid_hide_column(column)`: Hide column number `column`. Column numbers begin with `0`. If the column already is hidden, has no effect.
 * `grid_show_column(column)`: Show column number `column`. Column numbers begin with `0`. If the column already is shown, has no effect.
 * `search(str)`: the [jstree search](https://www.jstree.com/api/#/?q=search) has been extended to search the entire grid. to search a specific column use `searchColumn`.
-* `searchColumn(SearchObject)`:`SearchObject` is an object with the column number as key and the searchString as value. Column numbers begin with `0`. The different defined columns in the `SearchObject` will be joined by logical AND. This will use the jstree search settings for hiding and showing nodes
-	* examples: `searchColumn({0:'My Node'})` to search the first column (default the tree column) for 'My Node'. `searchColumn({0:'My Node', 1:'$10'})` to search a row where the first column contains 'My Node' and the second contains '$10'
-
+* `searchColumn(searchObject)`: Search one or more columns for specific strings. `searchObject` is an object with the column number as key, beginning with `0`, and the searchString as value. Multiple column values are joined together with logical `AND`. Uses the jstree search settings to hide/show nodes. Examples:
+    * `searchColumn({0:'My Node'})`: search for rows wherein the first column has text `'My Node'`
+    * `searchColumn({0:'My Node', 1:'$10'})`: search for rows wherein the first column has text `'My Node'` *AND* second column has text `'$10'`
 
 ### Events
 * `loaded.jstree`: When the tree is done loading, as usual, it fires a "loaded.jstree" event on the div to which you added jstree. jsTreeGrid uses this event to start its own load process.
