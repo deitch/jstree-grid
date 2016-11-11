@@ -114,7 +114,7 @@
 		return(fullWidth);
 	},
 	renderATitle = function(node,t,tree) {
-		var a = node.get(0).tagName.toLowerCase() === "a" ? node : node.children("a"), title, col = tree.settings.grid.columns[0];
+		var a = node.hasClass("jstree-anchor") ? node : node.children("[class~='jstree-anchor']"), title, col = tree.settings.grid.columns[0];
 		// get the title
 		title = "";
 		if (col.title) {
@@ -535,16 +535,16 @@
 			if (this._gridSettings.isThemeroller) {
 				this.element
 					.on("select_node.jstree",$.proxy(function(e,data){
-						data.rslt.obj.children("a").nextAll("div").addClass("ui-state-active");
+						data.rslt.obj.children("[class~='jstree-anchor']").nextAll("div").addClass("ui-state-active");
 					},this))
 					.on("deselect_node.jstree deselect_all.jstree",$.proxy(function(e,data){
-						data.rslt.obj.children("a").nextAll("div").removeClass("ui-state-active");
+						data.rslt.obj.children("[class~='jstree-anchor']").nextAll("div").removeClass("ui-state-active");
 					},this))
 					.on("hover_node.jstree",$.proxy(function(e,data){
-						data.rslt.obj.children("a").nextAll("div").addClass("ui-state-hover");
+						data.rslt.obj.children("[class~='jstree-anchor']").nextAll("div").addClass("ui-state-hover");
 					},this))
 					.on("dehover_node.jstree",$.proxy(function(e,data){
-						data.rslt.obj.children("a").nextAll("div").removeClass("ui-state-hover");
+						data.rslt.obj.children("[class~='jstree-anchor']").nextAll("div").removeClass("ui-state-hover");
 					},this));
 			}
 			
@@ -963,7 +963,7 @@
 			t = $(obj);
 			
 			// find the a children
-			a = t.children("a");
+			a = t.children("[class~='jstree-anchor']");
 			highlightSearch = a.hasClass(SEARCHCLASS);
 			
 			if (a.length === 1) {
