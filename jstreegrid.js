@@ -428,7 +428,7 @@
 				}, this))
 			.on("ready.jstree",$.proxy(function (e,data) {
 				// find the line-height of the first known node
-				var anchorHeight = this.element.find("li a:first").outerHeight(), q,
+				var anchorHeight = this.element.find("[class~='jstree-anchor']:first").outerHeight(), q,
 				cls = this.element.attr("class") || "";
 				$('<style type="text/css">div.jstree-grid-cell-root-'+this.rootid+' {line-height: '+anchorHeight+'px; height: '+anchorHeight+'px;}</style>').appendTo("head");
 
