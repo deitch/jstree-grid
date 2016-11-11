@@ -654,7 +654,7 @@
 						ref = $.jstree.reference(currentTree);
 						cols = ref.settings.grid.columns;
 						headers = toResize.parent().children("div.jstree-grid-column");
-						if (isNaN(colNum) || colNum < 0) { ref._gridSettings.treeWidthDiff = currentTree.find("ins:eq(0)").width() + currentTree.find("a:eq(0)").width() - ref._gridSettings.columns[0].width; }
+						if (isNaN(colNum) || colNum < 0) { ref._gridSettings.treeWidthDiff = currentTree.find("ins:eq(0)").width() + currentTree.find("[class~='jstree-anchor']:eq(0)").width() - ref._gridSettings.columns[0].width; }
 						width = ref._gridSettings.columns[colNum].width = parseFloat(toResize.css("width"));
 						isClickedSep = false;
 						toResize = null;
