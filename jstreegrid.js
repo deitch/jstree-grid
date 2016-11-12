@@ -171,8 +171,24 @@
 					sortAsc: true,
 					fixedHeader: s.fixedHeader !== false,
 					width: s.width,
-					height: s.height
+					height: s.height,
+					gridcontextmenu : s.gridcontextmenu
 				}, cols = gs.columns, treecol = 0, columnSearch = false;
+				if(gs.gridcontextmenu === true) {
+					gs.gridcontextmenu = function (grid,tree,node,val,col,t,target) {
+						return {
+							"edit": {
+								label: "Edit",
+								"action": function (data) {
+									var obj = t.get_node(node);
+									grid._edit(obj,col,target);
+								}
+							}
+						}
+					}
+				} else if (gs.gridcontextmenu === false) {
+					gs.gridcontextmenu = false;
+				} 
 				// find which column our tree shuld go in
 				for (i=0;i<s.columns.length;i++) {
 					if (s.columns[i].tree) {
@@ -934,14 +950,9 @@
 				};
 			}, cellRightClickHandler = function (tree,node,val,col,t) {
 				return function (e) {
-					if (gs.context) {
+					if (gs.gridcontextmenu) {
 						e.preventDefault();
-						$.vakata.context.show(this,{ 'x' : e.pageX, 'y' : e.pageY },{
-							"edit":{label:"Edit","action": function (data) {
-								var obj = t.get_node(node);
-								_this._edit(obj,col,e.target);
-							}}
-						});
+						$.vakata.context.show(this,{ 'x' : e.pageX, 'y' : e.pageY }, gs.gridcontextmenu(_this,tree,node,val,col,t,e.target));
 					}
 				};
 			},
