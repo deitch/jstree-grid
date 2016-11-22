@@ -114,7 +114,7 @@
 		return(fullWidth);
 	},
 	renderATitle = function(node,t,tree) {
-		var a = node.get(0).tagName.toLowerCase() === "a" ? node : node.children("a"), title, col = tree.settings.grid.columns[0];
+		var a = node.hasClass("jstree-anchor") ? node : node.children("[class~='jstree-anchor']"), title, col = tree.settings.grid.columns[0];
 		// get the title
 		title = "";
 		if (col.title) {
@@ -171,8 +171,24 @@
 					sortAsc: true,
 					fixedHeader: s.fixedHeader !== false,
 					width: s.width,
-					height: s.height
+					height: s.height,
+					gridcontextmenu : s.gridcontextmenu
 				}, cols = gs.columns, treecol = 0, columnSearch = false;
+				if(gs.gridcontextmenu === true) {
+					gs.gridcontextmenu = function (grid,tree,node,val,col,t,target) {
+						return {
+							"edit": {
+								label: "Edit",
+								"action": function (data) {
+									var obj = t.get_node(node);
+									grid._edit(obj,col,target);
+								}
+							}
+						}
+					}
+				} else if (gs.gridcontextmenu === false) {
+					gs.gridcontextmenu = false;
+				} 
 				// find which column our tree shuld go in
 				for (i=0;i<s.columns.length;i++) {
 					if (s.columns[i].tree) {
@@ -428,7 +444,7 @@
 				}, this))
 			.on("ready.jstree",$.proxy(function (e,data) {
 				// find the line-height of the first known node
-				var anchorHeight = this.element.find("li a:first").outerHeight(), q,
+				var anchorHeight = this.element.find("[class~='jstree-anchor']:first").outerHeight(), q,
 				cls = this.element.attr("class") || "";
 				$('<style type="text/css">div.jstree-grid-cell-root-'+this.rootid+' {line-height: '+anchorHeight+'px; height: '+anchorHeight+'px;}</style>').appendTo("head");
 
@@ -535,16 +551,16 @@
 			if (this._gridSettings.isThemeroller) {
 				this.element
 					.on("select_node.jstree",$.proxy(function(e,data){
-						data.rslt.obj.children("a").nextAll("div").addClass("ui-state-active");
+						data.rslt.obj.children("[class~='jstree-anchor']").nextAll("div").addClass("ui-state-active");
 					},this))
 					.on("deselect_node.jstree deselect_all.jstree",$.proxy(function(e,data){
-						data.rslt.obj.children("a").nextAll("div").removeClass("ui-state-active");
+						data.rslt.obj.children("[class~='jstree-anchor']").nextAll("div").removeClass("ui-state-active");
 					},this))
 					.on("hover_node.jstree",$.proxy(function(e,data){
-						data.rslt.obj.children("a").nextAll("div").addClass("ui-state-hover");
+						data.rslt.obj.children("[class~='jstree-anchor']").nextAll("div").addClass("ui-state-hover");
 					},this))
 					.on("dehover_node.jstree",$.proxy(function(e,data){
-						data.rslt.obj.children("a").nextAll("div").removeClass("ui-state-hover");
+						data.rslt.obj.children("[class~='jstree-anchor']").nextAll("div").removeClass("ui-state-hover");
 					},this));
 			}
 			
@@ -654,7 +670,7 @@
 						ref = $.jstree.reference(currentTree);
 						cols = ref.settings.grid.columns;
 						headers = toResize.parent().children("div.jstree-grid-column");
-						if (isNaN(colNum) || colNum < 0) { ref._gridSettings.treeWidthDiff = currentTree.find("ins:eq(0)").width() + currentTree.find("a:eq(0)").width() - ref._gridSettings.columns[0].width; }
+						if (isNaN(colNum) || colNum < 0) { ref._gridSettings.treeWidthDiff = currentTree.find("ins:eq(0)").width() + currentTree.find("[class~='jstree-anchor']:eq(0)").width() - ref._gridSettings.columns[0].width; }
 						width = ref._gridSettings.columns[colNum].width = parseFloat(toResize.css("width"));
 						isClickedSep = false;
 						toResize = null;
@@ -934,14 +950,9 @@
 				};
 			}, cellRightClickHandler = function (tree,node,val,col,t) {
 				return function (e) {
-					if (gs.context) {
+					if (gs.gridcontextmenu) {
 						e.preventDefault();
-						$.vakata.context.show(this,{ 'x' : e.pageX, 'y' : e.pageY },{
-							"edit":{label:"Edit","action": function (data) {
-								var obj = t.get_node(node);
-								_this._edit(obj,col,e.target);
-							}}
-						});
+						$.vakata.context.show(this,{ 'x' : e.pageX, 'y' : e.pageY }, gs.gridcontextmenu(_this,tree,node,val,col,t,e.target));
 					}
 				};
 			},
@@ -963,7 +974,7 @@
 			t = $(obj);
 			
 			// find the a children
-			a = t.children("a");
+			a = t.children("[class~='jstree-anchor']");
 			highlightSearch = a.hasClass(SEARCHCLASS);
 			
 			if (a.length === 1) {

@@ -1,7 +1,7 @@
 {
 	"name": "jstreegrid",
 	"description": "grid plugin for jstree",
-	"version": "3.5.30",
+	"version": "3.6.1",
 	"url": "https://github.com/deitch/jstree-grid",
 	"author": {"name":"Avi Deitcher","url":"https://github.com/deitch"},
 	"contributors": [
@@ -24,6 +24,10 @@
 		{
 			"name": "QueroBartk",
 			"url": "https://github.com/QueroBartK"
+		},
+		{
+			"name": "OgreTransporter",
+			"url": "https://github.com/OgreTransporter"
 		}
 	],
 	"dependencies": {
