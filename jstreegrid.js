@@ -1150,7 +1150,7 @@
 					if (title) {
 						span.attr("title",title);
 					}
-
+					tree.trigger("render_cell.jstree-grid", [{value: val, column: col.header, node: t, sourceName: col.value}]);
 				}		
 				last.addClass("jstree-grid-cell-last"+(tr?" ui-state-default":""));
 				// if there is no width given for the last column, do it via automatic
