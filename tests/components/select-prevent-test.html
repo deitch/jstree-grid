@@ -1,0 +1,93 @@
+<script type="text/javascript">
+	$(document).ready(function(){
+		var data, input1, input2, input3, input4;
+
+		input1 = "<input type='text'/>";
+
+		input2 = "<select><option>Option 1</option><option>Option 2</option><option>Option 3</option></select>";
+
+		input3 = "<input type='text'/>";
+
+		input4 = "<input type='checkbox'/>";
+
+		data = [{
+			text: "Input 1",
+			icon: false,
+			data: {
+				input: input1,
+				val: "Value 1"
+			}
+		}, {
+			text: "Input 2",
+			icon: false,
+			data: {
+				input: input2,
+				val: "Value 2"
+			}
+		}, {
+			text: "Input 3",
+			icon: false,
+			data: {
+				input: input3,
+				val: "Value 3"
+			}
+		}, {
+			text: "Input 4",
+			icon: false,
+			data: {
+				input: input4,
+				val: "Value 4"
+			}
+		}];
+		$("div#jstree").jstree({
+			plugins: ["grid"],
+			grid: {
+				columns: [{
+					tree: true
+				}, {
+					value: "input"
+				}, {
+					value: "val"
+				}]
+			},
+			core: {
+				data: data,
+				themes: {
+					dots: false
+				}
+			}
+		}).on("select_cell.jstree-grid", function(event, data) {
+			// Gets the node data from the tree
+			var node = $("div#jstree").jstree("get_node", data.node);
+			// Checks if the clicked cell is the html input one
+			switch(node.id) {
+				case "j1_1":
+					break;
+				case "j1_2":
+					event.preventDefault();
+					break;
+				case "j1_3":
+					event.preventDefault();
+					break;
+				case "j1_4":
+					event.preventDefault();
+					// Optionally select the line when clicked
+					$("div#jstree").jstree("deselect_all").jstree("select_node", data.node);
+					break;
+			}
+		});
+	});
+
+
+</script>
+
+<h2>Tree Select prevent Test</h2>
+<div>Select the elements in any of the three rows.
+	<ul>
+		<li>The first row does not do <code>event.preventDefault()</code>, so the whole row will be selected and lose focus</li>
+		<li>The second and third row do <code>event.preventDefault()</code>, so the whole row will not be selected</li>
+		<li>The fourth row does <code>event.preventDefault()</code>, but also manually selects the row, so the change should go through and the row will be selected</li>
+	</ul>
+</div>
+<div id="jstree">
+</div>
