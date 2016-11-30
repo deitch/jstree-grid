@@ -1,0 +1,68 @@
+<script type="text/javascript">
+	$(document).ready(function(){
+		var data, input1, input2, input3;
+
+		input1 = "<input type='text'/>";
+
+		input2 = "<select><option>Option 1</option><option>Option 2</option><option>Option 3</option></select>";
+
+		input3 = "<input type='checkbox'/>";
+
+		data = [{
+			text: "Input 1",
+			icon: false,
+			data: {
+				input: input1,
+				val: "Value 1"
+			}
+		}, {
+			text: "Input 2",
+			icon: false,
+			data: {
+				input: input2,
+				val: "Value 2"
+			}
+		}, {
+			text: "Input 3",
+			icon: false,
+			data: {
+				input: input3,
+				val: "Value 3"
+			}
+		}];
+		$("div#jstree").jstree({
+			plugins: ["grid"],
+			grid: {
+				columns: [{
+					tree: true
+				}, {
+					value: "input"
+				}, {
+					value: "val"
+				}]
+			},
+			core: {
+				data: data,
+				themes: {
+					dots: false
+				}
+			}
+		}).on("select_cell.jstree-grid", function(event, data) {
+			// Gets the node data from the tree
+			var node = $("div#jstree").jstree("get_node", data.node);
+			// Checks if the clicked cell is the html input one
+			if (node.data && node.data.input == data.value) {
+				event.preventDefault();
+				// Optionally select the line when clicked
+				$("div#jstree").jstree("deselect_all").jstree("select_node", data.node);
+			}
+		});
+	});
+
+
+</script>
+
+<h2>Tree Select prevent Test</h2>
+
+<div id="jstree">
+</div>
