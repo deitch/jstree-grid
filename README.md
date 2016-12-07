@@ -279,7 +279,20 @@ The following methods can be called on the jstree:
 * `loaded.jstree`: When the tree is done loading, as usual, it fires a "loaded.jstree" event on the div to which you added jstree. jsTreeGrid uses this event to start its own load process.
 * `loaded_grid.jstree`: When jsTreeGrid is done, it fires a "loaded_grid.jstree" event on the same div. If you need to run some
 code after the jsTreeGrid is done loading, just listen for that event. An example is in the treegrid.HTML sample page.
-* `select_cell.jstree-grid`: If you click in any individual cell, the jstreegrid will fire a "select_cell.jstree_grid" event on the jstree. This will select the entire line using jstree internals. If you have input HTML rendered as a cell, this can lead to losing focus of your input. To avoid the selection and so avoiding losing focus of your HTML elements, you can prevent the selection by preventing the event, like this:
+* `select_cell.jstree-grid`: If you click in any individual cell, the jstreegrid will fire a "select_cell.jstree_grid" event on the tree. See below for "cell selection".
+* `update_cell.jstree-grid`: If you right-click a cell and edit it, when the edit is complete, and if the value has changed, the jstreegrid will fire a `update_cell.jstree-grid` event on the jstree.
+* `resize_column.jstree-grid`: When a column is resized, whether from dragging the resizer or double-clicking it, this event will be fired.
+
+#### Cell Selection
+When you select a cell by clicking on it, two things happen:
+
+1. jstree-grid fires off a `select_cell.jstree-grid` event on the tree, to which you can listen.
+2. jstree-grid selects the row, leading in turn to the normal jstree row selection event handlers.
+
+If you wish to prevent the second part - entire row selection by the jstree - for example, if you have input HTML rendered in the cell and do not want to lose input focus, you can prevent the jstree selection.
+
+To do so, create a handler for the `select_cell.jstree-grid` event and prevent its handling:
+
 ``` js
 mytree.on("select_cell.jstree-grid", function(event, data) {
     if (/* some logic, if you want */) {
@@ -287,7 +300,9 @@ mytree.on("select_cell.jstree-grid", function(event, data) {
     }
 });
 ```
-and if you want to actually select the line without losing focus, you can do it manually:
+
+If you still want to prevent the automatic selection of the row, but do it yourself, you can do it manually:
+
 ``` js
 mytree.on("select_cell.jstree-grid", function(event, data) {
     event.preventDefault();
@@ -295,8 +310,7 @@ mytree.on("select_cell.jstree-grid", function(event, data) {
     mytree.jstree("select_node", data.node);
 });
 ```
-* `update_cell.jstree-grid`: If you right-click a cell and edit it, when the edit is complete, and if the value has changed, the jstreegrid will fire a `update_cell.jstree-grid` event on the jstree.
-* `resize_column.jstree-grid`: When a column is resized, whether from dragging the resizer or double-clicking it, this event will be fired.
+
 
 The signature for the select_cell.jstree-grid handler is:
 
@@ -313,6 +327,7 @@ where:
 * sourceName: name of the element in the original data that contained this value, as provided by the config in the columns "value" for this column
 
 
+#### Cell Update
 
 The signature for the update_cell.jstree-grid handler is:
 
