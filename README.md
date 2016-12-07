@@ -281,6 +281,7 @@ The following methods can be called on the jstree:
 code after the jsTreeGrid is done loading, just listen for that event. An example is in the treegrid.HTML sample page.
 * `select_cell.jstree-grid`: If you click in any individual cell, the jstreegrid will fire a "select_cell.jstree_grid" event on the tree. See below for "cell selection".
 * `update_cell.jstree-grid`: If you right-click a cell and edit it, when the edit is complete, and if the value has changed, the jstreegrid will fire a `update_cell.jstree-grid` event on the jstree.
+* `render_cell.jstree-grid`: Called each time a cell is rendered. Is not a one-time call, as cells are rendered when their container node is opened and destroyed each time is closed, so you can get multiple `render_cell.jstree-grid` calls for the same cell.
 * `resize_column.jstree-grid`: When a column is resized, whether from dragging the resizer or double-clicking it, this event will be fired.
 
 #### Cell Selection
@@ -354,7 +355,20 @@ where:
 * columnNumber: the number of the column being resized, with the first column being 0
 * newWidth: the new width of the column in pixels
 
+#### Cell Render
 
+The signature for the render_cell.jstree-grid handler is:
+
+````JavaScript
+function(event,{value:cellvalue, column:columnheader, node:node, sourceName:datakeyname})
+````
+
+where:
+
+* value: The value of the cell
+* column: The column header
+* node: Reference to the &lt;li&gt; element in the tree where this cell is rendered
+* sourceName: The key name in the data structure that gives the value to this cell
 
 ### Width
 

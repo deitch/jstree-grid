@@ -1,0 +1,45 @@
+		<script type="text/javascript">
+		$(document).ready(function(){
+				var data = [{
+					text: "Open and close me",
+					data: {price: "$5.00", size: "4",spanclass:"root"},
+					children: [
+						{text: "Really long named child whose name gets cut off", data: {price: "<b>$4.00</b>", size: "3",spanclass:"first"}},
+						{text: "Open and close me too", data: {price: "<i>$3.00</i>", size: "2",spanclass:"second"}, children:[
+							{text:"Grandchild",data:{price: "EXPENSIVE!",size:"10",spanclass:"third"}}
+						]}
+					]
+				}];
+				$("#jstree").on("render_cell.jstree-grid",function (e,data) {
+					console.log("Cell rendered:", data);
+					$("#events").append("<li> Cell rendered: "+data.node[0].id+"</li>");
+				});
+				$("#jstree").jstree(
+					{
+						htmlheader: 'Check console (F12 on most browsers)',
+						plugins: ["grid"],
+						core: {
+							data: data
+						},
+						grid: {
+							width: 400,
+							columns: [
+								{width: 150, header: "Nodes",title:"_DATA_"},
+								{width: 100, cellClass: "col1", value: "price", header: "<i>Price</i>", title:"price", valueClass:"spanclass"},
+								{width: 75, cellClass: "col2", value: "size", header: "Qty", title:"size",valueClass:"spanclass"}
+							]
+						}
+					}
+				);
+			});
+		</script>
+
+		<h2>Tree Grid render_cell Event Test</h2>
+		<div id="jstree">
+		</div>
+		<div>
+			<h3>Events</h3>
+			<div>Details in console</div>
+			<ol id="events">
+			</ol>
+		</div>

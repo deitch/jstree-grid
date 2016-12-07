@@ -946,10 +946,10 @@
 				return function(e) {
 					//node = tree.find("#"+node.attr("id"));
 					var event = jQuery.Event("select_cell.jstree-grid");
-					tree.trigger(event, [{value: val,column: col.header,node: node,grid:$(this),sourceName: col.value}]);
-					if (!event.isDefaultPrevented()) {
-						node.children(".jstree-anchor").trigger("click.jstree",e);
-					}
+ 					tree.trigger(event, [{value: val,column: col.header,node: node,grid:$(this),sourceName: col.value}]);
+ 					if (!event.isDefaultPrevented()) {
+ 						node.children(".jstree-anchor").trigger("click.jstree",e);
+ 					}
 				};
 			}, cellRightClickHandler = function (tree,node,val,col,t) {
 				return function (e) {
@@ -1150,6 +1150,8 @@
 					if (title) {
 						span.attr("title",title);
 					}
+					
+					tree.trigger("render_cell.jstree-grid", [{value: val, column: col.header, node: t, sourceName: col.value}]);
 				}		
 				last.addClass("jstree-grid-cell-last"+(tr?" ui-state-default":""));
 				// if there is no width given for the last column, do it via automatic
