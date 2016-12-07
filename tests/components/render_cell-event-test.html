@@ -12,6 +12,7 @@
 				}];
 				$("#jstree").on("render_cell.jstree-grid",function (e,data) {
 					console.log("Cell rendered:", data);
+					$("#events").append("<li> Cell rendered: "+data.node[0].id+"</li>");
 				});
 				$("#jstree").jstree(
 					{
@@ -35,4 +36,10 @@
 
 		<h2>Tree Grid render_cell Event Test</h2>
 		<div id="jstree">
+		</div>
+		<div>
+			<h3>Events</h3>
+			<div>Details in console</div>
+			<ol id="events">
+			</ol>
 		</div>
