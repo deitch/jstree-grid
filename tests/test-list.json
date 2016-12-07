@@ -14,6 +14,7 @@
 	"search-test.html",
 	"select-child-test.html",
 	"select-prevent-test.html",
+	"render_cell-event-test.html",
 	"sort-without-resizable-test.html",
 	"widths-test.html"
 ]
