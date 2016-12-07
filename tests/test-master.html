@@ -21,7 +21,7 @@
 				});
 				$("div#test-list").on('click','a',function (e) {
 					e.preventDefault();
-					item = $(this).attr("id");
+					var item = $(this).attr("id");
 					$("div#tests").load('components/'+item);
 				});
 			});
