@@ -1,4 +1,5 @@
 # jsTreeGrid
+[![CDNJS](https://img.shields.io/cdnjs/v/jstreegrid.svg)](https://cdnjs.com/libraries/jstreegrid)
 
 ## Overview
 Plugin for the jstree www.jstree.com tree component that provides a grid extension to the tree.
