@@ -2,6 +2,7 @@
 	"api-select-test.html",
 	"chrome-header-test.html",
 	"click-sort-test.html",
+	"clicked-on-show.html",
 	"dnd-test.html",
 	"dynamic-root-node-test.html",
 	"fixed-widths-resize-test.html",
