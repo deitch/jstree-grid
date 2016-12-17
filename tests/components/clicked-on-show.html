@@ -1,0 +1,52 @@
+		<script type="text/javascript">
+			$(document).ready(function(){
+				$("#jstree").jstree({
+			    plugins: ["grid"],
+			    'grid': {
+			      'columns': [{
+			        'header': 'Nodes',
+			        'width': 180
+			      }, {
+			        'header': 'Price',
+			        'width': 180,
+			        'value': function(node) {
+			          return (node.data && node.data.price);
+			        }
+			      }]
+			    },
+			    'core': {
+
+			      'data': [{
+			        'text': 'Root node',
+			        'state': {
+			          'opened': false
+			        },
+
+			        'children': [{
+			          'text': 'Child 1',
+			          'data': {
+			            'price': '$10'
+			          },
+			          'state': {
+			            'selected': true
+			          },
+			        }, {
+			          'text': 'Child 2',
+			          'data': {
+			            'price': '$20'
+			          }
+			        }]
+			      }]
+			    }
+			  });			});
+		</script>
+		<h2>Tree Grid Clicked On Show Test</h2>
+		<div>
+			<div>Two tests are included here:
+				<ul>
+					<li>On first rendering, the first child under "Root" should be selected, as should its grid cells</li>
+					<li>Select any cell, it will highlight all of the cells. Then close and open its parent, and the cell <i>and its grid cells</i> should be clicked.</li>
+				</ul>
+			</div>
+			<div id="jstree"></div>
+		</div>
