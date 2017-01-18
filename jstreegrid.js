@@ -624,7 +624,10 @@
 					width = localStorage['jstree-root-'+rootid+'-column-'+i];
 				else
 					width = cols[i].width || defaultWidth;
-
+				
+				var minWidth = cols[i].minWidth || width;
+				var maxWidth = cols[i].maxWidth || width;
+				
 				// we only deal with borders if width is not auto and not percentages
 				borPadWidth = tr ? 1+6 : 2+8; // account for the borders and padding
 				if (width !== 'auto' && typeof(width) !== "string") {
@@ -641,8 +644,8 @@
 				totalWidth += last.outerWidth();
 				puller = $("<div class='jstree-grid-separator jstree-grid-separator-"+classAdd+(tr ? " ui-widget-header" : "")+(resizable? " jstree-grid-resizable-separator":"")+"'>&nbsp;</div>").appendTo(last);
 				col.width(width);
-				col.css("min-width",width);
-				col.css("max-width",width);
+				col.css("min-width", minWidth);
+				col.css("max-width", maxWidth);
 			}
 
 			last.addClass((tr?"ui-widget-header ":"")+"jstree-grid-header jstree-grid-header-last jstree-grid-header-"+classAdd);
