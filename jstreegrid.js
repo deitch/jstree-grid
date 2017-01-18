@@ -35,8 +35,20 @@
 		SEARCHCLASS = "jstree-search",
 	SPECIAL_TITLE = "_DATA_", LEVELINDENT = 24, styled = false, GRIDCELLID_PREFIX = "jsgrid_",GRIDCELLID_POSTFIX = "_col",
 		MINCOLWIDTH = 10,
-		findDataCell = function (from,id) {
-			return from.find("div["+NODE_DATA_ATTR+"='"+id+"']");
+		findDataCell = function (from,ids) {
+			var ret;
+			if (ids === null || ids === undefined) {
+				ret = [];
+			} else if (typeof(ids) === "string") {
+				ret = from.find("div["+NODE_DATA_ATTR+"='"+ids+"']");
+			} else if (ids.length === 0) {
+				ret = from.find("div["+NODE_DATA_ATTR+"='"+ids.id+"']");
+			} else {
+				ret = ids.map(function (i,id) {
+					return from.find("div["+NODE_DATA_ATTR+"='"+id.id+"']");
+				});
+			}
+			return ret;
 		},
 		isClickedSep = false, toResize = null, oldMouseX = 0, newMouseX = 0,
 
@@ -426,9 +438,7 @@
 					if (data.node && data.node.children_d) {
 						removeNodes = removeNodes.concat(data.node.children_d);
 					}
-					for (i=0;i<removeNodes.length;i++) {
-						findDataCell(grid,removeNodes[i]).remove();
-					}
+					findDataCell(grid,removeNodes).remove();
 				}
 			}, this))
 			.on("close_node.jstree",$.proxy(function (e,data) {
@@ -490,9 +500,7 @@
 			.on("deselect_all.jstree",$.proxy(function(node,selected,event){
 				// get all of the ids that were unselected
 				var ids = selected.node || [], i;
-				for (i=0;i<ids.length;i++) {
-					findDataCell(this.gridWrapper,ids[i]).removeClass("jstree-clicked");
-				}
+				findDataCell(this.gridWrapper,ids).removeClass("jstree-clicked");
 			},this))
 			.on("search.jstree", $.proxy(function (e, data) {
 				// search sometimes filters, so we need to hide all of the appropriate grid cells as well, and show only the matches
@@ -518,9 +526,7 @@
 						});
 					}
 
-					data.nodes.filter(".jstree-node").each(function (i,node) {
-						findDataCell(grid,node.id).addClass(SEARCHCLASS);
-					});
+					findDataCell(grid,data.nodes.filter(".jstree-node")).addClass(SEARCHCLASS);
 				}
 				return true;
 			}, this))
@@ -528,9 +534,7 @@
 				// search has been cleared, so we need to show all rows
 				var grid = this.gridWrapper;
 				grid.find('div.jstree-grid-cell').show();
-				data.nodes.filter(".jstree-node").each(function (i,node) {
-					findDataCell(grid,node.id).removeClass(SEARCHCLASS);
-				});
+				findDataCell(grid,data.nodes.filter(".jstree-node")).removeClass(SEARCHCLASS);
 				return true;
 			}, this))
 			.on("copy_node.jstree", function (e, data) {
@@ -815,13 +819,13 @@
 						oldNodes = oldNodes.concat(obj.children_d);
 					}
 					// update id in children
-					for (i=0;i<oldNodes.length;i++) {
-						findDataCell(grid,oldNodes[i])
+					findDataCell(grid,oldNodes)
 						.attr(NODE_DATA_ATTR, obj.id)
-						.attr('id', GRIDCELLID_PREFIX+obj.id+GRIDCELLID_POSTFIX+(i+1))
 						.removeClass(GRIDCELLID_PREFIX+old+GRIDCELLID_POSTFIX)
-						.addClass(GRIDCELLID_PREFIX+obj.id+GRIDCELLID_POSTFIX);
-					}
+						.addClass(GRIDCELLID_PREFIX+obj.id+GRIDCELLID_POSTFIX)
+						.each(function(node,i) {
+							node.attr('id', GRIDCELLID_PREFIX+obj.id+GRIDCELLID_POSTFIX+(i+1));
+						});
 				}
 			}
 			return result;
@@ -829,9 +833,7 @@
 		this._hide_grid = function (node) {
 			var children = node && node.children_d ? node.children_d : [], i;
 			// go through each column, remove all children with the correct ID name
-			for (i=0;i<children.length;i++) {
-				findDataCell(this.gridWrapper,children[i]).remove();
-			}
+			findDataCell(this.gridWrapper,children).remove();
 		};
 		this.holdingCells = {};
 		this.getHoldingCells = function (obj,col,hc) {
