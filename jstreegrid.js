@@ -504,7 +504,7 @@
 			},this))
 			.on("search.jstree", $.proxy(function (e, data) {
 				// search sometimes filters, so we need to hide all of the appropriate grid cells as well, and show only the matches
-				var grid = this.gridWrapper, that = this, nodesToShow;
+				var grid = this.gridWrapper, that = this, nodesToShow, startTime = new Date().getTime(), endTime;
 				this.holdingCells = {};
 				if(data.nodes.length) {
 					if(this._data.search.som) {
@@ -527,6 +527,8 @@
 					}
 
 					findDataCell(grid,data.nodes.filter(".jstree-node")).addClass(SEARCHCLASS);
+          endTime = new Date().getTime();
+          this.element.trigger("search-complete.jstree-grid", [{time:endTime-startTime}]);
 				}
 				return true;
 			}, this))
