@@ -17,5 +17,6 @@
 	"select-prevent-test.html",
 	"render_cell-event-test.html",
 	"sort-without-resizable-test.html",
+	"large-dataset-test.html",
 	"widths-test.html"
 ]
