@@ -44,8 +44,13 @@
 			} else if (ids.length === 0) {
 				ret = from.find("div["+NODE_DATA_ATTR+"='"+ids.id+"']");
 			} else {
-				ret = ids.map(function (i,id) {
-					return from.find("div["+NODE_DATA_ATTR+"='"+id.id+"']");
+				// created a hashtable of the valid IDs
+				var idhash = $.makeArray(ids).reduce(function (total, elm) {
+					total[elm.id] = true;
+					return total;
+				}, {});
+				ret = from.find("div").filter(function (index, elm) {
+					return idhash[$(elm).attr(NODE_DATA_ATTR)];
 				});
 			}
 			return ret;
