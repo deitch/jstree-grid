@@ -38,7 +38,7 @@
 		findDataCell = function (from,ids) {
 			var ret;
 			if (ids === null || ids === undefined) {
-				ret = [];
+				ret = $();
 			} else if (typeof(ids) === "string") {
 				ret = from.find("div["+NODE_DATA_ATTR+"='"+ids+"']");
 			} else if (ids.length === 0) {
