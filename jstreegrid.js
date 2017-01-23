@@ -189,7 +189,8 @@
 					fixedHeader: s.fixedHeader !== false,
 					width: s.width,
 					height: s.height,
-					gridcontextmenu : s.gridcontextmenu
+					gridcontextmenu : s.gridcontextmenu,
+					treecol: 0
 				}, cols = gs.columns, treecol = 0, columnSearch = false;
 				if(gs.gridcontextmenu === true) {
 					gs.gridcontextmenu = function (grid,tree,node,val,col,t,target) {
@@ -211,6 +212,7 @@
 					if (s.columns[i].tree) {
 						// save which column it was
 						treecol = i;
+						gs.treecol = treecol;
 						// do not check any others
 						break;
 					}
@@ -948,7 +950,9 @@
 		};
 
 		this._prepare_grid = function (obj) {
-			var gs = this._gridSettings, c = gs.treeClass, _this = this, t, cols = gs.columns || [], width, tr = gs.isThemeroller,
+			var gs = this._gridSettings, c = gs.treeClass, _this = this, t,
+			cols = gs.columns || [], width, tr = gs.isThemeroller,
+			treecol = gs.treecol,
 			tree = this.element, rootid = this.rootid,
 			classAdd = (tr?"themeroller":"regular"), img, objData = this.get_node(obj),
 			defaultWidth = gs.columnWidth, conf = gs.defaultConf, cellClickHandler = function (tree,node,val,col,t) {
@@ -1000,15 +1004,6 @@
 				last = a;
 				// find which column our tree shuld go in
 				var s = this.settings.grid;
-				var treecol = 0;
-				for (i=0;i<s.columns.length;i++) {
-					if (s.columns[i].tree) {
-						// save which column it was
-						treecol = i;
-						// do not check any others
-						break;
-					}
-				}
 				for (i=0;i<cols.length;i++) {
 					if (treecol === i) {
 						continue;
