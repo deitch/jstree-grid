@@ -40,17 +40,12 @@
 		},
 		findDataCell = function (uniq, ids, col) {
 			var ret = $(), columns = [].concat(col), cellid;
-			if (ids === null || ids === undefined) {
+			if (ids === null || ids === undefined || ids.length === 0) {
 				ret = $();
 			} else if (typeof(ids) === "string") {
         cellId = generateCellId(uniq,ids);
 				$.each(columns,function (index,col) {
 					ret = ret.add($("#"+ cellId + col));
-				});
-			} else if (ids.length === 0) {
-        cellId = generateCellId(uniq,ids);
-				$.each(columns,function (index,col) {
-					ret = ret.add($("#"+cellId + col));
 				});
 			} else {
         $.makeArray(ids).map(function (elm) {
@@ -519,7 +514,8 @@
 			},this))
 			.on("search.jstree", $.proxy(function (e, data) {
 				// search sometimes filters, so we need to hide all of the appropriate grid cells as well, and show only the matches
-				var grid = this.gridWrapper, that = this, nodesToShow, startTime = new Date().getTime(), endTime;
+				var grid = this.gridWrapper, that = this, nodesToShow, startTime = new Date().getTime(),
+        ids = data.nodes.filter(".jstree-node").map(function(){return this.id;}), endTime;
 				this.holdingCells = {};
 				if(data.nodes.length) {
 					if(this._data.search.som) {
@@ -536,12 +532,12 @@
 							var id = node.id;
 							if (id) {
 								that._prepare_grid(node);
-								findDataCell(that.uniq,id,this._gridSettings.gridcols).show();
+								findDataCell(that.uniq,ids,that._gridSettings.gridcols).show();
 							}
 						});
 					}
 
-					findDataCell(that.uniq,data.nodes.filter(".jstree-node"),this._gridSettings.gridcols).addClass(SEARCHCLASS);
+					findDataCell(that.uniq,ids,this._gridSettings.gridcols).addClass(SEARCHCLASS);
           endTime = new Date().getTime();
           this.element.trigger("search-complete.jstree-grid", [{time:endTime-startTime}]);
 				}
@@ -549,9 +545,9 @@
 			}, this))
 			.on("clear_search.jstree", $.proxy(function (e, data) {
 				// search has been cleared, so we need to show all rows
-				var grid = this.gridWrapper;
+				var grid = this.gridWrapper, ids = data.nodes.filter(".jstree-node").map(function(){return this.id;});
 				grid.find('div.jstree-grid-cell').show();
-				findDataCell(this.uniq,data.nodes.filter(".jstree-node"),this._gridSettings.gridcols).removeClass(SEARCHCLASS);
+				findDataCell(this.uniq,ids,this._gridSettings.gridcols).removeClass(SEARCHCLASS);
 				return true;
 			}, this))
 			.on("copy_node.jstree", function (e, data) {
@@ -840,8 +836,8 @@
 						.attr(NODE_DATA_ATTR, obj.id)
 						.removeClass(generateCellId(uniq,old))
 						.addClass(generateCellId(uniq,obj.id))
-						.each(function(node,i) {
-							node.attr('id', generateCellId(uniq,obj.id)+(i+1));
+						.each(function(i,node) {
+							$(node).attr('id', generateCellId(uniq,obj.id)+(i+1));
 						});
 				}
 			}
