@@ -38,24 +38,29 @@
 		generateCellId = function (tree,id) {
 			return("jstree_"+tree+"_grid_"+escapeId(id)+"_col");
 		},
+    getIds = function (nodes) {
+      return $.makeArray(nodes.map(function(){return this.id;}));
+    },
 		findDataCell = function (uniq, ids, col) {
-			var ret = $(), columns = [].concat(col), cellid;
+			var ret = $(), columns = [].concat(col), cellId;
 			if (ids === null || ids === undefined || ids.length === 0) {
-				ret = $();
+				ret = "";
 			} else if (typeof(ids) === "string") {
         cellId = generateCellId(uniq,ids);
-				$.each(columns,function (index,col) {
-					ret = ret.add($("#"+ cellId + col));
-				});
+				ret = columns.map(function (col) {
+					return "#"+cellId+col;
+				}).join(", ");
 			} else {
-        $.makeArray(ids).map(function (elm) {
-          cellId = generateCellId(uniq,elm);
-  				$.each(columns,function (index,col) {
-						ret = ret.add($("#"+cellId + col));
-					});
+				ret = []
+				ids.forEach(function (elm,i) {
+          var cellId = generateCellId(uniq,elm);
+					ret = ret.concat(columns.map(function (col) {
+						return "#"+cellId+col;
+					}));
 				});
+        ret = ret.join(", ");
 			}
-			return ret;
+			return $(ret);
 		},
 		isClickedSep = false, toResize = null, oldMouseX = 0, newMouseX = 0,
 
@@ -515,7 +520,7 @@
 			.on("search.jstree", $.proxy(function (e, data) {
 				// search sometimes filters, so we need to hide all of the appropriate grid cells as well, and show only the matches
 				var grid = this.gridWrapper, that = this, nodesToShow, startTime = new Date().getTime(),
-        ids = data.nodes.filter(".jstree-node").map(function(){return this.id;}), endTime;
+        ids = getIds(data.nodes.filter(".jstree-node")), endTime;
 				this.holdingCells = {};
 				if(data.nodes.length) {
 					if(this._data.search.som) {
@@ -545,7 +550,7 @@
 			}, this))
 			.on("clear_search.jstree", $.proxy(function (e, data) {
 				// search has been cleared, so we need to show all rows
-				var grid = this.gridWrapper, ids = data.nodes.filter(".jstree-node").map(function(){return this.id;});
+				var grid = this.gridWrapper, ids = getIds(data.nodes.filter(".jstree-node"));
 				grid.find('div.jstree-grid-cell').show();
 				findDataCell(this.uniq,ids,this._gridSettings.gridcols).removeClass(SEARCHCLASS);
 				return true;
