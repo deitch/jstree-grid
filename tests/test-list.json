@@ -9,7 +9,7 @@
 	"fnvalue-test.html",
 	"grid-api-test.html",
 	"odd-named-id-test.html",
-	"renamed_id_test.html",
+	"rename_id_test.html",
 	"rename-dynamic-node-test.html",
 	"resize-event-test.html",
 	"search-test.html",
