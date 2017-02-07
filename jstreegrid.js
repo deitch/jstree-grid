@@ -537,7 +537,7 @@
 							var id = node.id;
 							if (id) {
 								that._prepare_grid(node);
-								findDataCell(that.uniq,ids,that._gridSettings.gridcols).show();
+								findDataCell(that.uniq,id,that._gridSettings.gridcols).show();
 							}
 						});
 					}
