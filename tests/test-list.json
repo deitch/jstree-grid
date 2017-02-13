@@ -18,5 +18,6 @@
 	"render_cell-event-test.html",
 	"sort-without-resizable-test.html",
 	"large-dataset-test.html",
-	"widths-test.html"
+	"widths-test.html",
+	"minwidth-maxwidth-test.html"
 ]

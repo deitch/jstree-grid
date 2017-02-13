@@ -1,0 +1,68 @@
+		<script type="text/javascript">
+		$(document).ready(function(){
+				var data = [{
+					text: "Root 1",
+					data: {input: "$5MM",output:"This is a such a beautiful place. it has so much potential!"},
+					children: [
+						{text: "Child 1", data: {input: "$500K",output:"Smaller, cheaper, but a cozy lovely home"}},
+						{text: "Child 2", data: {input: "$20MM",output:"Why in the world would anyone spend this much on a home??"}}
+					]
+				}],
+
+				tree =
+					{
+						plugins: ["themes","json","grid"],
+						core: {
+							data: data
+						},
+            grid: {
+              columns: [{
+                  header: "Property",
+                  minWidth: "100px",
+									maxWidth: "200px",
+                  tree: true
+              }, {
+                  header: "Value",
+                  width: "auto",
+                  minWidth: "100px",
+									maxWidth: "200px",
+                  value: "input"
+              }, {
+                  header: "Output",
+                  width: "auto",
+									minWidth: "100px",
+                  maxWidth: "200px",
+                  value: "output"
+              }],
+							width: 400,
+							resizable:true,
+							contextmenu:true
+						}
+					};
+
+
+				$("div#jstree1").on("loaded_grid.jstree",function(){
+					var wrapper = $(this).closest("div.jstree-grid-wrapper"),
+					midw = wrapper.children("div.jstree-grid-midwrapper"),
+					section = wrapper.closest("div.treesection"),
+					actuals = "Actuals "+wrapper.outerWidth()+": "+[midw.find("div.jstree-grid-column:eq(0)").outerWidth(),midw.find("div.jstree-grid-column:eq(1)").outerWidth(),midw.find("div.jstree-grid-column:eq(2)").outerWidth()].join(' ');
+
+					$(".actuals").text(actuals);
+				});
+				$("div#jstree1").jstree(tree);
+			});
+
+
+		</script>
+
+		<h2>Tree Grid minWidth/maxWidth Test</h2>
+
+		<div id="alltrees">
+			<h4>Width Tree</h4>
+			<p>The columns here all have width=auto, minWidth=100 and maxWidth=200. You can resize them, but when auto-rendering, none should be less than 100 or bigger than 200.
+				Of particular interest is the minWidth of the second column (which has very few characters) and the maxWidth of the third column (which has many).
+			</p>
+			<p>Actuals:</p><p class="actuals"></p>
+			<div id="jstree1"></div>
+		<hr/>
+		</div>
