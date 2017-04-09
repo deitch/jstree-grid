@@ -8,8 +8,8 @@
  *
  * Works only with jstree version >= 3.3.0
  *
- * $Date: 2015-11-29 $
- * $Revision:  3.4.2 $
+ * $Date: 2017-04-09 $
+ * $Revision:  3.8.1 $
  */
 
 /*jslint nomen:true */
@@ -456,6 +456,12 @@
 					findDataCell(this.uniq,removeNodes,this._gridSettings.gridcols).remove();
 				}
 			}, this))
+			.on("hide_node.jstree", $.proxy(function (e, data) {
+				// remove out own data cells
+        findDataCell(this.uniq, data.node.id, this._gridSettings.gridcols).remove();
+				// hide any children
+        this._hide_grid(data.node);
+      }, this))
 			.on("close_node.jstree",$.proxy(function (e,data) {
 				this._hide_grid(data.node);
 			}, this))
@@ -646,10 +652,10 @@
 					width = localStorage['jstree-root-'+rootid+'-column-'+i];
 				else
 					width = cols[i].width || defaultWidth;
-				
+
 				var minWidth = cols[i].minWidth || width;
 				var maxWidth = cols[i].maxWidth || width;
-				
+
 				// we only deal with borders if width is not auto and not percentages
 				borPadWidth = tr ? 1+6 : 2+8; // account for the borders and padding
 				if (width !== 'auto' && typeof(width) !== "string") {
@@ -864,7 +870,8 @@
 				child = generateCellId(uniq,children[i])+col;
 				if (hc[child] && obj.state.opened) {
 					ret = ret.add(hc[child]).add(this.getHoldingCells(this.get_node(children[i]),col,hc));
-					//delete hc[child];
+					// remove it once it was retrieved
+					delete hc[child];
 				}
 			}
 			return(ret);
