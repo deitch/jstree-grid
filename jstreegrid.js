@@ -863,13 +863,13 @@
 			findDataCell(this.uniq,children,this._gridSettings.gridcols).remove();
 		};
 		this.holdingCells = {};
-		this.getHoldingCells = function (obj,col,hc) {
+		this.popHoldingCells = function (obj,col,hc) {
 			var ret = $(), children = obj.children||[], child, i, uniq = this.uniq;
 			// run through each child, render it, and then render its children recursively
 			for (i=0;i<children.length;i++) {
 				child = generateCellId(uniq,children[i])+col;
 				if (hc[child] && obj.state.opened) {
-					ret = ret.add(hc[child]).add(this.getHoldingCells(this.get_node(children[i]),col,hc));
+					ret = ret.add(hc[child]).add(this.popHoldingCells(this.get_node(children[i]),col,hc));
 					// remove it once it was retrieved
 					delete hc[child];
 				}
@@ -1163,7 +1163,7 @@
 					}
 					// do we have any children waiting for this cell? walk down through the children/grandchildren/etc tree
 					if (rendered) {
-						last.after(this.getHoldingCells(objData,i,hc));
+						last.after(this.popHoldingCells(objData,i,hc));
 					}
 					// need to make the height of this match the line height of the tree. How?
 					span = last.children("span");
