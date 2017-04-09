@@ -1,0 +1,76 @@
+		<script type="text/javascript">
+		$(document).ready(function(){
+
+			// tree data
+			var data;
+			data = [{
+				id: "Products",
+			  text: "Products",
+			  data: {},
+			  children: [{
+					id: "Fruit",
+			    text: "Fruit",
+			    data: {},
+			    children:[
+			      {id: "Apple", text: "Apple", data: {price: 0.1, quantity: 20}},
+			      {id: "Banana", text: "Banana", data: {price: 0.2, quantity: 31}},
+			      {id: "Grapes", text: "Grapes", data: {price: 1.99, quantity: 34}},
+			      {id: "Mango", text: "Mango", data: {price: 0.5, quantity: 8}},
+			      {id: "Melon", text: "Melon", data: {price: 0.8, quantity: 4}},
+			      {id: "Pear", text: "Pear", data: {price: 0.1, quantity: 30}},
+			      {id: "Strawberry", text: "Strawberry", data: {price: 0.15, quantity: 32}}
+			    ],
+			    'state': {'opened': true}
+			  }, {
+					id: "Vegetables",
+			    text: "Vegetables",
+			    data: {},
+			    children:[
+			      {id: "Aubergine", text: "Aubergine", data: {price: 0.5, quantity: 8}},
+			      {id: "Broccoli", text: "Broccoli", data: {price: 0.4, quantity: 22}},
+			      {id: "Carrot", text: "Carrot", data: {price: 0.1, quantity: 32}},
+			      {id: "Cauliflower", text: "Cauliflower", data: {price: 0.45, quantity: 18}},
+			      {id: "Potato", text: "Potato", data: {price: 0.2, quantity: 38}}
+			    ]
+			  }],
+			  'state': {'opened': true}
+			}];
+
+			// load jstree
+			$("div#jstree").jstree({
+			  plugins: ["table","dnd","contextmenu","sort","grid"],
+			  core: {
+			    data: data
+			  },
+			  // configure tree table
+			  grid: {
+			    columns: [
+			      {width: 200, header: "Name"},
+			      {width: 150, value: "price", header: "Price", format: function(v) {if (v){ return '$'+v.toFixed(2) }}},
+			      {width: 150, value: "quantity", header: "Qty"}
+			    ],
+			    resizable: true,
+			    draggable: true,
+			    contextmenu: true,
+			    width: 500,
+			    height: 300
+			  }
+			});
+
+			$("#hide").on("click",function() {
+				$("div#jstree").jstree().hide_node("Banana");
+				debugger;
+				$("div#jstree").jstree().hide_node("Grapes");
+				//$("div#jstree").jstree().hide_node("Mango");
+			});
+		});
+
+
+		</script>
+		<h2>API Hide/Show Test</h2>
+
+			<div id="jstree" />
+
+			<button id="hide" >
+			  Hide Nodes
+			</button>
