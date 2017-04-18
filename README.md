@@ -71,7 +71,7 @@ Thus, an entry is likely to look like
 
 We use the div to control the entire height and width, and the span to get access to the actual data itself.
 
-###Options
+### Options
 
 #### The options are as follows:
 
