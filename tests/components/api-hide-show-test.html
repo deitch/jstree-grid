@@ -40,7 +40,8 @@
 			$("div#jstree").jstree({
 			  plugins: ["table","dnd","contextmenu","sort","grid"],
 			  core: {
-			    data: data
+			    data: data,
+					check_callback: true
 			  },
 			  // configure tree table
 			  grid: {
@@ -59,10 +60,14 @@
 
 			$("#hide").on("click",function() {
 				$("div#jstree").jstree().hide_node("Banana");
-				debugger;
 				$("div#jstree").jstree().hide_node("Grapes");
-				//$("div#jstree").jstree().hide_node("Mango");
+				$("div#jstree").jstree().hide_node("Mango");
 			});
+			$("#add").on("click",function() {
+			  var tree =$("div#jstree").jstree();
+			 var id=	tree.create_node(tree.get_node("Products"), { id: "NewProduct", text: "NewProduct",data: {price: 100, quantity: 0}, children:[]});
+			});
+
 		});
 
 
@@ -73,4 +78,7 @@
 
 			<button id="hide" >
 			  Hide Nodes
+			</button>
+			<button id="add" >
+			  Add Product
 			</button>
