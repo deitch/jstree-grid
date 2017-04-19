@@ -864,14 +864,26 @@
 		};
 		this.holdingCells = {};
 		this.popHoldingCells = function (obj,col,hc) {
-			var ret = $(), children = obj.children||[], child, i, uniq = this.uniq;
+			var ret = $(), children = obj.children||[], childId, child, i, uniq = this.uniq;
 			// run through each child, render it, and then render its children recursively
 			for (i=0;i<children.length;i++) {
-				child = generateCellId(uniq,children[i])+col;
-				if (hc[child] && obj.state.opened) {
-					ret = ret.add(hc[child]).add(this.popHoldingCells(this.get_node(children[i]),col,hc));
-					// remove it once it was retrieved
-					delete hc[child];
+				childId = generateCellId(uniq,children[i])+col;
+				// for each child, several possibilities:
+				// 1- child is in holding cells: add it and remove from holding cells (since we added it)
+				if (hc[childId]) {
+					child = hc[childId];
+					delete hc[childId];
+				} else {
+					// 2- child exists but no longer is in holding cells: add it directly
+					child = $("#"+childId);
+				}
+				if (child.length > 0) {
+					ret = ret.add(child);
+					// now recursively add the children of child
+
+					if (obj.state.opened) {
+						ret = ret.add(this.popHoldingCells(this.get_node(children[i]),col,hc));
+					}
 				}
 			}
 			return(ret);
@@ -1163,7 +1175,8 @@
 					}
 					// do we have any children waiting for this cell? walk down through the children/grandchildren/etc tree
 					if (rendered) {
-						last.after(this.popHoldingCells(objData,i,hc));
+						var toRen = this.popHoldingCells(objData,i,hc);
+						last.after(toRen);
 					}
 					// need to make the height of this match the line height of the tree. How?
 					span = last.children("span");
