@@ -247,7 +247,8 @@
 						'.jstree-grid-separator {position:absolute; top:0; right:0; height:24px; margin-left: -2px; border-width: 0 2px 0 0; *display:inline; *+display:inline; margin-right:0px;width:0px;}',
 						'.jstree-grid-header-cell {overflow: hidden; white-space: nowrap;padding: 1px 3px 2px 5px; cursor: default;}',
 						'.jstree-grid-header-themeroller {border: 0; padding: 1px 3px;}',
-						'.jstree-grid-header-regular {position:relative; background-color: #EBF3FD; z-index: 1;}',
+            '.jstree-grid-header-regular {position:relative; background-color: #EBF3FD; z-index: 1;}',
+            '.jstree-grid-hidden {display: none;}',
 						'.jstree-grid-resizable-separator {cursor: col-resize; width: 2px;}',
 						'.jstree-grid-separator-regular {border-color: #d0d0d0; border-style: solid;}',
 						'.jstree-grid-cell-themeroller {border: none !important; background: transparent !important;}',
@@ -456,11 +457,25 @@
 					findDataCell(this.uniq,removeNodes,this._gridSettings.gridcols).remove();
 				}
 			}, this))
-			.on("hide_node.jstree", $.proxy(function (e, data) {
-				// remove out own data cells
-        findDataCell(this.uniq, data.node.id, this._gridSettings.gridcols).remove();
-				// hide any children
-        this._hide_grid(data.node);
+      .on("hide_node.jstree", $.proxy(function (e, data) {
+        // remove out own data cells
+        findDataCell(this.uniq, data.node.id, this._gridSettings.gridcols).removeClass("jstree-grid-hidden");
+        if (data.node.state.opened) {
+          // hide any children
+          var children = data.node.children_d ? data.node.children_d : [], i;
+          // go through each column, remove all children with the correct ID name
+          findDataCell(this.uniq, children, this._gridSettings.gridcols).removeClass("jstree-grid-hidden");
+        }
+      }, this))
+      .on("hide_node.jstree", $.proxy(function (e, data) {
+        // remove out own data cells
+        findDataCell(this.uniq, data.node.id, this._gridSettings.gridcols).addClass("jstree-grid-hidden");
+        if (data.node.state.opened) {
+          // hide any children
+          var children = data.node.children_d ? data.node.children_d : [], i;
+          // go through each column, remove all children with the correct ID name
+          findDataCell(this.uniq, children, this._gridSettings.gridcols).addClass("jstree-grid-hidden");
+        }
       }, this))
 			.on("close_node.jstree",$.proxy(function (e,data) {
 				this._hide_grid(data.node);
@@ -820,7 +835,7 @@
 			// first allow the parent to redraw the node
 			obj = parent.redraw_node.call(this, obj, deep, is_callback, force_render);
 			// next prepare the grid for a redrawn node - but only if ths node is not hidden (search does that)
-			if (obj && !this.is_hidden(obj)) {
+			if (obj) {
 				this._prepare_grid(obj);
 			}
 			return obj;
@@ -1111,7 +1126,15 @@
 							last.addClass('jstree-grid-ellipsis');
 						}
 
-					}
+          }
+
+          // we need to check the hidden-state and see if we need to hide the node
+          if (objData.state.hidden) {
+            last.addClass("jstree-grid-hidden");
+          } else {
+            last.removeClass("jstree-grid-hidden");
+          }
+
 					// we need to put it in the dataCell - after the parent, but the position matters
 					// if we have no parent, then we are one of the root nodes, but still need to look at peers
 

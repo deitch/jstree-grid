@@ -12,13 +12,13 @@
 			    text: "Fruit",
 			    data: {},
 			    children:[
-			      {id: "Apple", text: "Apple", data: {price: 0.1, quantity: 20}},
-			      {id: "Banana", text: "Banana", data: {price: 0.2, quantity: 31}},
-			      {id: "Grapes", text: "Grapes", data: {price: 1.99, quantity: 34}},
-			      {id: "Mango", text: "Mango", data: {price: 0.5, quantity: 8}},
-			      {id: "Melon", text: "Melon", data: {price: 0.8, quantity: 4}},
-			      {id: "Pear", text: "Pear", data: {price: 0.1, quantity: 30}},
-			      {id: "Strawberry", text: "Strawberry", data: {price: 0.15, quantity: 32}}
+            { text: "Apple", data: { price: 0.1, quantity: 20 } },
+            { id: "Banana", text: "Banana", data: { price: 0.2, quantity: 31 }, state: { hidden: true } },
+            { id: "Grapes", text: "Grapes", data: { price: 1.99, quantity: 34 } },
+            { id: "Mango", text: "Mango", data: { price: 0.5, quantity: 8 }, state: { hidden: true } },
+            { text: "Melon", data: { price: 0.8, quantity: 4 }, state: { hidden: true } },
+            { text: "Pear", data: { price: 0.1, quantity: 30 } },
+            { text: "Strawberry", data: { price: 0.15, quantity: 32 } }
 			    ],
 			    'state': {'opened': true}
 			  }, {
@@ -26,11 +26,11 @@
 			    text: "Vegetables",
 			    data: {},
 			    children:[
-			      {id: "Aubergine", text: "Aubergine", data: {price: 0.5, quantity: 8}},
-			      {id: "Broccoli", text: "Broccoli", data: {price: 0.4, quantity: 22}},
-			      {id: "Carrot", text: "Carrot", data: {price: 0.1, quantity: 32}},
-			      {id: "Cauliflower", text: "Cauliflower", data: {price: 0.45, quantity: 18}},
-			      {id: "Potato", text: "Potato", data: {price: 0.2, quantity: 38}}
+            { text: "Aubergine", data: { price: 0.5, quantity: 8 } },
+            { text: "Broccoli", data: { price: 0.4, quantity: 22 }, state: { hidden: true } },
+            { text: "Carrot", data: { price: 0.1, quantity: 32 }, state: { hidden: true } },
+            { text: "Cauliflower", data: { price: 0.45, quantity: 18 }, state: { hidden: true } },
+            { text: "Potato", data: { price: 0.2, quantity: 38 } }
 			    ]
 			  }],
 			  'state': {'opened': true}
