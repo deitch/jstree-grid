@@ -41,11 +41,13 @@
     getIds = function (nodes) {
       return $.makeArray(nodes.map(function(){return this.id;}));
     },
-		findDataCell = function (uniq, ids, col) {
-			var ret = $(), columns = [].concat(col), cellId;
+    findDataCell = function (uniq, ids, col, scope) {
+      if (scope == undefined) { scope = $(); };
 			if (ids === null || ids === undefined || ids.length === 0) {
-				ret = "";
-			} else if (typeof(ids) === "string") {
+        return scope;
+      }
+      var ret = $(), columns = [].concat(col), cellId;
+      if (typeof (ids) === "string") {
         cellId = generateCellId(uniq,ids);
 				ret = columns.map(function (col) {
 					return "#"+cellId+col;
@@ -60,7 +62,7 @@
 				});
         ret = ret.join(", ");
 			}
-			return $(ret);
+      return columns.length ==1 ?  scope.find(ret) : $(ret);
 		},
 		isClickedSep = false, toResize = null, oldMouseX = 0, newMouseX = 0,
 
@@ -458,24 +460,24 @@
 				}
 			}, this))
       .on("hide_node.jstree", $.proxy(function (e, data) {
+        this._detachColumns(data.node.id);
+         var cols = this._gridSettings.columns || [], treecol = this._gridSettings.treecol;
         // remove out own data cells
-        findDataCell(this.uniq, data.node.id, this._gridSettings.gridcols).removeClass("jstree-grid-hidden");
-        if (data.node.state.opened) {
-          // hide any children
-          var children = data.node.children_d ? data.node.children_d : [], i;
-          // go through each column, remove all children with the correct ID name
-          findDataCell(this.uniq, children, this._gridSettings.gridcols).removeClass("jstree-grid-hidden");
-        }
+         for (var i = 0, len = cols.length; i < len; i++) {
+           if (i === treecol) { continue; }
+           findDataCell(this.uniq, data.node.id, i, $(this._domManipulation.columns[i])).removeClass("jstree-grid-hidden");
+         }
+        this._reattachColumns(node.data.id);
       }, this))
       .on("hide_node.jstree", $.proxy(function (e, data) {
+        this._detachColumns(data.node.id);
+        var cols = this._gridSettings.columns || [], treecol = this._gridSettings.treecol;
         // remove out own data cells
-        findDataCell(this.uniq, data.node.id, this._gridSettings.gridcols).addClass("jstree-grid-hidden");
-        if (data.node.state.opened) {
-          // hide any children
-          var children = data.node.children_d ? data.node.children_d : [], i;
-          // go through each column, remove all children with the correct ID name
-          findDataCell(this.uniq, children, this._gridSettings.gridcols).addClass("jstree-grid-hidden");
+        for (var i = 0, len = cols.length; i < len; i++) {
+          if (i === treecol) { continue; }
+          findDataCell(this.uniq, data.node.id, i, $(this._domManipulation.columns[i])).addClass("jstree-grid-hidden");
         }
+        this._reattachColumns(node.data.id);
       }, this))
 			.on("close_node.jstree",$.proxy(function (e,data) {
 				this._hide_grid(data.node);
@@ -827,16 +829,76 @@
 				_this.redraw_node(rootNode, true);
 			});
 
-		};
+    };
+
+    this._domManipulation = null; // We'll store the column nodes in this object and an id for the grid-node that started the manipulation { id: "id of the node that started the manipulation", columns: { Key-Value-Pair col-No: Column }}
+
+    function _guid() {
+      function s4() {
+        return Math.floor((1 + Math.random()) * 0x10000)
+          .toString(16)
+          .substring(1);
+      }
+      return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+        s4() + '-' + s4() + s4() + s4();
+    }
+    /*
+     * Trys to detach the tree columns on massive dom manipulations
+     */
+    this._detachColumns = function (id) {
+      // if the columns are not detached, then detach them
+      if (this._domManipulation == null) {
+        var cols = this._gridSettings.columns || [], treecol = this._gridSettings.treecol, mw = this.midWrapper;
+        this._domManipulation = { id: id, columns: {} };
+        for (var i = 0, len = cols.length; i < len; i++) {
+          if (treecol === i) {
+            continue;
+          }
+          this._domManipulation.columns[i] = mw.children(".jstree-grid-column-" + i)[0];
+          this._domManipulation.columns[i].parentNode.removeChild(this._domManipulation.columns[i]);
+        }
+      }
+      return this._domManipulation;
+    }
+
+    this._reattachColumns = function (id) {
+      if (this._domManipulation == null) { return false; }
+      if (this._domManipulation.id === id) {
+        var cols = this._gridSettings.columns || [], treecol = this._gridSettings.treecol, mw = this.midWrapper;
+        for (var i = 0, len = cols.length; i < len; i++) {
+          if (treecol === i) {
+            continue;
+          }
+          mw[0].appendChild(this._domManipulation.columns[i]);
+        }
+        this._domManipulation = null;
+      }
+      return true;
+    }
+
+    /*
+		 * Override open_node to detach the columns before redrawing child-nodes, and do reattach them afterwarts
+		 */
+    this.open_node = function (obj, callback, animation) {
+      var id = $.isArray(obj) ? _guid() : this.get_node(obj).id;
+      this._detachColumns(id);
+      var ret = parent.open_node.call(this,arguments);
+      this._reattachColumns(id);
+      return ret;
+    }
+
 		/*
 		 * Override redraw_node to correctly insert the grid
 		 */
-		this.redraw_node = function(obj, deep, is_callback, force_render) {
+    this.redraw_node = function (obj, deep, is_callback, force_render) {
+      var id = $.isArray(obj) ? _guid() : this.get_node(obj).id;
 			// first allow the parent to redraw the node
 			obj = parent.redraw_node.call(this, obj, deep, is_callback, force_render);
 			// next prepare the grid for a redrawn node - but only if ths node is not hidden (search does that)
-			if (obj) {
-				this._prepare_grid(obj);
+      if (obj) {
+        this._detachColumns(id);
+        this._prepare_grid(obj);
+        this._reattachColumns(id);
 			}
 			return obj;
 		};
@@ -872,10 +934,23 @@
 			}
 			return result;
 		};
-		this._hide_grid = function (node) {
-			var children = node && node.children_d ? node.children_d : [], i;
-			// go through each column, remove all children with the correct ID name
-			findDataCell(this.uniq,children,this._gridSettings.gridcols).remove();
+    this._hide_grid = function (node) {
+      if (!node) { return true; }
+      this._detachColumns(node.id);
+      var children = node.children ? node.children : [], cols = this._gridSettings.columns || [], treecol = this._gridSettings.treecol;
+      // try to remove all children
+      for (var i = 0, len = children.length; i < len; i++) {
+        var child = this.get_node(children[i]);
+        // go through each column, remove all children with the correct ID name
+        for (var j = 0, lenj = cols.length; j < lenj; j++) {
+          if (j === treecol) { continue; }
+          findDataCell(this.uniq, child.id, j, $(this._domManipulation.columns[j])).remove();
+        }
+        if (child.state.opened) { this._hide_grid(child);}
+      }
+			
+      
+      this._reattachColumns(node.id);
 		};
 		this.holdingCells = {};
 		this.popHoldingCells = function (obj,col,hc) {
@@ -1026,7 +1101,7 @@
 			},
 			i, val, cl, wcl, ccl, a, last, valClass, wideValClass, span, paddingleft, title, gridCellName, gridCellParentId, gridCellParent,
 			gridCellPrev, gridCellPrevId, gridCellNext, gridCellNextId, gridCellChild, gridCellChildId,
-			col, content, tmpWidth, mw = this.midWrapper, dataCell, lid = objData.id,
+			col, content, tmpWidth, mw = this.midWrapper, column, lid = objData.id,
 			highlightSearch, isClicked,
 			peers = this.get_node(objData.parent).children,
 			// find my position in the list of peers. "peers" is the list of everyone at my level under my parent, in order
@@ -1055,14 +1130,14 @@
 						continue;
 					}
 					col = cols[i];
-					dataCell = mw.children("div:eq("+i+")");
+          column = $(this._domManipulation.columns[i]); //mw.children("div:eq("+i+")");
 					// get the cellClass, the wideCellClass, and the columnClass
 					cl = col.cellClass || "";
 					wcl = col.wideCellClass || "";
 					ccl = col.columnClass || "";
 
-					// add a column class to the dataCell
-					dataCell.addClass(ccl);
+					// add a column class to the Column
+          column.addClass(ccl);
 
 
 					// get the contents of the cell - value could be a string or a function
@@ -1105,7 +1180,7 @@
 						width = tmpWidth || (width - paddingleft);
 					}
 
-					last = findDataCell(uniq, lid, i);
+          last = findDataCell(uniq, lid, i, column);
 					if (!last || last.length < 1) {
 						last = $("<div></div>");
 						$("<span></span>").appendTo(last);
@@ -1158,12 +1233,12 @@
 					//   4- Our previous peer is not drawn, we have no child that is drawn, our next peer is drawn: install right before our next peer
 					//   5- Our previous peer is not drawn, we have no child that is drawn, our next peer is not drawn: install right after parent
 					gridCellPrevId = pos <=0 ? objData.parent : findLastClosedNode(this,peers[pos-1]);
-					gridCellPrev = findDataCell(uniq,gridCellPrevId, i);
+          gridCellPrev = findDataCell(uniq, gridCellPrevId, i, column);
 					gridCellNextId = pos >= peers.length-1 ? "NULL" : peers[pos+1];
-					gridCellNext = findDataCell(uniq,gridCellNextId, i);
+          gridCellNext = findDataCell(uniq, gridCellNextId, i, column);
 					gridCellChildId = objData.children && objData.children.length > 0 ? objData.children[0] : "NULL";
-					gridCellChild = findDataCell(uniq,gridCellChildId, i);
-					gridCellParent = findDataCell(uniq,gridCellParentId, i);
+          gridCellChild = findDataCell(uniq, gridCellChildId, i, column);
+          gridCellParent = findDataCell(uniq, gridCellParentId, i, column);
 
 
 					// if our parent is already drawn, then we put this in the right order under our parent
@@ -1192,7 +1267,7 @@
 						} else if (gridCellNext && gridCellNext.length > 0) {
 							last.insertBefore(gridCellNext);
 						} else {
-							last.appendTo(dataCell);
+							last.appendTo(column);
 						}
 						rendered = true;
 					}
