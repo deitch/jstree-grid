@@ -218,7 +218,7 @@
 					gs.gridcontextmenu = false;
 				}
 				// find which column our tree shuld go in
-				for (i=0;i<s.columns.length;i++) {
+        for (var i = 0, len = s.columns.length;i<len;i++) {
 					if (s.columns[i].tree) {
 						// save which column it was
 						treecol = i;
@@ -273,7 +273,7 @@
 					this.gridWrapper.height(s.height);
 				}
 				// create the data columns
-				for (i=0;i<cols.length;i++) {
+        for (var i = 0, len = cols.length;i<len;i++) {
 					// create the column
 					$("<div></div>").addClass("jstree-default jstree-grid-column jstree-grid-column-"+i+" jstree-grid-column-root-"+this.rootid).appendTo(this.midWrapper);
 				}
@@ -363,7 +363,7 @@
 
 
 				// set default search for each column with no user defined search function (used when doing a columnSearch)
-				for(i=0; i<cols.length; i++) {
+        for (var i = 0, len = cols.length; i<len; i++) {
 					var column = cols[i];
 					if (typeof(column.search_callback) !== "function") {
 						// no search callback so set default function
@@ -389,7 +389,7 @@
 
 							// only bother looking in each cell if it was not yet matched
 							if (!matched) {
-								for (i=0;i<cols.length;i++) {
+                for (var i = 0, len = cols.length;i<len;i++) {
 									if (treecol === i) {
 										continue;
 									}
@@ -651,7 +651,7 @@
 
 
 			// create the headers
-			for (i=0;i<cols.length;i++) {
+      for (var i = 0, len = cols.length;i<len;i++) {
 				//col = $("<col/>");
 				//col.appendTo(colgroup);
 				cl = cols[i].headerClass || "";
@@ -953,10 +953,11 @@
       this._reattachColumns(node.id);
 		};
 		this.holdingCells = {};
-		this.popHoldingCells = function (obj,col,hc) {
+    this.popHoldingCells = function (obj, col, hc) {
+      if (obj.state.hidden) { return $(); }
 			var ret = $(), children = obj.children||[], childId, child, i, uniq = this.uniq;
 			// run through each child, render it, and then render its children recursively
-			for (i=0;i<children.length;i++) {
+      for (var i = 0, len = children.length;i<len;i++) {
 				childId = generateCellId(uniq,children[i])+col;
 				// for each child, several possibilities:
 				// 1- child is in holding cells: add it and remove from holding cells (since we added it)
@@ -1122,15 +1123,21 @@
 				a.addClass(c);
 				//renderAWidth(a,_this);
 				renderATitle(a,t,_this);
-				last = a;
+        last = a;
+
+        // calculate position ids once
+        gridCellPrevId = pos <= 0 ? objData.parent : findLastClosedNode(this, peers[pos - 1]);
+        gridCellNextId = pos >= peers.length - 1 ? "NULL" : peers[pos + 1];
+        gridCellChildId = objData.children && objData.children.length > 0 ? objData.children[0] : "NULL";
+
 				// find which column our tree shuld go in
 				var s = this.settings.grid;
-				for (i=0;i<cols.length;i++) {
+        for (var i = 0, len = cols.length;i<len;i++) {
 					if (treecol === i) {
 						continue;
 					}
 					col = cols[i];
-          column = $(this._domManipulation.columns[i]); //mw.children("div:eq("+i+")");
+          column = $(this._domManipulation.columns[i]); //Geht the detached column not mw.children("div:eq("+i+")");
 					// get the cellClass, the wideCellClass, and the columnClass
 					cl = col.cellClass || "";
 					wcl = col.wideCellClass || "";
@@ -1232,11 +1239,8 @@
 					//   3- Our previous peer is not drawn, we have a child that is drawn: install right before our first child
 					//   4- Our previous peer is not drawn, we have no child that is drawn, our next peer is drawn: install right before our next peer
 					//   5- Our previous peer is not drawn, we have no child that is drawn, our next peer is not drawn: install right after parent
-					gridCellPrevId = pos <=0 ? objData.parent : findLastClosedNode(this,peers[pos-1]);
           gridCellPrev = findDataCell(uniq, gridCellPrevId, i, column);
-					gridCellNextId = pos >= peers.length-1 ? "NULL" : peers[pos+1];
           gridCellNext = findDataCell(uniq, gridCellNextId, i, column);
-					gridCellChildId = objData.children && objData.children.length > 0 ? objData.children[0] : "NULL";
           gridCellChild = findDataCell(uniq, gridCellChildId, i, column);
           gridCellParent = findDataCell(uniq, gridCellParentId, i, column);
 
