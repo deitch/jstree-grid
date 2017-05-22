@@ -956,7 +956,12 @@
 		};
 		this.holdingCells = {};
     this.popHoldingCells = function (obj, col, hc) {
-      if (obj.state.hidden) { return $(); }
+      if (obj.state.hidden) {
+        if (hc[obj.id]) {
+          delete hc[obj.id];
+        }
+        return $();
+      }
 			var ret = $(), children = obj.children||[], childId, child, i, uniq = this.uniq;
 			// run through each child, render it, and then render its children recursively
       for (var i = 0, len = children.length;i<len;i++) {
