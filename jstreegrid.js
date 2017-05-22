@@ -882,7 +882,7 @@
     this.open_node = function (obj, callback, animation) {
       var id = $.isArray(obj) ? _guid() : this.get_node(obj).id;
       this._detachColumns(id);
-      var ret = parent.open_node.call(this,arguments);
+      var ret = parent.open_node.call(this, obj, callback, animation);
       this._reattachColumns(id);
       return ret;
     }
@@ -892,14 +892,16 @@
 		 */
     this.redraw_node = function (obj, deep, is_callback, force_render) {
       var id = $.isArray(obj) ? _guid() : this.get_node(obj).id;
+      // we detach the columns once
+      this._detachColumns(id);
 			// first allow the parent to redraw the node
 			obj = parent.redraw_node.call(this, obj, deep, is_callback, force_render);
 			// next prepare the grid for a redrawn node - but only if ths node is not hidden (search does that)
       if (obj) {
-        this._detachColumns(id);
         this._prepare_grid(obj);
-        this._reattachColumns(id);
-			}
+      }
+      // don't forget to reattach
+      this._reattachColumns(id);
 			return obj;
 		};
 		this.refresh = function () {
