@@ -459,10 +459,10 @@
 					findDataCell(this.uniq,removeNodes,this._gridSettings.gridcols).remove();
 				}
 			}, this))
-      .on("hide_node.jstree", $.proxy(function (e, data) {
+      .on("show_node.jstree", $.proxy(function (e, data) {
         this._detachColumns(data.node.id);
          var cols = this._gridSettings.columns || [], treecol = this._gridSettings.treecol;
-        // remove out own data cells
+        // show cells in each detachted column
          for (var i = 0, len = cols.length; i < len; i++) {
            if (i === treecol) { continue; }
            findDataCell(this.uniq, data.node.id, i, $(this._domManipulation.columns[i])).removeClass("jstree-grid-hidden");
@@ -472,7 +472,7 @@
       .on("hide_node.jstree", $.proxy(function (e, data) {
         this._detachColumns(data.node.id);
         var cols = this._gridSettings.columns || [], treecol = this._gridSettings.treecol;
-        // remove out own data cells
+        // hide cells in each detachted column
         for (var i = 0, len = cols.length; i < len; i++) {
           if (i === treecol) { continue; }
           findDataCell(this.uniq, data.node.id, i, $(this._domManipulation.columns[i])).addClass("jstree-grid-hidden");
