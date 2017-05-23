@@ -467,7 +467,7 @@
            if (i === treecol) { continue; }
            findDataCell(this.uniq, data.node.id, i, $(this._domManipulation.columns[i])).removeClass("jstree-grid-hidden");
          }
-        this._reattachColumns(node.data.id);
+         this._reattachColumns(data.node.id);
       }, this))
       .on("hide_node.jstree", $.proxy(function (e, data) {
         this._detachColumns(data.node.id);
@@ -477,7 +477,7 @@
           if (i === treecol) { continue; }
           findDataCell(this.uniq, data.node.id, i, $(this._domManipulation.columns[i])).addClass("jstree-grid-hidden");
         }
-        this._reattachColumns(node.data.id);
+        this._reattachColumns(data.node.id);
       }, this))
 			.on("close_node.jstree",$.proxy(function (e,data) {
 				this._hide_grid(data.node);
@@ -955,37 +955,20 @@
       this._reattachColumns(node.id);
 		};
 		this.holdingCells = {};
-    this.popHoldingCells = function (obj, col, hc) {
-      if (obj.state.hidden) {
-        if (hc[obj.id]) {
-          delete hc[obj.id];
+    this.getHoldingCells = function (obj, col, hc) {
+      if (obj.state.hidden || !obj.state.opened) { return $(); }
+      var ret = $(), children = obj.children || [], child, i, uniq = this.uniq;
+      // run through each child, render it, and then render its children recursively
+      for (i = 0; i < children.length; i++) {
+        child = generateCellId(uniq, children[i]) + col;
+        if (hc[child]) {
+          ret = ret.add(hc[child]).add(this.getHoldingCells(this.get_node(children[i]), col, hc));
+          //delete hc[child];
         }
-        return $();
       }
-			var ret = $(), children = obj.children||[], childId, child, i, uniq = this.uniq;
-			// run through each child, render it, and then render its children recursively
-      for (var i = 0, len = children.length;i<len;i++) {
-				childId = generateCellId(uniq,children[i])+col;
-				// for each child, several possibilities:
-				// 1- child is in holding cells: add it and remove from holding cells (since we added it)
-				if (hc[childId]) {
-					child = hc[childId];
-					delete hc[childId];
-				} else {
-					// 2- child exists but no longer is in holding cells: add it directly
-					child = $("#"+childId);
-				}
-				if (child.length > 0) {
-					ret = ret.add(child);
-					// now recursively add the children of child
+      return (ret);
+    };
 
-					if (obj.state.opened) {
-						ret = ret.add(this.popHoldingCells(this.get_node(children[i]),col,hc));
-					}
-				}
-			}
-			return(ret);
-		};
 		/**
 		 * put a grid cell in edit mode (input field to edit the data)
 		 * @name edit(obj, col)
@@ -1284,7 +1267,7 @@
 					}
 					// do we have any children waiting for this cell? walk down through the children/grandchildren/etc tree
 					if (rendered) {
-						var toRen = this.popHoldingCells(objData,i,hc);
+						var toRen = this.getHoldingCells(objData,i,hc);
 						last.after(toRen);
 					}
 					// need to make the height of this match the line height of the tree. How?
