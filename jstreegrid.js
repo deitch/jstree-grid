@@ -446,8 +446,11 @@
 			this._initialize();
 			this.element
 			.on("move_node.jstree create_node.jstree clean_node.jstree change_node.jstree", $.proxy(function (e, data) {
-				var target = this.get_node(data || "#",true);
-				this._prepare_grid(target);
+        var target = this.get_node(data || "#", true);
+        var id = _guid();
+        this._detachColumns(id);
+        this._prepare_grid(target);
+        this._reattachColumns(id);
 			}, this))
 			.on("delete_node.jstree",$.proxy(function (e,data) {
 				if (data.node.id !== undefined) {
@@ -545,7 +548,9 @@
 				var grid = this.gridWrapper, that = this, nodesToShow, startTime = new Date().getTime(),
         ids = getIds(data.nodes.filter(".jstree-node")), endTime;
 				this.holdingCells = {};
-				if(data.nodes.length) {
+        if (data.nodes.length) {
+          var id = _guid();
+          this._detachColumns(id);
 					if(this._data.search.som) {
 						// create the list of nodes we want to look at
 						if(this._data.search.smc) {
@@ -559,13 +564,20 @@
 						nodesToShow.filter(".jstree-node").each(function (i,node) {
 							var id = node.id;
 							if (id) {
-								that._prepare_grid(node);
-								findDataCell(that.uniq,id,that._gridSettings.gridcols).show();
+                that._prepare_grid(node);
+                for (var i = 0, len = that._gridSettings.gridcols.length; i < len; i++) {
+                  if (i === that._gridSettings.treecol) { continue; }
+                  findDataCell(that.uniq, id, that._gridSettings.gridcols[i], $(that._domManipulation.columns[i])).show();
+                }
 							}
 						});
 					}
 
-					findDataCell(that.uniq,ids,this._gridSettings.gridcols).addClass(SEARCHCLASS);
+          for (var i = 0, len = this._gridSettings.gridcols.length; i < len; i++) {
+            if (i === this._gridSettings.treecol) { continue; }
+            findDataCell(that.uniq, ids, this._gridSettings.gridcols[i], $(this._domManipulation.columns[i])).addClass(SEARCHCLASS);
+          }
+          this._reattachColumns(id);
           endTime = new Date().getTime();
           this.element.trigger("search-complete.jstree-grid", [{time:endTime-startTime}]);
 				}
@@ -580,8 +592,10 @@
 			}, this))
 			.on("copy_node.jstree", function (e, data) {
 				var newtree = data.new_instance, oldtree = data.old_instance, obj = newtree.get_node(data.node,true);
-				copyData(oldtree,data.original,newtree,data.node,true);
-				newtree._prepare_grid(obj);
+        copyData(oldtree, data.original, newtree, data.node, true);
+        newtree._detachColumns(obj.id);
+        newtree._prepare_grid(obj);
+        newtree._reattachColumns(obj.id);
 				return true;
 			})
 			.on("show_ellipsis.jstree", $.proxy(function (e, data) {
@@ -880,7 +894,13 @@
 		 * Override open_node to detach the columns before redrawing child-nodes, and do reattach them afterwarts
 		 */
     this.open_node = function (obj, callback, animation) {
-      var id = $.isArray(obj) ? _guid() : this.get_node(obj).id;
+      var isArray = $.isArray(obj);
+      var node = null;
+      if (!isArray) {
+        node = this.get_node(obj);
+        if (node.id === "#") { return; } // wtf??? we ar in the root and do not need a open!
+      }
+      var id = isArray ? _guid() : node.id;
       this._detachColumns(id);
       var ret = parent.open_node.call(this, obj, callback, animation);
       this._reattachColumns(id);
@@ -1011,8 +1031,11 @@
 								v = t;
 							} else {
 								obj.data[col.value] = v;
-								this.element.trigger('update_cell.jstree-grid',{node:obj, col:col.value, value:v, old:t});
-								this._prepare_grid(this.get_node(obj,true));
+                this.element.trigger('update_cell.jstree-grid', { node: obj, col: col.value, value: v, old: t });
+                var id = _guid();
+                this._detachColumns(id);
+                this._prepare_grid(this.get_node(obj, true));
+                this._reattachColumns(id);
 							}
 							h2.remove();
 							element.show();
@@ -1127,7 +1150,7 @@
 						continue;
 					}
 					col = cols[i];
-          column = $(this._domManipulation.columns[i]); //Geht the detached column not mw.children("div:eq("+i+")");
+          column = this._domManipulation == null ? mw.children("div:eq(" + i + ")") : $(this._domManipulation.columns[i]); //Geht the detached column not mw.children("div:eq("+i+")");
 					// get the cellClass, the wideCellClass, and the columnClass
 					cl = col.cellClass || "";
 					wcl = col.wideCellClass || "";
