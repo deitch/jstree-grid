@@ -463,24 +463,10 @@
 				}
 			}, this))
       .on("show_node.jstree", $.proxy(function (e, data) {
-        this._detachColumns(data.node.id);
-         var cols = this._gridSettings.columns || [], treecol = this._gridSettings.treecol;
-        // show cells in each detachted column
-         for (var i = 0, len = cols.length; i < len; i++) {
-           if (i === treecol) { continue; }
-           findDataCell(this.uniq, data.node.id, i, $(this._domManipulation.columns[i])).removeClass("jstree-grid-hidden");
-         }
-         this._reattachColumns(data.node.id);
+        this._hideOrShowTree(data.node, false);
       }, this))
       .on("hide_node.jstree", $.proxy(function (e, data) {
-        this._detachColumns(data.node.id);
-        var cols = this._gridSettings.columns || [], treecol = this._gridSettings.treecol;
-        // hide cells in each detachted column
-        for (var i = 0, len = cols.length; i < len; i++) {
-          if (i === treecol) { continue; }
-          findDataCell(this.uniq, data.node.id, i, $(this._domManipulation.columns[i])).addClass("jstree-grid-hidden");
-        }
-        this._reattachColumns(data.node.id);
+        this._hideOrShowTree(data.node, true);
       }, this))
 			.on("close_node.jstree",$.proxy(function (e,data) {
 				this._hide_grid(data.node);
@@ -955,7 +941,32 @@
 				}
 			}
 			return result;
-		};
+    };
+    
+    this._hideOrShowTree = function(node, hide) { 
+      //Hides or shows a tree
+      this._detachColumns(node.id);
+      // show cells in each detachted column
+      this._hideOrShowNode(node, hide, this._gridSettings.columns || [], this._gridSettings.treecol);
+      this._reattachColumns(node.id);
+    }
+    this._hideOrShowNode = function(node, hide, cols, treecol) {
+      //Hides or shows a node with recursive calls to all open child-nodes
+      for (var i = 0, len = cols.length; i < len; i++) {
+        if (i === treecol) { continue; }
+        var cells = findDataCell(this.uniq, node.id, i, $(this._domManipulation.columns[i]));
+        if (hide) {
+          cells.addClass("jstree-grid-hidden");
+        } else {
+          cells.removeClass("jstree-grid-hidden");
+        }
+      }
+      if (node.state.opened && node.children) {
+        for (var i = 0, len = node.children.length; i < len; i++) {
+          this._hideOrShowNode(this.get_node(node.children[i]), hide, cols, treecol);
+        }
+      }
+    }
     this._hide_grid = function (node) {
       if (!node) { return true; }
       this._detachColumns(node.id);

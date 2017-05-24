@@ -12,13 +12,13 @@
 			    text: "Fruit",
 			    data: {},
 			    children:[
-            { text: "Apple", data: { price: 0.1, quantity: 20 } },
+            { id: "Apple", text: "Apple", data: { price: 0.1, quantity: 20 } },
             { id: "Banana", text: "Banana", data: { price: 0.2, quantity: 31 }, state: { hidden: true } },
             { id: "Grapes", text: "Grapes", data: { price: 1.99, quantity: 34 } },
             { id: "Mango", text: "Mango", data: { price: 0.5, quantity: 8 }, state: { hidden: true } },
-            { text: "Melon", data: { price: 0.8, quantity: 4 }, state: { hidden: true } },
-            { text: "Pear", data: { price: 0.1, quantity: 30 } },
-            { text: "Strawberry", data: { price: 0.15, quantity: 32 } }
+            { id: "Melon", text: "Melon", data: { price: 0.8, quantity: 4 }, state: { hidden: true } },
+            { id: "Pear", text: "Pear", data: { price: 0.1, quantity: 30 } },
+            { id: "Strawberry", text: "Strawberry", data: { price: 0.15, quantity: 32 } }
 			    ],
 			    'state': {'opened': true}
 			  }, {
@@ -32,7 +32,34 @@
             { text: "Cauliflower", data: { price: 0.45, quantity: 18 }, state: { hidden: true } },
             { text: "Potato", data: { price: 0.2, quantity: 38 } }
 			    ]
-			  }],
+          }, {
+            id: "Meat",
+            text: "Meat",
+            data: {},
+            children: [{
+              id: "Fresh",
+              text: "Fresh",
+              data: {},
+              children: [
+                { id: "FreshPork", text: "Pork", data: { price: 1.99, quantity: 20 } },
+                { id: "FreshBeef", text: "Beef", data: { price: 4.99, quantity: 31 } },
+                { id: "FreshChicken", text: "Chicken", data: { price: 1.99, quantity: 34 } }
+              ],
+              'state': { 'opened': true }
+            }, {
+              id: "Frozen",
+              text: "Frozen",
+              data: {},
+              children: [
+                { id: "FrozenPork", text: "Pork", data: { price: 1.99, quantity: 20 } },
+                { id: "FrozenBeef", text: "Beef", data: { price: 4.99, quantity: 31 } },
+                { id: "FrozenChicken", text: "Chicken", data: { price: 1.99, quantity: 34 } }
+              ],
+              'state': { 'opened': true }
+            }
+            ],
+            'state': { 'opened': true }
+          }],
 			  'state': {'opened': true}
 			}];
 
@@ -58,10 +85,22 @@
 			  }
 			});
 
-			$("#hide").on("click",function() {
-				$("div#jstree").jstree().hide_node("Banana");
-				$("div#jstree").jstree().hide_node("Grapes");
-				$("div#jstree").jstree().hide_node("Mango");
+      $("#hide").on("click", function () {
+        var text = $("#hide").text();
+        if (text === "Show Nodes") {
+          $("div#jstree").jstree().show_node("Banana");
+          $("div#jstree").jstree().show_node("Grapes");
+          $("div#jstree").jstree().show_node("Mango");
+          $("div#jstree").jstree().show_node("Meat");
+          $("#hide").text("Hide Nodes");
+        } else {
+          $("div#jstree").jstree().hide_node("Banana");
+          $("div#jstree").jstree().hide_node("Grapes");
+          $("div#jstree").jstree().hide_node("Mango");
+          $("div#jstree").jstree().hide_node("Meat");
+          $("#hide").text("Show Nodes");
+          
+        }
 			});
 			$("#add").on("click",function() {
 			  var tree =$("div#jstree").jstree();
