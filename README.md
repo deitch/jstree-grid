@@ -100,7 +100,8 @@ We use the div to control the entire height and width, and the span to get acces
 * `stateful`: true/false. If true, then whenever a column width is resized, it will store it in html5 localStorage, if available. Defaults to false.
 * `contextmenu`: true/false whether or not a context menu for editing the cells should be shown on right-click. Defaults to false.
 * `gridcontextmenu`: function to create context menu items; see context menu of jstree for format. In addition, if `false` or not set, no special context menu. If `true`, creates a default menu to edit the cell entry.
-* `caseInsensitive`: true/false whether or not the column sort should be case sensitive or insensitive
+* `caseInsensitive`: true/false whether or not the column sort should be case insensitive. Default value is false (the default sort is case sensitive)
+
 The reason for both `valueClass` and `wideValueClass` is to give you the ability to control both the narrow part of the text,  and the entire width of the cell. For example, if the cell is 56px wide, but the text in it is "OK" and thus only 20px wide.
 Suppose you have a class "important" which backgrounds in red, and a class "clickable" which changes the cursor to a pointer.
 You want the entire width of the cell to be red, but just the word "OK" to be clickable.
