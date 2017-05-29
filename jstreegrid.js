@@ -195,6 +195,7 @@
 					indent: 0,
 					sortOrder: 'text',
 					sortAsc: true,
+					caseInsensitive: s.caseInsensitive,
 					fixedHeader: s.fixedHeader !== false,
 					width: s.width,
 					height: s.height,
@@ -295,7 +296,8 @@
 					var bigger, colrefs = this.colrefs;
 
 					if (gs.sortOrder==='text') {
-						bigger = (defaultSort(a, b) === 1);
+						var caseInsensitiveSort = this.get_text(a).toLowerCase().localeCompare(this.get_text(b).toLowerCase());
+						bigger = gs.caseInsensitive ? (caseInsensitiveSort === 1) : (defaultSort(a, b) === 1); 
 					} else {
 						// gs.sortOrder just refers to the unique random name for this column
 						// we need to get the correct value
@@ -303,10 +305,12 @@
 						value = colrefs[gs.sortOrder].value,
 						valueA = typeof(value) === 'function' ? value(nodeA) : nodeA.data[value],
 						valueB = typeof(value) === 'function' ? value(nodeB) : nodeB.data[value];
-						bigger = valueA > valueB;
+						if(typeof(valueA) && typeof(valueB) !== 'undefined') {
+						  bigger = gs.caseInsensitive ? valueA.toLowerCase() > valueB.toLowerCase(): valueA > valueB ;
+						}
 					}
 
-					if (gs.sortAsc===false)
+					if (!gs.sortAsc)
 						bigger = !bigger;
 
 					return bigger ? 1 : -1;
