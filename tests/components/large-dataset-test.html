@@ -4,6 +4,11 @@
         for (i=1; i<1000; i++) {
           var entry = { "id" : "child"+i, "parent" : "Root", "text" : "child"+i, "data" : { "one" : i+" one", "two" : i+" two", "three" : i+" three"}};
           data.push(entry);
+          for (var j = 0; j < 50; j++) {
+            var id = i.toString() + "-" + j.toString();
+            var centry = { "id": "child" + id, "parent": entry.id, "text": "child" + id, "data": { "one": id + " one", "two": id + " two", "three": id + " three" } };
+            data.push(centry);
+          }
         }
 
 				$('#jstree').jstree({

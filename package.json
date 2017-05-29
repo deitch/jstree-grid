@@ -1,43 +1,47 @@
 {
 	"name": "jstreegrid",
 	"description": "grid plugin for jstree",
-	"version": "3.8.2",
+	"version": "3.8.3",
 	"url": "https://github.com/deitch/jstree-grid",
 	"author": {"name":"Avi Deitcher","url":"https://github.com/deitch"},
-	"contributors": [
-		{
-			"name": "jochenberger",
-			"url": "https://github.com/jochenberger"
-		},
-		{
-			"name": "Tobias Zanke",
-			"url": "https://github.com/TZanke"
-		},
-		{
-			"name": "ChrisRaven",
-			"url": "https://github.com/ChrisRaven"
-		},
-		{
-			"name": "Brabus",
-			"url": "https://github.com/side-by-side"
-		},
-		{
-			"name": "Adam Jimenez",
-			"url": "https://github.com/adamjimenez"
-		},
-		{
-			"name": "QueroBartk",
-			"url": "https://github.com/QueroBartK"
-		},
-		{
-			"name": "OgreTransporter",
-			"url": "https://github.com/OgreTransporter"
-		},
-		{
-			"name": "LlorX",
-			"url": "https://github.com/Llorx"
-		}
-	],
+  "contributors": [
+    {
+      "name": "jochenberger",
+      "url": "https://github.com/jochenberger"
+    },
+    {
+      "name": "Tobias Zanke",
+      "url": "https://github.com/TZanke"
+    },
+    {
+      "name": "ChrisRaven",
+      "url": "https://github.com/ChrisRaven"
+    },
+    {
+      "name": "Brabus",
+      "url": "https://github.com/side-by-side"
+    },
+    {
+      "name": "Adam Jimenez",
+      "url": "https://github.com/adamjimenez"
+    },
+    {
+      "name": "QueroBartk",
+      "url": "https://github.com/QueroBartK"
+    },
+    {
+      "name": "OgreTransporter",
+      "url": "https://github.com/OgreTransporter"
+    },
+    {
+      "name": "LlorX",
+      "url": "https://github.com/Llorx"
+    },
+    {
+      "name": "PetzeltA",
+      "url": "https://github.com/petzelta/"
+    }
+  ],
 	"dependencies": {
     "jstree":">=3.0.0"
 	},
