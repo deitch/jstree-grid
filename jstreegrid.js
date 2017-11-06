@@ -297,7 +297,7 @@
 
 					if (gs.sortOrder==='text') {
 						var caseInsensitiveSort = this.get_text(a).toLowerCase().localeCompare(this.get_text(b).toLowerCase());
-						bigger = gs.caseInsensitive ? (caseInsensitiveSort === 1) : (defaultSort(a, b) === 1); 
+						bigger = gs.caseInsensitive ? (caseInsensitiveSort === 1) : (defaultSort(a, b) === 1);
 					} else {
 						// gs.sortOrder just refers to the unique random name for this column
 						// we need to get the correct value
@@ -540,6 +540,8 @@
 				this.holdingCells = {};
         if (data.nodes.length) {
           var id = _guid();
+					// save the cells we will hide
+					var cells = grid.find('div.jstree-grid-cell-regular');
           this._detachColumns(id);
 					if(this._data.search.som) {
 						// create the list of nodes we want to look at
@@ -549,7 +551,7 @@
 						nodesToShow = (nodesToShow || data.nodes).add(data.nodes.parentsUntil(".jstree"));
 
 						// hide all of the grid cells
-						grid.find('div.jstree-grid-cell-regular').hide();
+						cells.hide();
 						// show only those that match
 						nodesToShow.filter(".jstree-node").each(function (i,node) {
 							var id = node.id;
@@ -946,8 +948,8 @@
 			}
 			return result;
     };
-    
-    this._hideOrShowTree = function(node, hide) { 
+
+    this._hideOrShowTree = function(node, hide) {
       //Hides or shows a tree
       this._detachColumns(node.id);
       // show cells in each detachted column
@@ -985,8 +987,8 @@
         }
         if (child.state.opened) { this._hide_grid(child);}
       }
-			
-      
+
+
       this._reattachColumns(node.id);
 		};
 		this.holdingCells = {};
