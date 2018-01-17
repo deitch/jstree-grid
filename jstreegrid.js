@@ -598,6 +598,16 @@
 				this.gridWrapper.find(".jstree-grid-cell").add(".jstree-grid-header", this.gridWrapper).removeClass("jstree-grid-ellipsis");
 				return true;
 			}, this))
+			.on("enable_node.jstree", $.proxy(function (e, data) {
+				var id = data.node.id;
+				findDataCell(this.uniq,id,this._gridSettings.gridcols).removeClass("jstree-disabled");
+				this.get_node(data.node.id,true).children("div.jstree-grid-cell").removeClass("jstree-disabled");
+			}, this))
+			.on("disable_node.jstree", $.proxy(function (e, data) {
+				var id = data.node.id;
+				findDataCell(this.uniq,id,this._gridSettings.gridcols).addClass("jstree-disabled");
+				this.get_node(data.node.id,true).children("div.jstree-grid-cell").addClass("jstree-disabled");
+			}, this))
 			;
 			if (this._gridSettings.isThemeroller) {
 				this.element
@@ -1247,6 +1257,12 @@
             last.removeClass("jstree-grid-hidden");
           }
 
+					// ditto for the disabled-state and disabling the node
+					if (objData.state.disabled) {
+						last.addClass('jstree-disabled');
+					} else {
+						last.removeClass('jstree-disabled');
+					}
 					// we need to put it in the dataCell - after the parent, but the position matters
 					// if we have no parent, then we are one of the root nodes, but still need to look at peers
 
@@ -1341,3 +1357,4 @@
 		// need to do alternating background colors or borders
 	};
 }));
+
