@@ -4,6 +4,8 @@
 	"version": "3.9.3",
 	"url": "https://github.com/deitch/jstree-grid",
 	"author": {"name":"Avi Deitcher","url":"https://github.com/deitch"},
+	"main": "jstreegrid.js",
+	"license": "MIT",
   "contributors": [
     {
       "name": "jochenberger",
