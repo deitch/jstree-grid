@@ -7,6 +7,8 @@
     "name": "Avi Deitcher",
     "url": "https://github.com/deitch"
   },
+  "main": "jstreegrid.js",
+  "license": "MIT",
   "contributors": [
     {
       "name": "jochenberger",
