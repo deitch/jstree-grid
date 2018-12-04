@@ -865,7 +865,7 @@
       // if the columns are not detached, then detach them
       if (this._domManipulation == null) {
         var cols = this._gridSettings.columns || [], treecol = this._gridSettings.treecol, mw = this.midWrapper;
-        this._domManipulation = { id: id, columns: {} };
+        this._domManipulation = { id: id, oldActiveElement: document.activeElement, columns: {} };
         for (var i = 0, len = cols.length; i < len; i++) {
           //if (treecol === i) {
           //  continue;
@@ -887,6 +887,7 @@
           //}
           mw[0].appendChild(this._domManipulation.columns[i]);
         }
+        if (this._domManipulation.oldActiveElement !== document.activeElement) { $(this._domManipulation.oldActiveElement).focus(); }
         this._domManipulation = null;
       }
       return true;
