@@ -192,6 +192,7 @@
 					resizable : s.resizable,
 					draggable : s.draggable,
 					stateful: s.stateful,
+					headerAsTitle: s.headerAsTitle || false,
 					indent: 0,
 					sortOrder: 'text',
 					sortAsc: true,
@@ -673,6 +674,7 @@
 				cl = cols[i].headerClass || "";
 				ccl = cols[i].columnClass || "";
 				val = cols[i].header || "";
+				headerTitle = cols[i].headerTitle || "";
 				do {
 					coluuid = String(Math.floor(Math.random()*10000));
 				} while(this.colrefs[coluuid] !== undefined);
@@ -700,6 +702,14 @@
 				if (this.settings.core.themes.ellipsis === true){
 				  last.addClass('jstree-grid-ellipsis');
 				}
+
+				// add title and strip out HTML
+				var title = gs.headerAsTitle && !headerTitle ? val : (headerTitle ? headerTitle : "");
+				title = title.replace(htmlstripre, '');
+				if (title) {
+					last.attr("title",title);
+				}
+
 				last.prependTo(col);
 				last.attr(COL_DATA_ATTR, name);
 				totalWidth += last.outerWidth();
