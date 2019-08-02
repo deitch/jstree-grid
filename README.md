@@ -86,6 +86,7 @@ We use the div to control the entire height and width, and the span to get acces
     * `maxWidth`: Maximum width of the column when width is set to `auto`. Does **not** limit manual column resizing.
     * `header`: string to use as a header for the column.
 	* `headerClass`: a CSS class to add to the header cell in this column
+	* `headerTitle`: a title to add to the header cell in this column, shown as a tooltip
 	* `columnClass`: a CSS class to add to the header cell and the column cell
 	* `cellClass`: a CSS class to add to each cell in this column (except for the header) - added to the `<span>`
 	* `wideCellClass`: a CSS class to add to each cell in this column (except for the header) - added to the `<div>`
@@ -98,6 +99,7 @@ We use the div to control the entire height and width, and the span to get acces
 * `resizable`: true/false if the columns should be resizable. Defaults to false.
 * `draggable`: true/false if the columns should be draggable (requires jQuery UI with sortable plugin). Defaults to false.
 * `stateful`: true/false. If true, then whenever a column width is resized, it will store it in html5 localStorage, if available. Defaults to false.
+* `headerAsTitle`: true/false. If true, the header is used as `headerTitle`. If false, no title is added, but in case the option `headerTitle` is set, a title is added. Defaults to false.
 * `contextmenu`: true/false whether or not a context menu for editing the cells should be shown on right-click. Defaults to false.
 * `gridcontextmenu`: function to create context menu items; see context menu of jstree for format. In addition, if `false` or not set, no special context menu. If `true`, creates a default menu to edit the cell entry.
 * `caseInsensitive`: true/false whether or not the column sort should be case insensitive. Default value is false (the default sort is case sensitive)
