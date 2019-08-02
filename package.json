@@ -59,6 +59,5 @@
   "repository": {
     "type": "git",
     "url": "http://github.com/deitch/jstree-grid.git"
-  },
-  "license": "MIT"
+  }
 }
