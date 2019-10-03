@@ -1,6 +1,8 @@
 # jsTreeGrid
 [![CDNJS](https://img.shields.io/cdnjs/v/jstreegrid.svg)](https://cdnjs.com/libraries/jstreegrid)
 
+UNSUPPORTED: You are welcome to find issues, and submit Pull Requests to fix. Beyond that, there really isn't time to support it.
+
 ## Overview
 Plugin for the jstree www.jstree.com tree component that provides a grid extension to the tree.
 
