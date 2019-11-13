@@ -246,7 +246,7 @@
 				if (!styled) {
 					styled = true;
 					styles = [
-						'.jstree-grid-cell {vertical-align: top; overflow:hidden;margin-left:0;position:relative;width: 100%;padding-left:7px;white-space: nowrap;}',
+						'.jstree-grid-cell {vertical-align: top; overflow:hidden;margin-left:0;position:relative;width: 100%;padding-left:7px;white-space: nowrap;-ms-scroll-limit: 0 0 0 0;}',
 						'.jstree-grid-cell span {margin-right:0px;margin-right:0px;*display:inline;*+display:inline;white-space: nowrap;}',
 						'.jstree-grid-separator {position:absolute; top:0; right:0; height:24px; margin-left: -2px; border-width: 0 2px 0 0; *display:inline; *+display:inline; margin-right:0px;width:0px;}',
 						'.jstree-grid-header-cell {overflow: hidden; white-space: nowrap;padding: 1px 3px 2px 5px; cursor: default;}',
@@ -259,7 +259,7 @@
 						'.jstree-grid-wrapper {table-layout: fixed; width: 100%; overflow: auto; position: relative;}',
 						'.jstree-grid-midwrapper {display: table-row;}',
 						'.jstree-grid-width-auto {width:auto;display:block;}',
-						'.jstree-grid-column {display: table-cell; overflow: hidden;}',
+						'.jstree-grid-column {display: table-cell; overflow: hidden;-ms-scroll-limit: 0 0 0 0;}',
 						'.jstree-grid-ellipsis {text-overflow: ellipsis;}',
 						'.jstree-grid-col-0 {width: 100%;}'
 					];
