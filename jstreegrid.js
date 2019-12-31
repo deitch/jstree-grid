@@ -399,7 +399,11 @@
 										continue;
 									}
 									col = cols[i];
-									matched = f.search(getCellData(col.value,node)).isMatch;
+									var cellData = getCellData(col.value,node) ;
+									if ( ( cellData == null ) || ( cellData == '' ) ) {
+										continue ;
+									}
+									matched = f.search(cellData).isMatch;
 									if (matched) {
 										break;
 									}
