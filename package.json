@@ -1,7 +1,7 @@
 {
   "name": "jstreegrid",
   "description": "grid plugin for jstree",
-  "version": "3.10.1",
+  "version": "3.10.2",
   "url": "https://github.com/deitch/jstree-grid",
   "author": {
     "name": "Avi Deitcher",
@@ -45,6 +45,10 @@
     {
       "name": "PetzeltA",
       "url": "https://github.com/petzelta/"
+    },
+    {
+      "name": "yarn",
+      "url": "https://github.com/YarnSeemannsgarn"
     }
   ],
   "dependencies": {
